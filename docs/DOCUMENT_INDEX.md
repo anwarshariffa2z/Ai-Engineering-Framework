@@ -52,7 +52,7 @@ This is the canonical registry for every framework document. A document is not c
 | REF-0001 | Framework Glossary | Reference | Approved | Framework Maintainers | [document](02-methodology/glossary.md) | 1.0.0 | 2026-07-25 |
 | REF-0002 | Architecture Decision Records | Reference | Approved | Framework Maintainers | [document](ADR/README.md) | 1.3.0 | 2026-07-26 |
 | REF-0003 | Documentation Navigation | Reference | Approved | Framework Maintainers | [document](README.md) | 1.1.0 | 2026-07-26 |
-| REF-0004 | Changelog | Reference | Approved | Framework Maintainers | [document](../CHANGELOG.md) | 1.0.0 | 2026-07-25 |
+| REF-0004 | Changelog | Reference | Approved | Framework Maintainers | [document](../CHANGELOG.md) | 1.1.0 | 2026-07-26 |
 | REF-0005 | Contributing | Reference | Approved | Framework Maintainers | [document](../CONTRIBUTING.md) | 1.0.1 | 2026-07-26 |
 | REF-0006 | Code of Conduct | Reference | Approved | Framework Maintainers | [document](../CODE_OF_CONDUCT.md) | 1.0.0 | 2026-07-25 |
 | REF-0007 | Security Policy | Reference | Approved | Framework Maintainers | [document](../SECURITY.md) | 1.0.1 | 2026-07-26 |
@@ -71,6 +71,7 @@ This is the canonical registry for every framework document. A document is not c
 | REF-0020 | Operations Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/operations-types.md) | 1.0.0 | 2026-07-26 |
 | REF-0021 | Gap Analysis Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/gap-types.md) | 1.0.0 | 2026-07-26 |
 | REF-0022 | Runtime Verification Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/runtime-types.md) | 1.0.0 | 2026-07-26 |
+| REF-0023 | Framework Operationalization Roadmap | Roadmap | Draft | Framework Maintainers | [document](07-roadmap/framework-operationalization-roadmap.md) | 1.0.0 | 2026-07-26 |
 | STD-0001 | Document Metadata Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/document-metadata-standard.md) | 1.1.1 | 2026-07-26 |
 | STD-0002 | Framework Document ID Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/document-id-standard.md) | 1.1.0 | 2026-07-26 |
 | STD-0003 | Data Governance Standard | Development | Approved | Framework Maintainers | [document](04-development/data-governance-standard.md) | 1.0.0 | 2026-07-25 |
