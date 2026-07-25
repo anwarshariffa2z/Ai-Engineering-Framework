@@ -1,7 +1,7 @@
 ---
 id: AUD-0000
 title: Audit Engine Documentation
-version: 0.1.1
+version: 0.1.2
 status: Draft
 owner: Framework Maintainers
 created: 2026-07-25
@@ -20,7 +20,7 @@ Provide the ordered document structure for the planned Audit Engine.
 
 ## Scope
 
-This directory contains the approved Architecture Discovery methodology and draft structures for subsequent Audit Engine phases. It contains no implementation.
+This directory contains the approved Architecture Discovery and Database Discovery methodologies and draft structures for subsequent Audit Engine phases. It contains no implementation.
 
 ## Related Documents
 
