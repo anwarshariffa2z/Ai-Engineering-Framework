@@ -1,11 +1,11 @@
 ---
 id: AUD-0012
 title: Audit Engine Product Specification
-version: 1.0.0
-status: Planned
+version: 1.0.1
+status: Draft
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-25
+last_updated: 2026-07-26
 review_cycle: Quarterly
 category: Roadmap
 tags: [audit-engine, roadmap, specification]
@@ -16,7 +16,7 @@ related: [../03-audit-engine/README.md, ../02-methodology/glossary.md]
 
 ## Status
 
-Planned. This document defines the intended capability and acceptance boundary. It does not provide an implementation, runnable package, service, schema, or command-line interface.
+Draft. This document defines the intended capability and acceptance boundary. It does not provide an implementation, runnable package, service, schema, or command-line interface, and implementation is not authorized until the acceptance criteria below are met.
 
 ## Problem
 

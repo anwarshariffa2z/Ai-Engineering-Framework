@@ -1,15 +1,15 @@
 ---
 id: REF-0007
 title: Security Policy
-version: 1.0.0
+version: 1.0.1
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-25
+last_updated: 2026-07-26
 review_cycle: Annual
 category: Reference
 tags: [security, reporting]
-related: [docs/04-development/security-standard.md]
+related: [STD-0006]
 ---
 
 # Security Policy

@@ -1,15 +1,15 @@
 ---
 id: REF-0005
 title: Contributing
-version: 1.0.0
+version: 1.0.1
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-25
+last_updated: 2026-07-26
 review_cycle: Annual
 category: Reference
 tags: [contributing, governance]
-related: [CODE_OF_CONDUCT.md, docs/02-methodology/document-metadata-standard.md]
+related: [CODE_OF_CONDUCT.md, STD-0001]
 ---
 
 # Contributing
