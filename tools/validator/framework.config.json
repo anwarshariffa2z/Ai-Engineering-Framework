@@ -1,7 +1,7 @@
 {
   "corpusRoot": ".",
   "include": ["**/*.md"],
-  "exclude": [".git/**", "node_modules/**", "validation/**", "tools/**"],
+  "exclude": [".git/**", "node_modules/**", "validation/**", "tools/**", "tasks/**", "HANDOVER.md"],
   "registryDocumentId": "REF-0009",
   "coreKeys": [
     "id", "title", "version", "status", "owner",
