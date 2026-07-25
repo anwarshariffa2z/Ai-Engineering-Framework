@@ -1,7 +1,7 @@
 ---
 id: REF-0009
 title: Framework Document Registry
-version: 1.1.0
+version: 1.1.1
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -39,21 +39,24 @@ This is the canonical registry for every framework document. A document is not c
 | AUD-0011 | Runtime Verification | Audit Engine | Draft | Framework Maintainers | [document](03-audit-engine/10-runtime-verification.md) | 0.1.0 | 2026-07-25 |
 | AUD-0012 | Audit Engine Product Specification | Roadmap | Planned | Framework Maintainers | [document](07-roadmap/audit-engine-roadmap.md) | 1.0.0 | 2026-07-25 |
 | ADR-0001 | Establish a Documentation-First Framework | Architecture Decision Record | Accepted | Framework Maintainers | [document](ADR/ADR-0001-framework-foundation.md) | 1.0.0 | 2026-07-25 |
+| ADR-0002 | Express Requirements as Standard Metadata Rather Than as Rule Objects | Architecture Decision Record | Accepted | Framework Maintainers | [document](ADR/ADR-0002-requirements-as-metadata.md) | 1.0.0 | 2026-07-25 |
+| ADR-0003 | Declare Normativity at Section Granularity in Every Document | Architecture Decision Record | Accepted | Framework Maintainers | [document](ADR/ADR-0003-normative-informative-separation.md) | 1.0.0 | 2026-07-25 |
+| ADR-0004 | Depend on Artifact Types Rather Than on Producing Methodologies | Architecture Decision Record | Accepted | Framework Maintainers | [document](ADR/ADR-0004-depend-on-artifact-types.md) | 1.0.0 | 2026-07-25 |
 | CAP-0001 | Repository Audit Capability | Capability | Draft | Framework Maintainers | [document](09-capabilities/CAP-0001-repository-audit.md) | 1.0.0 | 2026-07-25 |
 | CHK-0001 | Delivery Evidence Checklist | Methodology | Approved | Framework Maintainers | [document](02-methodology/delivery-evidence-checklist.md) | 1.0.0 | 2026-07-25 |
 | CMD-0001 | Change Management | Governance | Approved | Framework Maintainers | [document](06-governance/change-management.md) | 1.0.0 | 2026-07-25 |
 | EX-0001 | System Evidence Record Example | Example | Approved | Framework Maintainers | [document](08-examples/system-evidence-record.md) | 1.0.0 | 2026-07-25 |
 | PLB-0001 | Incident Management | Governance | Approved | Framework Maintainers | [document](06-governance/incident-management.md) | 1.0.0 | 2026-07-25 |
 | REF-0001 | Framework Glossary | Reference | Approved | Framework Maintainers | [document](02-methodology/glossary.md) | 1.0.0 | 2026-07-25 |
-| REF-0002 | Architecture Decision Records | Reference | Approved | Framework Maintainers | [document](ADR/README.md) | 1.0.0 | 2026-07-25 |
+| REF-0002 | Architecture Decision Records | Reference | Approved | Framework Maintainers | [document](ADR/README.md) | 1.1.0 | 2026-07-25 |
 | REF-0003 | Documentation Navigation | Reference | Approved | Framework Maintainers | [document](README.md) | 1.0.0 | 2026-07-25 |
 | REF-0004 | Changelog | Reference | Approved | Framework Maintainers | [document](../CHANGELOG.md) | 1.0.0 | 2026-07-25 |
 | REF-0005 | Contributing | Reference | Approved | Framework Maintainers | [document](../CONTRIBUTING.md) | 1.0.0 | 2026-07-25 |
 | REF-0006 | Code of Conduct | Reference | Approved | Framework Maintainers | [document](../CODE_OF_CONDUCT.md) | 1.0.0 | 2026-07-25 |
 | REF-0007 | Security Policy | Reference | Approved | Framework Maintainers | [document](../SECURITY.md) | 1.0.0 | 2026-07-25 |
 | REF-0008 | Reference Library | Reference | Approved | Framework Maintainers | [document](05-reference/README.md) | 1.0.0 | 2026-07-25 |
-| REF-0009 | Framework Document Registry | Reference | Approved | Framework Maintainers | [document](DOCUMENT_INDEX.md) | 1.1.0 | 2026-07-25 |
-| REF-0010 | Documentation Validation Report | Reference | Approved | Framework Maintainers | [document](validation-report.md) | 1.0.4 | 2026-07-25 |
+| REF-0009 | Framework Document Registry | Reference | Approved | Framework Maintainers | [document](DOCUMENT_INDEX.md) | 1.1.1 | 2026-07-25 |
+| REF-0010 | Documentation Validation Report | Reference | Approved | Framework Maintainers | [document](validation-report.md) | 1.0.5 | 2026-07-25 |
 | REF-0011 | Framework Architecture Review | Roadmap | Draft | Framework Maintainers | [document](07-roadmap/framework-architecture-review.md) | 1.0.0 | 2026-07-25 |
 | STD-0001 | Document Metadata Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/document-metadata-standard.md) | 1.0.0 | 2026-07-25 |
 | STD-0002 | Framework Document ID Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/document-id-standard.md) | 1.0.0 | 2026-07-25 |

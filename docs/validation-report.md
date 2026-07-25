@@ -1,7 +1,7 @@
 ---
 id: REF-0010
 title: Documentation Validation Report
-version: 1.0.4
+version: 1.0.5
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -37,6 +37,8 @@ Validation covered all Markdown documents in the repository except `LICENSE`, in
 | Remaining Audit Engine documents retain Draft structural status | Pass |
 | The frozen architecture design set is registered and its links resolve | Pass |
 | Architecture design documents assert no normative requirements | Pass |
+| Each Architecture Decision Record decides exactly one question and follows the record template | Pass |
+| Architecture Decision Records reference supporting design documents rather than restating them | Pass |
 
 ## Known Exceptions
 
