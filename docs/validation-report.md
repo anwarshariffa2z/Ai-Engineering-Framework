@@ -1,7 +1,7 @@
 ---
 id: REF-0010
 title: Documentation Validation Report
-version: 1.0.3
+version: 1.0.4
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -35,6 +35,17 @@ Validation covered all Markdown documents in the repository except `LICENSE`, in
 | Database Discovery reuses the evidence states, confidence levels, and health scale established by AUD-0002 without local redefinition | Pass |
 | DB-NNN audit artifact identifiers are held outside the framework document namespace and absent from the registry | Pass |
 | Remaining Audit Engine documents retain Draft structural status | Pass |
+| The frozen architecture design set is registered and its links resolve | Pass |
+| Architecture design documents assert no normative requirements | Pass |
+
+## Known Exceptions
+
+Two conformance exceptions are open. Both are disclosed with an owner and a resolution point rather than being reported as passing.
+
+| Exception | Detail | Resolution |
+| --- | --- | --- |
+| EXC-0001 | The `CAP` prefix and the `Capability` category are used by CAP-0001 but are not defined by the Framework Document ID Standard or the Document Metadata Standard. The document is registered so that registry integrity holds; the standards do not yet authorize the prefix. | Standards milestone, when the identifier and metadata standards are revised. |
+| EXC-0002 | Architecture Decision Records use `status: Accepted`, which is not among the values the Document Metadata Standard permits. This predates the current work and affects ADR-0001 and every subsequent record. | Standards milestone, by admitting the value or migrating the records. |
 
 ## Notes
 
@@ -43,3 +54,5 @@ The repository is ready to scale through the ID, metadata, registry, and numbere
 Database Discovery introduces two conventions that later playbooks are expected to follow where their domain warrants: technology-family guidance applied only after the family is evidenced, and a fixed set of identified audit artifacts giving downstream playbooks a stable output contract. Its `DB-NNN` artifact identifiers name audit outputs rather than framework documents and are therefore governed by the playbook, not by the Framework Document ID Standard.
 
 Nine Audit Engine documents remain Draft structural placeholders: AUD-0001 and AUD-0004 through AUD-0011.
+
+The framework architecture design set — the core architecture, the artifact model, the repository audit capability, and the architecture review — is registered as Draft. These documents describe structure and assert no requirements; nothing in them constrains a contributor until a decision record accepts them and a standard makes their content normative.
