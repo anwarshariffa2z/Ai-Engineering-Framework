@@ -1,7 +1,7 @@
 ---
 id: REF-0009
 title: Framework Document Registry
-version: 1.2.0
+version: 1.3.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -27,8 +27,8 @@ This is the canonical registry for every framework document. A document is not c
 | DOC-0007 | Framework Artifact Model | Foundation | Draft | Framework Maintainers | [document](01-foundation/framework-artifact-model.md) | 1.0.0 | 2026-07-25 |
 | AUD-0000 | Audit Engine Documentation | Audit Engine | Draft | Framework Maintainers | [document](03-audit-engine/README.md) | 0.1.2 | 2026-07-25 |
 | AUD-0001 | Audit Engine Bootstrap | Audit Engine | Draft | Framework Maintainers | [document](03-audit-engine/00-bootstrap.md) | 0.1.0 | 2026-07-25 |
-| AUD-0002 | Architecture Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/01-architecture-discovery.md) | 1.0.0 | 2026-07-25 |
-| AUD-0003 | Database Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/02-database-discovery.md) | 2.0.0 | 2026-07-25 |
+| AUD-0002 | Architecture Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/01-architecture-discovery.md) | 2.0.0 | 2026-07-25 |
+| AUD-0003 | Database Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/02-database-discovery.md) | 3.0.0 | 2026-07-25 |
 | AUD-0004 | Frontend Discovery | Audit Engine | Draft | Framework Maintainers | [document](03-audit-engine/03-frontend-discovery.md) | 0.1.0 | 2026-07-25 |
 | AUD-0005 | Backend Discovery | Audit Engine | Draft | Framework Maintainers | [document](03-audit-engine/04-backend-discovery.md) | 0.1.1 | 2026-07-25 |
 | AUD-0006 | Business Workflow Discovery | Audit Engine | Draft | Framework Maintainers | [document](03-audit-engine/05-business-workflow-discovery.md) | 0.1.0 | 2026-07-25 |
@@ -55,8 +55,8 @@ This is the canonical registry for every framework document. A document is not c
 | REF-0006 | Code of Conduct | Reference | Approved | Framework Maintainers | [document](../CODE_OF_CONDUCT.md) | 1.0.0 | 2026-07-25 |
 | REF-0007 | Security Policy | Reference | Approved | Framework Maintainers | [document](../SECURITY.md) | 1.0.0 | 2026-07-25 |
 | REF-0008 | Reference Library | Reference | Approved | Framework Maintainers | [document](05-reference/README.md) | 1.0.0 | 2026-07-25 |
-| REF-0009 | Framework Document Registry | Reference | Approved | Framework Maintainers | [document](DOCUMENT_INDEX.md) | 1.2.0 | 2026-07-25 |
-| REF-0010 | Documentation Validation Report | Reference | Approved | Framework Maintainers | [document](validation-report.md) | 1.1.0 | 2026-07-25 |
+| REF-0009 | Framework Document Registry | Reference | Approved | Framework Maintainers | [document](DOCUMENT_INDEX.md) | 1.3.0 | 2026-07-25 |
+| REF-0010 | Documentation Validation Report | Reference | Approved | Framework Maintainers | [document](validation-report.md) | 1.2.0 | 2026-07-25 |
 | REF-0011 | Framework Architecture Review | Roadmap | Draft | Framework Maintainers | [document](07-roadmap/framework-architecture-review.md) | 1.0.0 | 2026-07-25 |
 | STD-0001 | Document Metadata Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/document-metadata-standard.md) | 1.0.0 | 2026-07-25 |
 | STD-0002 | Framework Document ID Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/document-id-standard.md) | 1.0.0 | 2026-07-25 |
@@ -65,9 +65,9 @@ This is the canonical registry for every framework document. A document is not c
 | STD-0005 | Reliability Standard | Development | Approved | Framework Maintainers | [document](04-development/reliability-standard.md) | 1.0.0 | 2026-07-25 |
 | STD-0006 | Security Standard | Development | Approved | Framework Maintainers | [document](04-development/security-standard.md) | 1.0.0 | 2026-07-25 |
 | STD-0007 | Evidence and Confidence Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/evidence-and-confidence.md) | 1.1.0 | 2026-07-25 |
-| STD-0008 | Artifact Specification Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/artifact-specification.md) | 1.3.0 | 2026-07-25 |
+| STD-0008 | Artifact Specification Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/artifact-specification.md) | 1.4.0 | 2026-07-25 |
 | STD-0010 | Metadata Specification Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/metadata-specification.md) | 1.1.0 | 2026-07-25 |
-| STD-0011 | Contract Specification Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/contract-specification.md) | 1.1.0 | 2026-07-25 |
+| STD-0011 | Contract Specification Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/contract-specification.md) | 1.2.0 | 2026-07-25 |
 | STD-0012 | Validation Specification Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/validation-specification.md) | 1.0.0 | 2026-07-25 |
 | TMP-0001 | Architecture Decision Record Template | Template | Approved | Framework Maintainers | [document](ADR/ADR-template.md) | 1.0.0 | 2026-07-25 |
 | TMP-0002 | Pull Request Template | Template | Approved | Framework Maintainers | [document](../.github/pull_request_template.md) | 1.0.0 | 2026-07-25 |

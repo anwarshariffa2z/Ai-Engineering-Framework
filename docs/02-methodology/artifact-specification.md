@@ -1,7 +1,7 @@
 ---
 id: STD-0008
 title: Artifact Specification Standard
-version: 1.3.0
+version: 1.4.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -63,11 +63,6 @@ requirements:
     check: mechanical
     severity: blocking
     scope: artifact
-  - id: R-07
-    level: MUST
-    check: mechanical
-    severity: blocking
-    scope: artifact
   - id: R-08
     level: MUST
     check: mechanical
@@ -108,11 +103,6 @@ requirements:
     check: mechanical
     severity: blocking
     scope: evidence
-  - id: R-16
-    level: MUST
-    check: judgment
-    severity: blocking
-    scope: artifact
   - id: R-17
     level: MUST
     check: mechanical
@@ -153,11 +143,6 @@ requirements:
     check: mechanical
     severity: blocking
     scope: artifact-type
-  - id: R-28
-    level: MUST
-    check: mechanical
-    severity: blocking
-    scope: producer
   - id: R-32
     level: MUST
     check: mechanical
@@ -168,16 +153,6 @@ requirements:
     check: mechanical
     severity: blocking
     scope: artifact
-  - id: R-34
-    level: MUST
-    check: mechanical
-    severity: blocking
-    scope: producer
-  - id: R-35
-    level: MUST
-    check: judgment
-    severity: blocking
-    scope: producer
   - id: R-36
     level: MUST
     check: mechanical
@@ -228,16 +203,6 @@ requirements:
     check: mechanical
     severity: blocking
     scope: lineage
-  - id: R-47
-    level: MUST
-    check: mechanical
-    severity: blocking
-    scope: consumer
-  - id: R-48
-    level: MUST
-    check: mechanical
-    severity: blocking
-    scope: consumer
   - id: R-49
     level: MUST
     check: mechanical
@@ -341,7 +306,7 @@ R-11 is marked judgment-checkable because a mechanical check can detect known cr
 
 **R-06.** An artifact instance MUST be addressable as the pair of its run identity and its type identity. A record MUST be addressable within its artifact, and an evidence item MUST be addressable within its record.
 
-**R-07.** A consumer MUST NOT address an artifact by file path or by producer identity.
+The obligation on a consumer to address artifacts by identity rather than by path or producer is stated by [STD-0011](contract-specification.md) R-40.
 
 Instances are not independently versioned. Their type is versioned; their identity is their run and type.
 
@@ -391,7 +356,9 @@ The duty to reject an artifact whose envelope cannot be parsed is validator beha
 
 Structure observed in one environment is not evidence about another.
 
-**R-33.** An artifact MUST declare its redaction state. A consumer MUST NOT interpret redacted absence as absence.
+**R-33.** An artifact MUST declare its redaction state.
+
+The obligation on a consumer not to read redacted absence as absence is stated by [STD-0011](contract-specification.md) R-42.
 
 ## 7. Optional Envelope Metadata
 
@@ -424,7 +391,7 @@ An optional member that is present but empty is not equivalent to an absent memb
 
 A record marked Unknown asserts that a determination could not be made. A record with no evidence and no Unknown marking is not a conforming record, because it asserts something the artifact cannot support.
 
-**R-16.** Absence of a record MUST be interpretable only against the artifact's declared scope. A producer MUST NOT emit an artifact whose scope declaration does not permit a consumer to determine what absence means.
+What absence of a record means is defined by [STD-0007](evidence-and-confidence.md) sections 6 and 8. The obligation on a producer to declare a scope adequate for absence to be interpretable is stated by [STD-0011](contract-specification.md) R-41.
 
 ## 9. Evidence and Confidence Attachment Points
 
@@ -462,11 +429,7 @@ A consumer carries the following obligations:
 | `Unavailable` | Treat as missing input; MUST NOT interpret as absence of the thing |
 | `Failed` | Treat as missing input; the failure MUST be surfaced |
 
-**R-34.** A producer MUST declare completeness honestly. A producer that examined less than its declared scope MUST NOT declare `Complete`.
-
-**R-35.** A consumer MUST distinguish `NotApplicable` from `Unavailable` and MUST NOT treat them equivalently.
-
-R-34 and R-35 are marked judgment-checkable. No mechanical check can determine whether a producer's declared scope matches what it actually examined, and this is the conformance failure with the widest downstream consequence: a false `Complete` causes every downstream consumer to read absence as evidence.
+The obligation on a producer to declare completeness honestly is stated by [STD-0011](contract-specification.md) R-05, and the obligation on a consumer to distinguish the states is stated by its R-13.
 
 ## 11. Lineage Requirements
 
@@ -480,9 +443,7 @@ The detection of a cycle, its timing, and the resulting failure are validator be
 
 **R-46.** Lineage MUST be recorded per record where derivation is partial. An artifact in which some records derive from upstream input and others were independently established MUST NOT record blanket derivation, because doing so over-propagates the constraints of STD-0007 and understates conclusions that were independently supported.
 
-**R-47.** A consumer MUST NOT present a stale artifact and a current artifact as concurrently valid.
-
-Regenerating an upstream artifact renders every downstream artifact deriving from it stale.
+Regenerating an upstream artifact renders every downstream artifact deriving from it stale. The obligation on a consumer not to present stale and current artifacts as concurrently valid is stated by [STD-0011](contract-specification.md) R-43.
 
 ## 12. Versioning Rules
 
@@ -518,15 +479,15 @@ Adding a value to a closed vocabulary is a major change. Adding a value to an op
 
 **Cross-revision consumption.** Consuming an artifact produced against a different subject revision than the current run is permitted only where declared.
 
-**R-48.** A cross-revision declaration MUST record both revisions and the reason for reuse, and a conclusion drawn from a cross-revision input MUST be capped at `Medium` confidence and MUST NOT be recorded as `Verified`. The consumer obligation to declare such reuse is stated by STD-0011.
+The obligations arising from cross-revision consumption — declaring both revisions and the reason for reuse, and the confidence cap on any conclusion drawn from such an input — are stated by [STD-0011](contract-specification.md) R-44.
 
 ## 14. Producer Output Requirements
 
 *This section is normative.*
 
-**R-28.** A producer MUST emit the declared type identity at a version compatible with its declaration, MUST emit every field the type requires, MUST use closed vocabularies correctly, MUST declare completeness per section 10, and MUST record provenance and lineage per sections 6 and 11.
+A well-formed artifact carries the declared type identity at a compatible version, every field the type requires, correct use of closed vocabularies, a declared completeness state, and recorded provenance and lineage. Those properties are stated by the requirements in sections 3 through 12 of this standard.
 
-R-28 states the properties of a well-formed artifact. **The behavioural obligations of producers and consumers — preconditions, guaranteed outputs, failure behaviour, substitution, and contract evolution — are defined by [STD-0011](contract-specification.md)** and are not restated here.
+**The obligation on a producer to emit such an artifact is stated by [STD-0011](contract-specification.md) R-23**, together with every other behavioural obligation of producers and consumers. This standard defines the artifact; the contract standard defines what a participant must do about it.
 
 **Retired requirements.** The following identifiers are retired permanently and are not reused, per [STD-0010](metadata-specification.md) R-18.
 
@@ -534,8 +495,17 @@ R-28 states the properties of a well-formed artifact. **The behavioural obligati
 | --- | --- | --- | --- |
 | R-24, R-25, R-27, R-29, R-30, R-31 | 1.2.0 | STD-0011 | Participant obligations |
 | R-38 | 1.3.0 | STD-0012 R-04, R-05 | Validator behaviour |
+| R-07 | 1.4.0 | STD-0011 R-40 | Consumer obligation |
+| R-16 | 1.4.0 | STD-0007 sections 6 and 8; STD-0011 R-41 | Semantics and producer obligation |
+| R-28 | 1.4.0 | STD-0011 R-23 | Producer obligation, duplicated |
+| R-34 | 1.4.0 | STD-0011 R-05 | Producer obligation, duplicated |
+| R-35 | 1.4.0 | STD-0011 R-13 | Consumer obligation, duplicated |
+| R-47 | 1.4.0 | STD-0011 R-43 | Consumer obligation |
+| R-48 | 1.4.0 | STD-0011 R-44 | Consumer obligation |
 
-R-09 and R-20 were narrowed rather than retired at 1.3.0, their validator clauses relocating to STD-0012 while their consumer and object clauses remain here.
+R-09 and R-20 were narrowed rather than retired at 1.3.0, their validator clauses relocating to STD-0012 while their consumer and object clauses remain here. R-33 was narrowed at 1.4.0, its consumer clause relocating to STD-0011 R-42 while its declaration clause remains.
+
+Fourteen identifiers are now retired from this standard. Each retirement moved an obligation to the standard that owns it; none removed an obligation from the framework.
 
 ## 15. Required Artifact Type Definition Sections
 
@@ -578,9 +548,9 @@ Fixtures are a property of the type definition and are therefore stated here. Th
 
 *This section is normative.*
 
-A producer conforms to this standard when the artifacts it emits satisfy R-28, R-34, and R-11. Its behavioural conformance is defined by [STD-0011](contract-specification.md) section 14.
+An artifact conforms when it satisfies R-01, R-02, R-06, R-08 through R-15, R-17 through R-19, R-33, R-40, and R-42 through R-46.
 
-A consumer conforms to this standard when it satisfies R-35. Its behavioural conformance is defined by STD-0011 section 14.
+Producer and consumer conformance is not defined by this standard. Both are defined by [STD-0011](contract-specification.md) section 14, which owns participant obligations.
 
 An artifact type definition conforms when it satisfies R-04, R-21, R-26, R-32, R-36, R-37, R-49, and R-50.
 

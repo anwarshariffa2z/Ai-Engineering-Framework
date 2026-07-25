@@ -1,7 +1,7 @@
 ---
 id: REF-0010
 title: Documentation Validation Report
-version: 1.1.0
+version: 1.2.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -66,6 +66,13 @@ Validation covered all Markdown documents in the repository except `LICENSE`, in
 | No validator behaviour is stated outside the Validation Specification Standard | Pass |
 | Every load-bearing normative obligation in the five core standards carries a requirement identifier | Pass |
 | Every requirement identifier is stated in the body and declared in metadata, in both directions, across all five core standards | Pass |
+| Architecture Discovery and Database Discovery consume the core standards and restate none of them | Pass |
+| No methodology carries a requirements key, per the metadata standard | Pass |
+| Every methodology declares its capability, inputs, outputs, preconditions, and produced artifact types | Pass |
+| Every methodology declares object type, layer, and the dependency and reference split | Pass |
+| Evidence states, confidence levels, and the health scale are defined in exactly one standard and referenced by both methodologies | Pass |
+| Methodologies declare only their own health dimensions, not the scale or its guards | Pass |
+| Participant and semantic obligations are held by the standards that own them, with none remaining in the artifact standard | Pass |
 
 ## Requirement Traceability
 
@@ -74,11 +81,11 @@ The five core standards declare the enforceable surface of the framework. Every 
 | Standard | Requirements | Mechanical | Judgment | Retired |
 | --- | --- | --- | --- | --- |
 | STD-0007 Evidence and Confidence | 44 | 20 | 24 | — |
-| STD-0008 Artifact Specification | 44 | 40 | 4 | 7 |
+| STD-0008 Artifact Specification | 37 | 35 | 2 | 14 |
 | STD-0010 Metadata Specification | 40 | 40 | 0 | — |
-| STD-0011 Contract Specification | 39 | 33 | 6 | — |
+| STD-0011 Contract Specification | 44 | 37 | 7 | — |
 | STD-0012 Validation Specification | 39 | 39 | 0 | — |
-| **Total** | **206** | **172** | **34** | **7** |
+| **Total** | **204** | **171** | **33** | **14** |
 
 Judgment-classified requirements are not exempt from enforcement. STD-0012 sections 8 and 9 govern them: those that a human can decide are routed to review, and those that cannot be decided by inspection at all are recorded as unenforceable rather than omitted.
 
@@ -95,8 +102,17 @@ Retired identifiers are permanently withdrawn and are never reused, per STD-0010
 | STD-0008 | R-30 | 1.2.0 | STD-0011 R-11 | Participant obligation |
 | STD-0008 | R-31 | 1.2.0 | STD-0011 R-12 | Participant obligation |
 | STD-0008 | R-38 | 1.3.0 | STD-0012 R-04, R-05 | Validator behaviour |
+| STD-0008 | R-07 | 1.4.0 | STD-0011 R-40 | Consumer obligation |
+| STD-0008 | R-16 | 1.4.0 | STD-0007 sections 6 and 8; STD-0011 R-41 | Semantics and producer obligation |
+| STD-0008 | R-28 | 1.4.0 | STD-0011 R-23 | Producer obligation, duplicated |
+| STD-0008 | R-34 | 1.4.0 | STD-0011 R-05 | Producer obligation, duplicated |
+| STD-0008 | R-35 | 1.4.0 | STD-0011 R-13 | Consumer obligation, duplicated |
+| STD-0008 | R-47 | 1.4.0 | STD-0011 R-43 | Consumer obligation |
+| STD-0008 | R-48 | 1.4.0 | STD-0011 R-44 | Consumer obligation |
 
-Three requirements were narrowed rather than retired, their validator clauses relocating while their remaining clauses stayed: STD-0008 R-09 and R-20, and STD-0011 R-36.
+Four requirements were narrowed rather than retired, their relocating clauses moving while their remaining clauses stayed: STD-0008 R-09, R-20, and R-33, and STD-0011 R-36.
+
+Fourteen identifiers are retired from STD-0008. Every retirement moved an obligation to the standard that owns it; none removed an obligation from the framework. The artifact standard now holds only artifact properties.
 
 ## Known Exceptions
 

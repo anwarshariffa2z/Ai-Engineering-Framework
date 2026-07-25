@@ -1,7 +1,7 @@
 ---
 id: STD-0011
 title: Contract Specification Standard
-version: 1.1.0
+version: 1.2.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -224,6 +224,31 @@ requirements:
     check: mechanical
     severity: blocking
     scope: evolution
+  - id: R-40
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: consumer
+  - id: R-41
+    level: MUST
+    check: judgment
+    severity: blocking
+    scope: producer
+  - id: R-42
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: consumer
+  - id: R-43
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: consumer
+  - id: R-44
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: consumer
 ---
 
 # Contract Specification Standard
@@ -310,6 +335,10 @@ R-05 is the central producer obligation and is judgment-checkable. It covers dec
 
 **R-08.** A producer MUST NOT weaken or withdraw a guarantee except through the evolution process in section 12.
 
+**R-41.** A producer MUST declare a scope adequate for a consumer to determine what absence of a record means. It MUST NOT emit an artifact whose scope declaration leaves absence uninterpretable.
+
+R-41 was relocated from STD-0008 at version 1.2.0. What absence means is defined by [STD-0007](evidence-and-confidence.md); the obligation to declare a scope that makes it determinable is the producer's.
+
 A producer is not obliged to find anything. It is obliged to look within its declared scope, to report honestly what it found and did not find, and to be clear about which is which.
 
 ## 5. Consumer Obligations
@@ -329,6 +358,16 @@ A producer is not obliged to find anything. It is obliged to look within its dec
 R-13 is the consumer obligation with the widest reach. A consumer that reads a `Partial` artifact as though it were `Complete`, or that records a conclusion stronger than the input it derived it from, produces output that is structurally valid and substantively false.
 
 **R-14.** A consumer MUST declare its own degradation when a required input is unavailable. It MUST NOT proceed silently on a missing input.
+
+**R-40.** A consumer MUST address an artifact by its run and type identity. It MUST NOT address an artifact by file path or by producer identity.
+
+**R-42.** A consumer MUST NOT interpret redacted absence as absence.
+
+**R-43.** A consumer MUST NOT present a stale artifact and a current artifact as concurrently valid.
+
+**R-44.** A consumer consuming an artifact produced against a different subject revision MUST declare both revisions and the reason for reuse, MUST cap any conclusion drawn from that input at `Medium` confidence, and MUST NOT record such a conclusion as `Verified`.
+
+R-40 through R-44 were relocated from STD-0008 at version 1.2.0. They are consumer obligations rather than properties of an artifact, and their subject matter is unchanged.
 
 A consumer is entitled to rely on a producer's guarantees. It is not entitled to assume anything a producer did not guarantee, and the difference between the two is stated in the contract rather than inferred from the output.
 
