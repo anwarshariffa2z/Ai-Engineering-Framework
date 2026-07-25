@@ -1,7 +1,7 @@
 ---
 id: REF-0010
 title: Documentation Validation Report
-version: 1.0.0
+version: 1.0.1
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -28,8 +28,9 @@ Validation covered all Markdown documents in the repository except `LICENSE`, in
 | Document IDs are unique and match the registry | Pass |
 | Markdown filenames are unique within their directories and no duplicate document paths exist | Pass |
 | Every Markdown document is represented in the Document Registry | Pass |
-| Audit Engine documents contain structure only and retain Draft status | Pass |
+| Architecture Discovery methodology is complete, evidence-led, and registered as AUD-0002 | Pass |
+| Remaining Audit Engine documents retain Draft structural status | Pass |
 
 ## Notes
 
-The repository is ready to scale through the ID, metadata, registry, and numbered-domain conventions. Audit Engine methodologies and implementation remain explicitly out of scope.
+The repository is ready to scale through the ID, metadata, registry, and numbered-domain conventions. Architecture Discovery is the reference methodology for future audit playbooks; Audit Engine implementation remains explicitly out of scope.
