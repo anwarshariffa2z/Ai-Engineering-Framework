@@ -40,3 +40,41 @@ The one exception: where an intermediate state genuinely existed and differed, r
 ### Working files are not framework documents
 
 `HANDOVER.md` and `tasks/*.md` are Markdown in the repository but are not framework corpus. They belong in the validator's exclude list alongside `tools/`, not in the registry with front matter. Adding them to the corpus would have failed validation on documents that are not governed by the standards at all.
+
+## Lesson — 2026-07-26 (second session)
+
+### The scope field settled an ownership question that had cost three milestones
+
+Eleven requirements moved from STD-0008 to STD-0013, and choosing which required no judgment at all: they were exactly the requirements whose declared `scope` was `artifact-type` rather than `artifact`, `record`, `evidence`, `run`, `producer`, or `transformer`. Three earlier milestones resolved the same class of question by inventing a test each time. The metadata had been carrying the answer since ADR-0002; nobody had queried it.
+
+Worth remembering as a general move: when a structured declaration already partitions the thing being argued about, query the partition before proposing a test.
+
+### Duplication is removed by finding the rule, not by merging the documents
+
+STD-0008 R-32 required all 93 artifact types to state their own completeness conditions, and those conditions were identical in all 93 cases. The fix was one section in STD-0013 stating them once, not a shared type. Meanwhile the ten `*.risks` and ten `*.health` types stayed separate despite looking near-identical, because per-type versioning and per-domain vocabularies are real variability.
+
+The test that separated the two cases: does the difference between members change what a consumer must do? Completeness conditions did not. Dimension vocabularies did.
+
+### An ADR's list of affected standards is a hypothesis
+
+ADR-0005 named STD-0008 as the only affected standard. Implementation immediately hit a second: STD-0010 R-09 admitted only keys "defined by this standard", so `artifact_types` failed on all ten declaration documents. The validator found it within seconds of the first run.
+
+Carried forward into ADR-0006 by listing STD-0010 in its affected-standards table on purpose, reasoning that an identity string is a new kind of metadata value and its admissibility under R-07 will need settling for the same reason.
+
+### Backticks inside inline shell scripts silently delete content
+
+Twice this session, JS strings containing Markdown code spans were passed through `bash -c`, and the shell command-substituted them. Eight code spans vanished from REF-0012 and a path from the validation report, leaving grammatical sentences with holes — `Ten domain-specific  types and ten  types`. No error, no exit code.
+
+Both caught only by reading the file afterwards. This is the third distinct variant of shell-mangles-content in this project, after the PowerShell encoding and array-unroll traps. **Rule: multi-line prose edits go through Write or Edit, never through a script invoked from a shell.** Scripts are for structured, line-based edits on registry tables.
+
+### The regex-over-whole-file registry edit failed again, and the line-based form worked
+
+A `RegExp` with the `m` flag against CRLF content wrote a table row to line 1 of `DOCUMENT_INDEX.md`, destroying the front matter. The validator reported all 56 documents unregistered on the next run, which is exactly the behaviour that makes it worth having. Restored with `git checkout` and redone by splitting on newline, matching per line, and preserving each line's own terminator.
+
+### Naming what is not activated is as valuable as the activation count
+
+The artifact type declaration framework bound 26 new checks and activated zero previously dormant requirements. The honest statement is structural: STD-0007, STD-0008, and STD-0011 govern artifact *instances*, the framework ships types and never instances, and 114 requirements therefore stay dormant until a producer runs. Reporting only the +26 would have implied progress toward something that had not moved.
+
+### The last blocker moved three times, and the third move changed its kind
+
+CAP-0001's readiness gap was "nine methodologies missing", then "no artifact type definitions", now "instance identity". The first two were closed by writing documents. The third could not be, which is why it needed an ADR rather than another milestone of authoring. A blocker that keeps regenerating is a sign the real question has not been named yet.
