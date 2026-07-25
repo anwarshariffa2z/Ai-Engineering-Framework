@@ -1,15 +1,15 @@
 ---
 id: DOC-0007
 title: Framework Artifact Model
-version: 1.0.0
+version: 1.1.0
 status: Draft
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-25
+last_updated: 2026-07-26
 review_cycle: Event-driven
 category: Foundation
 tags: [architecture, artifacts, interoperability, versioning, contracts]
-related: [framework-core-architecture.md, framework-architecture.md, ../09-capabilities/CAP-0001-repository-audit.md, ../03-audit-engine/01-architecture-discovery.md, ../03-audit-engine/02-database-discovery.md, ../07-roadmap/framework-architecture-review.md]
+related: [framework-core-architecture.md, framework-architecture.md, ../09-capabilities/CAP-0001-repository-audit.md, ../03-audit-engine/01-architecture-discovery.md, ../03-audit-engine/02-database-discovery.md, ../07-roadmap/framework-architecture-review.md, ../ADR/ADR-0006-artifact-instance-identity.md]
 ---
 
 # Framework Artifact Model
@@ -377,7 +377,7 @@ Each scenario shows the model resolving a case that would otherwise break indepe
 
 ## 19. Open Questions
 
-**Q-01 — Where do artifact instances live, and how are runs addressed across repositories?** This model defines addressing within a run; it does not define where runs are stored or how a consumer in one repository reaches a run produced in another. This is the remaining part of the original blocking question.
+**Q-01 — Where do artifact instances live, and how are runs addressed across repositories? Resolved.** [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md) decides it: an instance is named by a logical identity, its location is resolved separately, and its integrity is verified by content digest. Carriage of that decision into STD-0008, STD-0010, STD-0011, and STD-0012 remains implementation work.
 
 **Q-02 — Is the envelope serialization-independent in practice?** The design assumes it, but a concrete serialization may impose constraints the abstract model does not anticipate.
 

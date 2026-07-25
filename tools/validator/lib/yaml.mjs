@@ -28,6 +28,19 @@ function indentOf(line) {
   return line.length - line.trimStart().length;
 }
 
+// Reads `key: value` from a trimmed line, tolerating a quoted key.
+// Returns [key, value] or null.
+function readKey(raw) {
+  const quoted = /^"([^"]+)":\s*(.*)$/.exec(raw);
+  if (quoted) return [quoted[1], quoted[2]];
+  const plain = SCALAR.exec(raw);
+  return plain ? [plain[1], plain[2]] : null;
+}
+
+function assign(target, key, value) {
+  target[key] = value.trim().startsWith('[') ? parseInlineList(value) : stripQuotes(value);
+}
+
 // Parses a block starting at `start` whose entries are indented deeper than `parentIndent`.
 // Returns [value, nextIndex].
 function parseBlock(lines, start, parentIndent) {
@@ -49,17 +62,27 @@ function parseBlock(lines, start, parentIndent) {
       const headScalar = SCALAR.exec(head);
       if (headScalar) {
         // A list of maps: the first key sits on the dash line, the rest below.
+        // Entry values may themselves be inline lists or nested blocks, which is
+        // what artifact type declarations require.
         const entry = {};
-        entry[headScalar[1]] = stripQuotes(headScalar[2]);
+        assign(entry, headScalar[1], headScalar[2]);
         i += 1;
         while (i < lines.length) {
           const next = lines[i];
           if (next.trim() === '') { i += 1; continue; }
           if (indentOf(next) <= itemIndent) break;
-          const keyMatch = SCALAR.exec(next.trim());
+          const keyIndent = indentOf(next);
+          const keyMatch = readKey(next.trim());
           if (!keyMatch) break;
-          entry[keyMatch[1]] = stripQuotes(keyMatch[2]);
-          i += 1;
+          const [key, value] = keyMatch;
+          if (value === '') {
+            const [nested, nextIndex] = parseBlock(lines, i + 1, keyIndent);
+            entry[key] = nested === null ? '' : nested;
+            i = nested === null ? i + 1 : nextIndex;
+          } else {
+            assign(entry, key, value);
+            i += 1;
+          }
         }
         items.push(entry);
       } else {

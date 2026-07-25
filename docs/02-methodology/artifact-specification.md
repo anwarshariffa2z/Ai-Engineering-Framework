@@ -1,15 +1,15 @@
 ---
 id: STD-0008
 title: Artifact Specification Standard
-version: 1.4.0
+version: 1.5.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-25
+last_updated: 2026-07-26
 review_cycle: Annual
 category: Methodology
 tags: [artifacts, interoperability, versioning, contracts, standard]
-related: [document-metadata-standard.md, document-id-standard.md, evidence-and-confidence.md, contract-specification.md, validation-specification.md, ../01-foundation/framework-core-architecture.md, ../01-foundation/framework-artifact-model.md, ../ADR/ADR-0002-requirements-as-metadata.md, ../ADR/ADR-0003-normative-informative-separation.md, ../ADR/ADR-0004-depend-on-artifact-types.md]
+related: [document-metadata-standard.md, document-id-standard.md, evidence-and-confidence.md, contract-specification.md, validation-specification.md, ../01-foundation/framework-core-architecture.md, ../01-foundation/framework-artifact-model.md, ../ADR/ADR-0002-requirements-as-metadata.md, ../ADR/ADR-0003-normative-informative-separation.md, ../ADR/ADR-0004-depend-on-artifact-types.md, artifact-type-declaration-standard.md]
 normativity:
   "1": informative
   "2": normative
@@ -43,16 +43,6 @@ requirements:
     check: mechanical
     severity: blocking
     scope: artifact
-  - id: R-03
-    level: MUST
-    check: mechanical
-    severity: blocking
-    scope: artifact-type
-  - id: R-04
-    level: MUST
-    check: mechanical
-    severity: blocking
-    scope: artifact-type
   - id: R-05
     level: MUST
     check: mechanical
@@ -123,46 +113,11 @@ requirements:
     check: mechanical
     severity: blocking
     scope: composition
-  - id: R-21
-    level: MUST
-    check: mechanical
-    severity: blocking
-    scope: artifact-type
-  - id: R-22
-    level: MUST
-    check: judgment
-    severity: blocking
-    scope: artifact-type
-  - id: R-23
-    level: MUST
-    check: mechanical
-    severity: blocking
-    scope: artifact-type
-  - id: R-26
-    level: MUST
-    check: mechanical
-    severity: blocking
-    scope: artifact-type
-  - id: R-32
-    level: MUST
-    check: mechanical
-    severity: blocking
-    scope: artifact-type
   - id: R-33
     level: MUST
     check: mechanical
     severity: blocking
     scope: artifact
-  - id: R-36
-    level: MUST
-    check: mechanical
-    severity: blocking
-    scope: artifact-type
-  - id: R-37
-    level: MUST
-    check: mechanical
-    severity: blocking
-    scope: document
   - id: R-39
     level: MUST
     check: mechanical
@@ -203,16 +158,6 @@ requirements:
     check: mechanical
     severity: blocking
     scope: lineage
-  - id: R-49
-    level: MUST
-    check: mechanical
-    severity: blocking
-    scope: artifact-type
-  - id: R-50
-    level: MUST
-    check: mechanical
-    severity: blocking
-    scope: artifact-type
   - id: R-51
     level: MUST
     check: mechanical
@@ -242,13 +187,13 @@ requirements:
 
 *This section is informative.*
 
-This standard makes the [Framework Artifact Model](../01-foundation/framework-artifact-model.md) binding. It states what a framework artifact is, what every artifact must carry, and how artifact types are defined and versioned.
+This standard makes the [Framework Artifact Model](../01-foundation/framework-artifact-model.md) binding. It states what a framework artifact is and what every artifact must carry. How artifact types are declared and versioned is stated by [STD-0013](artifact-type-declaration-standard.md), per [ADR-0005](../ADR/ADR-0005-artifact-types-as-declarations.md).
 
 It implements decisions already taken. It does not revisit them. Where a reader wants the reasoning behind a rule here, it is in the design documents referenced above, and this standard deliberately does not restate it.
 
-**In scope.** Artifact identity, envelope, required and optional metadata, type definition, type versioning semantics, completeness declaration, evidence and confidence attachment points, lineage, artifact well-formedness, and type-definition conformance.
+**In scope.** Artifact identity, envelope, required and optional metadata, completeness declaration, evidence and confidence attachment points, lineage, and artifact well-formedness.
 
-**Out of scope.** The content of any specific artifact type; the methodologies that produce or consume artifacts; serialization format and file layout; storage, transport, and access control; the canonical syntax for metadata, which [STD-0010](metadata-specification.md) defines; the meaning of evidence, confidence, and completeness, which [STD-0007](evidence-and-confidence.md) defines; and the obligations of producers and consumers, which [STD-0011](contract-specification.md) defines.
+**Out of scope.** The content of any specific artifact type; the methodologies that produce or consume artifacts; serialization format and file layout; storage, transport, and access control; the canonical syntax for metadata, which [STD-0010](metadata-specification.md) defines; the meaning of evidence, confidence, and completeness, which [STD-0007](evidence-and-confidence.md) defines; and the obligations of producers and consumers, which [STD-0011](contract-specification.md) defines; and the declaration, versioning, and conformance of artifact types, which [STD-0013](artifact-type-declaration-standard.md) defines.
 
 **On metadata representation.** Where this standard requires that something be declared in metadata, the canonical representation is defined by [STD-0010](metadata-specification.md).
 
@@ -260,7 +205,7 @@ It implements decisions already taken. It does not revisit them. Where a reader 
 
 **Artifact** — a structured output produced by executing a methodology or process against a subject.
 
-**Artifact type** — the declared contract describing what an artifact of that kind asserts and what shape it takes.
+**Artifact type** — the declared contract describing what an artifact of that kind asserts and what shape it takes. Its declaration is governed by [STD-0013](artifact-type-declaration-standard.md).
 
 **Artifact instance** — one production of one artifact type, in one run.
 
@@ -284,11 +229,11 @@ It implements decisions already taken. It does not revisit them. Where a reader 
 
 **R-01.** An artifact MUST consist of exactly one envelope and exactly one body.
 
-**R-02.** An artifact MUST declare the artifact type it claims to be, and MUST conform to that type's definition.
+**R-02.** An artifact MUST declare the artifact type it claims to be, and MUST conform to that type's declaration. What conformance consists of is stated by [STD-0013](artifact-type-declaration-standard.md) section 16.
 
 **R-40.** An output that does not carry an envelope is not a framework artifact and MUST NOT be consumed as one, regardless of how well structured its content is. This applies equally to human-authored analysis, tool output, and material supplied by a requester: such material is an *input* to a producer and may be recorded as evidence, but it does not become an artifact until a conforming producer emits one.
 
-**R-03.** An artifact type MUST be owned by the framework or by a declared extending namespace. An artifact type MUST NOT be owned by a methodology.
+The ownership, identity, and namespacing of an artifact type are stated by [STD-0013](artifact-type-declaration-standard.md) section 4.
 
 **R-11.** An artifact MUST NOT contain secret values, credentials, connection strings, host endpoints, personal or regulated data, or subject record values. Structure may be described; content MUST NOT be reproduced.
 
@@ -298,7 +243,7 @@ R-11 is marked judgment-checkable because a mechanical check can detect known cr
 
 *This section is normative.*
 
-**R-04.** An artifact type definition MUST declare a stable, namespaced type identity. A type identity MUST NOT be reused.
+An artifact type is declared, not defined in prose. Its identity, version, fields, vocabularies, completeness conditions, lineage, compatibility profiles, lifecycle, and conformance fixtures are all stated by [STD-0013](artifact-type-declaration-standard.md), per [ADR-0005](../ADR/ADR-0005-artifact-types-as-declarations.md). This standard defines the artifact instance and says nothing about the shape of any type.
 
 **R-05.** Within a run, an artifact type MUST appear at most once.
 
@@ -413,9 +358,7 @@ Confidence attaches at record level and is aggregated at envelope level per R-10
 
 *This section is normative.*
 
-**The meaning of each completeness state is defined by [STD-0007](evidence-and-confidence.md) section 8** and is not restated here. This section states the obligations a producer and consumer carry with respect to those states.
-
-**R-32.** Every artifact type definition MUST state the conditions under which each completeness state applies to that type.
+**The meaning of each completeness state is defined by [STD-0007](evidence-and-confidence.md) section 8** and is not restated here. This section states the obligations a producer and consumer carry with respect to those states. The conditions under which each state applies to an artifact type are stated once by [STD-0013](artifact-type-declaration-standard.md) section 9, and the obligation on a producer to assign a state under those conditions is its R-36.
 
 **R-45.** An artifact MUST declare exactly one completeness state. The completeness vocabulary is **closed** and comprises `Complete`, `Partial`, `NotApplicable`, `Unavailable`, and `Failed`.
 
@@ -449,33 +392,17 @@ Regenerating an upstream artifact renders every downstream artifact deriving fro
 
 *This section is normative.*
 
-**R-21.** An artifact type MUST carry a semantic version, and a producer MUST declare the exact type version it emits.
+Artifact type versioning is stated by [STD-0013](artifact-type-declaration-standard.md): the version a declaration carries by its R-05, the classification of a change by its R-15 and R-24, the requirement that a different assertion take a new identity by its R-03, and deprecation by its R-27 and R-28.
 
-**R-22.** A change to an artifact type MUST be classified as major where a conforming consumer that was correct before the change could be wrong after it.
+The obligation on a producer to declare the exact type version it emits is [STD-0011](contract-specification.md) R-23, and the obligation on an artifact to record it is R-10 of this standard.
 
-The following are major changes: removing a field; making an optional field required; changing a field's meaning, unit, or interpretation; removing or narrowing a value from a closed vocabulary; changing what absence of a record implies; and changing the semantics of an existing state.
-
-The following are minor changes: adding an optional field; adding a value to an open vocabulary; adding a record group; and relaxing a producer-side constraint on which no consumer relies.
-
-The following are patch changes: clarifying documentation; correcting an example; correcting a description that misstated existing behavior.
-
-R-22 is judgment-checkable because a meaning change may produce no structural difference. A field whose interpretation silently shifts is a major change with no detectable schema difference, and it is the change most likely to be mis-classified.
-
-**R-23.** An artifact type whose semantic definition changes such that it asserts something different about its subject MUST take a new type identity. It MUST NOT take a major version.
-
-A major version expresses evolution of one contract. A different assertion is a different contract, and versioning it as the same one permits a consumer resolving a type to receive an artifact answering a question it did not ask.
-
-**R-36.** A deprecated artifact type MUST declare a successor reference and a deprecation reason. Existing instances of a deprecated type MUST remain valid and readable. Instances MUST NOT be deleted.
+This standard states nothing further about type versioning. An instance is not independently versioned; its type is versioned, and its identity is its run and type, per R-06.
 
 ## 13. Compatibility Requirements
 
 *This section is normative.*
 
-**The obligations arising from compatibility are defined by [STD-0011](contract-specification.md) section 11** and are not restated here. This section defines only the properties of a type that make compatibility determinable.
-
-**R-26.** Every enumerated field in an artifact type definition MUST declare itself closed or open.
-
-Adding a value to a closed vocabulary is a major change. Adding a value to an open vocabulary is a minor change.
+**The obligations arising from compatibility are defined by [STD-0011](contract-specification.md) section 11** and are not restated here. The properties of a type that make compatibility determinable — closed and open vocabulary declarations, and declared consumption profiles — are stated by [STD-0013](artifact-type-declaration-standard.md) sections 8 and 12.
 
 **Cross-revision consumption.** Consuming an artifact produced against a different subject revision than the current run is permitted only where declared.
 
@@ -502,45 +429,28 @@ A well-formed artifact carries the declared type identity at a compatible versio
 | R-35 | 1.4.0 | STD-0011 R-13 | Consumer obligation, duplicated |
 | R-47 | 1.4.0 | STD-0011 R-43 | Consumer obligation |
 | R-48 | 1.4.0 | STD-0011 R-44 | Consumer obligation |
+| R-03, R-04, R-21, R-22, R-23, R-26, R-32, R-36, R-37, R-50 | 1.5.0 | STD-0013 | Artifact type declaration, per ADR-0005 |
+| R-49 | 1.5.0 | Withdrawn | A data record has no sections to mark normative or informative |
 
 R-09 and R-20 were narrowed rather than retired at 1.3.0, their validator clauses relocating to STD-0012 while their consumer and object clauses remain here. R-33 was narrowed at 1.4.0, its consumer clause relocating to STD-0011 R-42 while its declaration clause remains.
 
-Fourteen identifiers are now retired from this standard. Each retirement moved an obligation to the standard that owns it; none removed an obligation from the framework.
+Twenty-five identifiers are now retired from this standard. Every retirement before 1.5.0 moved an obligation to the standard that owns it. The eleven retired at 1.5.0 were the only requirements this standard scoped to `artifact-type` rather than to an artifact, record, evidence item, run, producer, or transformer; STD-0013 restates ten of them and the eleventh, R-49, is withdrawn rather than moved because it constrained a prose document that no longer exists. STD-0013 section 18 maps each one.
 
-## 15. Required Artifact Type Definition Sections
+What remains here is the artifact instance and nothing else.
+
+## 15. Artifact Type Declarations
 
 *This section is normative.*
 
-**R-37.** Every artifact type definition MUST declare all sixteen of the following.
+An artifact type is declared as structured data governed by [STD-0013](artifact-type-declaration-standard.md), per [ADR-0005](../ADR/ADR-0005-artifact-types-as-declarations.md). Its required and optional declaration fields are that standard's sections 5 and 6, its carriage is its R-31, and the conformance relation between an instance and its declared type is its section 16.
 
-| Section | Content |
-| --- | --- |
-| Purpose | What this artifact asserts about a subject |
-| Artifact Type | Namespaced type identity and current version |
-| Required Metadata | Envelope members required beyond section 6, and required body fields |
-| Optional Metadata | Optional fields and their meaning when present |
-| Producer | The kind of producer expected, never a specific methodology identity |
-| Consumers | The known consumers and what each reads |
-| Contract | What a consumer may rely upon, stated as commitments |
-| Versioning | Current version and the change history that produced it |
-| Compatibility | Declared consumption profiles known to the type owner |
-| Evidence | Where evidence attaches within this type's records |
-| Confidence | How confidence is assigned and aggregated for this type |
-| Completeness | The conditions under which each completeness state applies |
-| Lineage | Upstream artifact types this type may derive from |
-| Validation Rules | The mechanical checks a conforming instance satisfies |
-| Examples | Conformance fixtures, per section 16 |
-| Informative Notes | Rationale, caveats, and guidance, marked informative |
-
-**R-49.** A type definition MUST mark each of these sections normative or informative, per section 18.
+This standard states no property of any artifact type. The obligation on an artifact to declare the type it claims and to conform to it is R-02, and everything that obligation resolves against is STD-0013's.
 
 ## 16. Validation Requirements
 
 *This section is normative.*
 
-**R-50.** Every artifact type definition MUST supply conformance fixtures covering its normal case, its empty case, its `NotApplicable` case, its `Partial` case, and its boundary cases.
-
-Fixtures are a property of the type definition and are therefore stated here. The procedure by which a producer or consumer demonstrates conformance against them is validator behaviour and is stated by [STD-0012](validation-specification.md) section 10.
+Conformance fixtures are a property of a type declaration and are required by [STD-0013](artifact-type-declaration-standard.md) R-29 and R-30. The procedure by which a producer or consumer demonstrates conformance against them is validator behaviour and is stated by [STD-0012](validation-specification.md) section 10.
 
 **Validator behaviour is not stated by this standard.** Rejection duties, fail-closed conditions, extension tolerance, coverage, severity, outcomes, exceptions, and reporting are all owned by [STD-0012](validation-specification.md).
 
@@ -552,7 +462,7 @@ An artifact conforms when it satisfies R-01, R-02, R-06, R-08 through R-15, R-17
 
 Producer and consumer conformance is not defined by this standard. Both are defined by [STD-0011](contract-specification.md) section 14, which owns participant obligations.
 
-An artifact type definition conforms when it satisfies R-04, R-21, R-26, R-32, R-36, R-37, R-49, and R-50.
+An artifact type declaration conforms when it satisfies the requirements of [STD-0013](artifact-type-declaration-standard.md) section 5 through section 15. This standard states no conformance criterion for a type.
 
 How conformance is evaluated and enforced is defined by [STD-0012](validation-specification.md).
 
@@ -568,27 +478,27 @@ A transformer that discards fields it does not understand silently destroys anot
 
 *This section is normative.*
 
-**R-37 applies to artifact type definitions. This section applies to every framework document.**
+**This section applies to every framework document.** It does not apply to an artifact type declaration, which is a data record with no sections, and which [STD-0013](artifact-type-declaration-standard.md) governs.
 
 Per ADR-0003, every framework document declares the normativity of each of its sections in metadata. The declaration is authoritative; the italic marker beneath each heading in this document renders that declaration for a human reader and is not a second mechanism.
 
 The prohibition on stating a requirement in an informative section is [STD-0010](metadata-specification.md) R-19. Any obligation appearing in one has no force.
 
-The conceptual model for this declaration is in [Framework Core Architecture](../01-foundation/framework-core-architecture.md) section 12. **STD-0010 defines the canonical representation.** The front matter of this document demonstrates the intended shape; that shape is illustrative until STD-0010 is approved.
+The conceptual model for this declaration is in [Framework Core Architecture](../01-foundation/framework-core-architecture.md) section 12. **STD-0010 defines the canonical representation.** The front matter of this document demonstrates the intended shape.
 
 ## 19. Examples
 
 *This section is informative.*
 
-**A field is added.** A producer adds an optional field to an artifact type. Minor increment under R-22. Consumers whose declared profiles exclude the field are unaffected under R-25. No coordination occurs.
+**A field is added.** A producer adds an optional field to an artifact type. Minor increment under [STD-0013](artifact-type-declaration-standard.md) R-15. Consumers whose declared profiles exclude the field are unaffected under [STD-0011](contract-specification.md) R-25. No coordination occurs.
 
-**A field is removed.** A producer removes a field that one of four consumers reads. Major increment. Profile evaluation identifies the single affected consumer; three continue unchanged. Without profiles, all four would be revisited.
+**A field is removed.** A producer removes a field that one of four consumers reads. Major increment under [STD-0013](artifact-type-declaration-standard.md) R-24. Profile evaluation identifies the single affected consumer; three continue unchanged. Without profiles, all four would be revisited.
 
-**A subject has no data stores.** The producer emits an artifact with completeness `NotApplicable` and a recorded reason. Under R-35 consumers treat it as a valid finding, and it does not lower a score.
+**A subject has no data stores.** The producer emits an artifact with completeness `NotApplicable` and a recorded reason. Under [STD-0011](contract-specification.md) R-13 consumers treat it as a valid finding, and it does not lower a score.
 
 **A producer is unauthorized.** No artifact is emitted; resolution finds nothing. Consumers declare the input unavailable and mark dependent records Unknown. Structurally similar to the previous example, and correctly producing the opposite outcome.
 
-**A producer is substituted.** An organization replaces the architecture producer with its own, emitting the same types at compatible versions. Under R-29 no downstream consumer changes, and none can detect the substitution.
+**A producer is substituted.** An organization replaces the architecture producer with its own, emitting the same types at compatible versions. Under [ADR-0004](../ADR/ADR-0004-depend-on-artifact-types.md) no downstream consumer changes, and none can detect the substitution.
 
 **Two producers consume each other.** The lineage graph contains a cycle. Under R-20 composition fails before execution, naming both participants.
 
@@ -600,7 +510,7 @@ The requirement that the envelope be interpretable without the type definition (
 
 The distinction between `NotApplicable` and `Unavailable` (R-35) is the interpretive rule most often lost in practice and the most expensive to lose. Both yield an empty record set. The first is a finding about the subject; the second is a hole in the audit. A framework that cannot distinguish them will eventually report a clean result for a domain nobody examined.
 
-R-34 is the conformance requirement most likely to be violated undetectably. A producer that examined half its declared scope and declared `Complete` is structurally valid and semantically corrupt, and no mechanical check can catch it. Conformance fixtures reduce the risk; they do not remove it.
+Honest completeness declaration is the conformance requirement most likely to be violated undetectably. A producer that examined half its declared scope and declared `Complete` is structurally valid and semantically corrupt, and no mechanical check can catch it. Conformance fixtures reduce the risk; they do not remove it.
 
 This standard says nothing about where artifacts are stored or how a consumer reaches an artifact produced in another repository. That question is recorded as open in [Framework Artifact Model](../01-foundation/framework-artifact-model.md) section 19 and is out of scope here. Nothing in this standard depends on its resolution.
 
