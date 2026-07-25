@@ -42,13 +42,14 @@ This is the canonical registry for every framework document. A document is not c
 | ADR-0002 | Express Requirements as Standard Metadata Rather Than as Rule Objects | Architecture Decision Record | Accepted | Framework Maintainers | [document](ADR/ADR-0002-requirements-as-metadata.md) | 1.0.0 | 2026-07-25 |
 | ADR-0003 | Declare Normativity at Section Granularity in Every Document | Architecture Decision Record | Accepted | Framework Maintainers | [document](ADR/ADR-0003-normative-informative-separation.md) | 1.0.0 | 2026-07-25 |
 | ADR-0004 | Depend on Artifact Types Rather Than on Producing Methodologies | Architecture Decision Record | Accepted | Framework Maintainers | [document](ADR/ADR-0004-depend-on-artifact-types.md) | 1.0.0 | 2026-07-25 |
+| ADR-0005 | Declare Artifact Types as Structured Data Governed by One Standard | Architecture Decision Record | Draft | Framework Maintainers | [document](ADR/ADR-0005-artifact-types-as-declarations.md) | 1.0.0 | 2026-07-26 |
 | CAP-0001 | Repository Audit Capability | Capability | Draft | Framework Maintainers | [document](09-capabilities/CAP-0001-repository-audit.md) | 1.1.0 | 2026-07-26 |
 | CHK-0001 | Delivery Evidence Checklist | Methodology | Approved | Framework Maintainers | [document](02-methodology/delivery-evidence-checklist.md) | 1.0.0 | 2026-07-25 |
 | CMD-0001 | Change Management | Governance | Approved | Framework Maintainers | [document](06-governance/change-management.md) | 1.0.0 | 2026-07-25 |
 | EX-0001 | System Evidence Record Example | Example | Approved | Framework Maintainers | [document](08-examples/system-evidence-record.md) | 1.0.0 | 2026-07-25 |
 | PLB-0001 | Incident Management | Governance | Approved | Framework Maintainers | [document](06-governance/incident-management.md) | 1.0.0 | 2026-07-25 |
 | REF-0001 | Framework Glossary | Reference | Approved | Framework Maintainers | [document](02-methodology/glossary.md) | 1.0.0 | 2026-07-25 |
-| REF-0002 | Architecture Decision Records | Reference | Approved | Framework Maintainers | [document](ADR/README.md) | 1.1.0 | 2026-07-25 |
+| REF-0002 | Architecture Decision Records | Reference | Approved | Framework Maintainers | [document](ADR/README.md) | 1.2.0 | 2026-07-26 |
 | REF-0003 | Documentation Navigation | Reference | Approved | Framework Maintainers | [document](README.md) | 1.0.0 | 2026-07-25 |
 | REF-0004 | Changelog | Reference | Approved | Framework Maintainers | [document](../CHANGELOG.md) | 1.0.0 | 2026-07-25 |
 | REF-0005 | Contributing | Reference | Approved | Framework Maintainers | [document](../CONTRIBUTING.md) | 1.0.1 | 2026-07-26 |
