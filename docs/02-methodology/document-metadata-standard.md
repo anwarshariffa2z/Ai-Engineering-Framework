@@ -1,7 +1,7 @@
 ---
 id: STD-0001
 title: Document Metadata Standard
-version: 1.1.0
+version: 1.1.1
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -90,9 +90,9 @@ related:
 
 *This section is normative.*
 
-`id` is a unique framework document ID. `title` is the reader-facing name. `version` uses semantic versioning. `status` is Draft, Approved, Deprecated, or Superseded. `owner` names the accountable role or team. `created` and `last_updated` use ISO 8601 dates. `review_cycle` states a concrete cadence or `Event-driven`. `category` matches the repository classification. `tags` is a YAML list of searchable terms. `related` is a YAML list of repository-relative or document-relative references.
+`id` is a unique framework document ID. `title` is the reader-facing name. `version` uses semantic versioning. `status` is Draft, Approved, Deprecated, or Superseded. `owner` names the accountable role or team. `created` and `last_updated` use ISO 8601 dates. `review_cycle` states a concrete cadence or `Event-driven`. `category` matches the repository classification. `tags` is a YAML list of searchable terms. `related` is a YAML list of references.
 
-The permitted form of each value is defined by [STD-0010](metadata-specification.md) section 4, and the permitted values of `status` and `category` by its section 6.
+The permitted form of each value is defined by [STD-0010](metadata-specification.md) section 4 — including the permitted form of a reference, which its R-07 defines — and the permitted values of `status` and `category` by its section 6. Where this standard and STD-0010 both address a key, this standard governs the obligation and STD-0010 governs its representation.
 
 ## 5. Agreement and Maintenance
 
