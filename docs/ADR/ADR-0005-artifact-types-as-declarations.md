@@ -1,8 +1,8 @@
 ---
 id: ADR-0005
 title: Declare Artifact Types as Structured Data Governed by One Standard
-version: 1.0.0
-status: Draft
+version: 1.1.0
+status: Accepted
 owner: Framework Maintainers
 created: 2026-07-26
 last_updated: 2026-07-26
@@ -16,7 +16,7 @@ references: [README.md, ADR-0002-requirements-as-metadata.md, ADR-0004-depend-on
 
 # ADR-0005: Declare Artifact Types as Structured Data Governed by One Standard
 
-- Status: Draft
+- Status: Accepted
 - Date: 2026-07-26
 - Owners: Framework Maintainers
 

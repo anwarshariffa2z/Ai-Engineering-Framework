@@ -1,7 +1,7 @@
 ---
 id: REF-0002
 title: Architecture Decision Records
-version: 1.2.0
+version: 1.3.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -9,7 +9,7 @@ last_updated: 2026-07-26
 review_cycle: Annual
 category: Reference
 tags: [architecture, decisions, adr]
-related: [ADR-template.md, ADR-0001-framework-foundation.md, ADR-0002-requirements-as-metadata.md, ADR-0003-normative-informative-separation.md, ADR-0004-depend-on-artifact-types.md, ADR-0005-artifact-types-as-declarations.md]
+related: [ADR-template.md, ADR-0001-framework-foundation.md, ADR-0002-requirements-as-metadata.md, ADR-0003-normative-informative-separation.md, ADR-0004-depend-on-artifact-types.md, ADR-0005-artifact-types-as-declarations.md, ADR-0006-artifact-instance-identity.md]
 ---
 
 # Architecture Decision Records
@@ -27,3 +27,4 @@ Each record decides one thing. Where a decision is supported by a design documen
 | [ADR-0003](ADR-0003-normative-informative-separation.md) | Declare normativity at section granularity in every document |
 | [ADR-0004](ADR-0004-depend-on-artifact-types.md) | Depend on artifact types rather than on producing methodologies |
 | [ADR-0005](ADR-0005-artifact-types-as-declarations.md) | Declare artifact types as structured data governed by one standard |
+| [ADR-0006](ADR-0006-artifact-instance-identity.md) | Identify artifact instances by logical identity and resolve location separately |

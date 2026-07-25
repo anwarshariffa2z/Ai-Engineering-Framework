@@ -1,7 +1,7 @@
 ---
 id: CAP-0001
 title: Repository Audit Capability
-version: 1.1.0
+version: 1.3.1
 status: Draft
 owner: Framework Maintainers
 created: 2026-07-25
@@ -201,7 +201,9 @@ This capability is **partially fulfillable at the current framework revision**, 
 | Gap analysis | AUD-0010 | Approved |
 | Runtime verification | AUD-0011 | Approved |
 
-**Ten of eleven methodologies are approved, and none is executable.** Every approved methodology declares the artifact types it produces, and no artifact type definition has been written, so a run cannot emit a conforming artifact. Readiness is now bounded by the artifact model rather than by the methodology set. A run at this revision produces a valid but partial audit whose composed health is a bounded range (section 11.3). The capability is honest about this by design: a capability that claims readiness it does not have is worse than one that does not exist, because consumers act on the claim.
+**Ten of eleven methodologies are approved, and every artifact type they declare is declared in the corpus.** The specification of this capability is complete except in one respect, and that respect is architectural rather than implementational: how an artifact instance is identified and addressed is decided in principle by [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md) and not yet carried into the standards it names. Until it is, a producer has no identity to record and a consumer has no identity to resolve.
+
+A run at this revision produces a valid but partial audit whose composed health is a bounded range (section 11.3). The capability is honest about this by design: a capability that claims readiness it does not have is worse than one that does not exist, because consumers act on the claim.
 
 ## 10. Outputs
 
@@ -353,17 +355,15 @@ This is a property of the design rather than a limitation of it. A capability wh
 
 ## 16. Contract Status and Known Gaps
 
-This capability is Draft. Three gaps are disclosed rather than deferred, because a public contract that conceals its own preconditions is not a contract.
+This capability is Draft. Its gaps are disclosed rather than deferred, because a public contract that conceals its own preconditions is not a contract.
 
-**No artifact type definition exists.** Ten of eleven methodologies are approved and every one declares the artifact types it produces, but none of those types has been defined against [STD-0008](../02-methodology/artifact-specification.md) section 15. Ninety-three types are registered in the [Artifact Type Inventory](../07-roadmap/artifact-type-inventory.md) and none is implemented. This is now the binding constraint on execution: a methodology that cannot emit a conforming artifact cannot be run, however completely it is specified.
+**One architectural decision remains to be carried into the standards.** The ordering in section 9.1 requires that one methodology's artifacts be readable by another, which requires that an artifact instance have a name. [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md) decides that name: a logical identity composed of subject authority, subject name, subject revision, run discriminator, and type at version, with location resolved separately and a content digest supplying immutability. The decision is recorded; the standards it affects — STD-0008, STD-0010, STD-0011, and STD-0012 — have not yet been revised to state it.
+
+**This was the framework's last open architectural question, and it is now decided rather than outstanding.** [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md) is Accepted; what remains is authoring, not design. Every artifact type this capability composes is declared: ninety-three declarations under [STD-0013](../02-methodology/artifact-type-declaration-standard.md), one per type registered in the [Artifact Type Inventory](../07-roadmap/artifact-type-inventory.md). The specification of what this capability produces is complete. What is outstanding is the specification of how its outputs are named, and no amount of implementation would supply it.
 
 **One of eleven methodologies does not exist.** [AUD-0001](../03-audit-engine/00-bootstrap.md) Bootstrap remains a structural placeholder, and the ordering in section 9.1 begins with it.
 
-**The shared evidence and scoring models are duplicated** across the two existing methodologies rather than held in one standard. This capability depends on their consistency; the framework architecture review recommends extracting them.
-
-**Artifact interchange is undesigned.** The ordering in section 9.1 requires that one methodology's artifacts be readable by another. Where artifacts live, how they are addressed, and how a downstream methodology reaches an upstream artifact is an open question in the framework core architecture and blocks full execution of this capability more directly than any missing methodology.
-
-**Identifier and registration note.** The `CAP` prefix and the `Capability` category are not currently defined by the Framework Document ID Standard, and this document is not registered in the Document Registry, because this milestone prohibited modifying existing documents. Both are required before this capability is anything other than a proposal. The registry row required is: `CAP-0001 | Repository Audit Capability | Capability | Draft | Framework Maintainers | 09-capabilities/CAP-0001-repository-audit.md | 1.0.0 | 2026-07-25`.
+**Identifier note.** This document is registered, and the `Capability` category is admitted by [STD-0010](../02-methodology/metadata-specification.md) R-11. The `CAP` prefix remains absent from the prefix table of the [Framework Document ID Standard](../02-methodology/document-id-standard.md), which is recorded as an open exception in the [validation report](../validation-report.md) rather than left implicit. It is not a validation failure, because that standard's R-01 constrains identifier form rather than prefix membership.
 
 ## 17. Related Documents
 
