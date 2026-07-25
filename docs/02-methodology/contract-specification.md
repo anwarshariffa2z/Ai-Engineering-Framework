@@ -1,7 +1,7 @@
 ---
 id: STD-0011
 title: Contract Specification Standard
-version: 1.0.0
+version: 1.1.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -9,7 +9,7 @@ last_updated: 2026-07-25
 review_cycle: Annual
 category: Methodology
 tags: [contracts, producers, consumers, compatibility, obligations, standard]
-related: [artifact-specification.md, metadata-specification.md, evidence-and-confidence.md, ../01-foundation/framework-core-architecture.md, ../01-foundation/framework-artifact-model.md, ../ADR/ADR-0002-requirements-as-metadata.md, ../ADR/ADR-0003-normative-informative-separation.md, ../ADR/ADR-0004-depend-on-artifact-types.md, ../09-capabilities/CAP-0001-repository-audit.md]
+related: [artifact-specification.md, metadata-specification.md, evidence-and-confidence.md, validation-specification.md, ../01-foundation/framework-core-architecture.md, ../01-foundation/framework-artifact-model.md, ../ADR/ADR-0002-requirements-as-metadata.md, ../ADR/ADR-0003-normative-informative-separation.md, ../ADR/ADR-0004-depend-on-artifact-types.md, ../09-capabilities/CAP-0001-repository-audit.md]
 normativity:
   "1": informative
   "2": normative
@@ -209,6 +209,21 @@ requirements:
     check: mechanical
     severity: blocking
     scope: conformance
+  - id: R-37
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: producer
+  - id: R-38
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: orchestrator
+  - id: R-39
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: evolution
 ---
 
 # Contract Specification Standard
@@ -329,7 +344,7 @@ A consumer is entitled to rely on a producer's guarantees. It is not entitled to
 
 Preconditions are the contract's entry gate. Typical preconditions are access to the subject at a stated revision, an authorization boundary, availability of a required input artifact, and an executor meeting the producer's declared requirements.
 
-A producer that discovers mid-execution that a precondition it declared does not in fact hold MUST treat the situation as a failure under section 10 rather than continuing on a weaker basis.
+**R-37.** A producer that discovers mid-execution that a precondition it declared does not in fact hold MUST treat the situation as a failure under section 10 rather than continuing on a weaker basis.
 
 ## 7. Postconditions
 
@@ -408,7 +423,7 @@ Version semantics — what constitutes a major, minor, or patch change — are d
 
 The consequence of R-30 is that a major change to a field no consumer reads breaks no consumer. Profiles are what allow a type to evolve in one area while consumers depending on another continue unchanged.
 
-**Preflight.** Where an orchestrator composes several producers and consumers, it MUST verify compatibility across the whole composition before execution begins. A composition that would fail at its ninth step because of a version mismatch fails at its first.
+**R-38.** Where an orchestrator composes several producers and consumers, it MUST verify compatibility across the whole composition before execution begins. A composition that would fail at its ninth step because of a version mismatch fails at its first.
 
 ## 12. Contract Evolution
 
@@ -424,7 +439,9 @@ R-32 includes changing failure behaviour deliberately. A producer that previousl
 
 Deprecation proceeds in three stages: the guarantee is announced as deprecated with a successor; new consumers are refused it; and finally it is withdrawn at a major version. Instances produced under the old contract remain valid and readable indefinitely, because they are historical records of a subject at a revision.
 
-A contract may be evolved only by the owner of its artifact type. A producer MUST NOT evolve a contract it does not own, and an organization extending a framework type does so by declaring its own type, not by altering one it consumes.
+**R-39.** A producer MUST NOT evolve a contract it does not own.
+
+A contract may be evolved only by the owner of its artifact type. An organization extending a framework type does so by declaring its own type, not by altering one it consumes.
 
 ## 13. Substitution and Equivalence
 
@@ -442,7 +459,9 @@ Substitution is what ADR-0004 exists to enable, and R-34 states its price precis
 
 **R-35.** Conformance is established per artifact type, not per producer. A producer conforming for one type makes no claim about another.
 
-**R-36.** A party MUST declare its conformance and MUST demonstrate it against the type's conformance fixtures.
+**R-36.** A party MUST declare its conformance.
+
+The procedure by which conformance is demonstrated against a type's fixtures is validator behaviour and is stated by [STD-0012](validation-specification.md) section 10.
 
 A producer conforms when it satisfies R-03 through R-08, its preconditions satisfy R-15, its postconditions satisfy R-18 and R-19, its inputs satisfy R-20 and R-21, its guarantees satisfy R-23 and R-24, its failure behaviour satisfies R-25 and R-26, and its compatibility satisfies R-28 and R-29.
 
@@ -450,7 +469,7 @@ A consumer conforms when it satisfies R-09 through R-14, R-27, and R-30.
 
 An orchestrator conforms when it satisfies R-16, R-17, and the preflight obligation in section 11.
 
-Declaration without demonstration is not conformance. Demonstration without declaration leaves a consumer unable to discover what it may rely upon. STD-0012 defines how conformance is checked and reported; this standard defines only what conformance is.
+Declaration without demonstration is not conformance. Demonstration without declaration leaves a consumer unable to discover what it may rely upon. [STD-0012](validation-specification.md) defines how conformance is checked and reported; this standard defines only what conformance is.
 
 ## 15. Examples
 

@@ -1,7 +1,7 @@
 ---
 id: STD-0008
 title: Artifact Specification Standard
-version: 1.2.0
+version: 1.3.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -9,7 +9,7 @@ last_updated: 2026-07-25
 review_cycle: Annual
 category: Methodology
 tags: [artifacts, interoperability, versioning, contracts, standard]
-related: [document-metadata-standard.md, document-id-standard.md, evidence-and-confidence.md, contract-specification.md, ../01-foundation/framework-core-architecture.md, ../01-foundation/framework-artifact-model.md, ../ADR/ADR-0002-requirements-as-metadata.md, ../ADR/ADR-0003-normative-informative-separation.md, ../ADR/ADR-0004-depend-on-artifact-types.md]
+related: [document-metadata-standard.md, document-id-standard.md, evidence-and-confidence.md, contract-specification.md, validation-specification.md, ../01-foundation/framework-core-architecture.md, ../01-foundation/framework-artifact-model.md, ../ADR/ADR-0002-requirements-as-metadata.md, ../ADR/ADR-0003-normative-informative-separation.md, ../ADR/ADR-0004-depend-on-artifact-types.md]
 normativity:
   "1": informative
   "2": normative
@@ -188,16 +188,71 @@ requirements:
     check: mechanical
     severity: blocking
     scope: document
-  - id: R-38
-    level: MUST
-    check: mechanical
-    severity: blocking
-    scope: extension
   - id: R-39
     level: MUST
     check: mechanical
     severity: blocking
     scope: transformer
+  - id: R-40
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: artifact
+  - id: R-41
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: producer
+  - id: R-42
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: record
+  - id: R-43
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: artifact
+  - id: R-44
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: record
+  - id: R-45
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: artifact
+  - id: R-46
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: lineage
+  - id: R-47
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: consumer
+  - id: R-48
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: consumer
+  - id: R-49
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: artifact-type
+  - id: R-50
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: artifact-type
+  - id: R-51
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: extension
 ---
 
 # Artifact Specification Standard
@@ -266,7 +321,7 @@ It implements decisions already taken. It does not revisit them. Where a reader 
 
 **R-02.** An artifact MUST declare the artifact type it claims to be, and MUST conform to that type's definition.
 
-An output that does not carry an envelope is not a framework artifact and MUST NOT be consumed as one, regardless of how well structured its content is. This applies equally to human-authored analysis, tool output, and material supplied by a requester: such material is an *input* to a producer and may be recorded as evidence, but it does not become an artifact until a conforming producer emits one.
+**R-40.** An output that does not carry an envelope is not a framework artifact and MUST NOT be consumed as one, regardless of how well structured its content is. This applies equally to human-authored analysis, tool output, and material supplied by a requester: such material is an *input* to a producer and may be recorded as evidence, but it does not become an artifact until a conforming producer emits one.
 
 **R-03.** An artifact type MUST be owned by the framework or by a declared extending namespace. An artifact type MUST NOT be owned by a methodology.
 
@@ -282,7 +337,7 @@ R-11 is marked judgment-checkable because a mechanical check can detect known cr
 
 **R-05.** Within a run, an artifact type MUST appear at most once.
 
-A producer that would otherwise emit several artifacts of one type MUST instead emit one artifact whose declared scope covers their union. Consumers have no basis on which to merge partial artifacts of the same type, and a specification that permits them requires every consumer to invent a merge rule.
+**R-41.** A producer that would otherwise emit several artifacts of one type MUST instead emit one artifact whose declared scope covers their union. Consumers have no basis on which to merge partial artifacts of the same type, and a specification that permits them requires every consumer to invent a merge rule.
 
 **R-06.** An artifact instance MUST be addressable as the pair of its run identity and its type identity. A record MUST be addressable within its artifact, and an evidence item MUST be addressable within its record.
 
@@ -296,11 +351,13 @@ Instances are not independently versioned. Their type is versioned; their identi
 
 **R-08.** The envelope MUST be interpretable without reference to the artifact's type definition.
 
-This is the property that allows generic machinery — resolvers, validators, lineage checkers, staleness detection — to process artifacts of types it does not know. A consumer encountering an unknown type MUST still be able to determine what the artifact describes, whether it is current, whether it is complete, and who produced it, and therefore MUST be able to make a correct decision to reject it rather than a guess.
+This is the property that allows generic machinery — resolvers, validators, lineage checkers, staleness detection — to process artifacts of types it does not know. Under R-08 a consumer encountering an unknown type can still determine what the artifact describes, whether it is current, whether it is complete, and who produced it, and can therefore make a correct decision to reject it rather than a guess.
 
 The envelope comprises eight groups: identity, type, subject, scope, completeness, provenance, lineage, and assessment. Sections 6 and 7 state which members of each group are required and which are optional.
 
-**R-09.** An artifact whose envelope cannot be parsed MUST be rejected. A consumer MUST NOT infer an artifact's type, subject, or completeness from its body.
+**R-09.** A consumer MUST NOT infer an artifact's type, subject, or completeness from its body.
+
+The duty to reject an artifact whose envelope cannot be parsed is validator behaviour and is stated by [STD-0012](validation-specification.md) R-09.
 
 ## 6. Required Envelope Metadata
 
@@ -330,7 +387,9 @@ The envelope comprises eight groups: identity, type, subject, scope, completenes
 
 **R-17.** Where an artifact records any observation not derived from the subject's source, it MUST declare the environment in which that observation was made.
 
-Structure observed in one environment is not evidence about another. An artifact that mixes source-derived and environment-derived observations MUST attribute the environment per record, not only in the envelope.
+**R-42.** An artifact that mixes source-derived and environment-derived observations MUST attribute the environment per record, not only in the envelope.
+
+Structure observed in one environment is not evidence about another.
 
 **R-33.** An artifact MUST declare its redaction state. A consumer MUST NOT interpret redacted absence as absence.
 
@@ -349,7 +408,9 @@ Structure observed in one environment is not evidence about another. An artifact
 | Estimated cost | Context or execution cost, for capability planning |
 | Namespaced extension fields | Organization or plugin fields, per section 17 |
 
-An optional member that is present but empty is not equivalent to an absent member. A producer that declares a member MUST populate it or omit it.
+**R-43.** A producer that declares an optional member MUST populate it or omit it.
+
+An optional member that is present but empty is not equivalent to an absent member.
 
 ## 8. Artifact Body Requirements
 
@@ -359,7 +420,9 @@ An optional member that is present but empty is not equivalent to an absent memb
 
 **R-13.** Every record MUST carry a confidence level and at least one evidence reference, or MUST be marked Unknown.
 
-A record marked Unknown asserts that a determination could not be made. It MUST carry the scope reason that bounds the unknown. A record with no evidence and no Unknown marking is not a conforming record, because it asserts something the artifact cannot support.
+**R-44.** A record marked Unknown MUST carry the scope reason that bounds the unknown.
+
+A record marked Unknown asserts that a determination could not be made. A record with no evidence and no Unknown marking is not a conforming record, because it asserts something the artifact cannot support.
 
 **R-16.** Absence of a record MUST be interpretable only against the artifact's declared scope. A producer MUST NOT emit an artifact whose scope declaration does not permit a consumer to determine what absence means.
 
@@ -367,7 +430,7 @@ A record marked Unknown asserts that a determination could not be made. It MUST 
 
 *This section is normative.*
 
-This section states where evidence and confidence attach. **STD-0007 defines the evidence model itself**, including the semantics of each state, the confidence levels, and the propagation rules. This standard does not define them and MUST NOT be read as doing so.
+This section states where evidence and confidence attach. **STD-0007 defines the evidence model itself**, including the semantics of each state, the confidence levels, and the propagation rules. This standard does not define them and is not to be read as doing so.
 
 **R-14.** Evidence attaches at record level. An artifact MUST NOT carry evidence that is not referenced by a record.
 
@@ -387,7 +450,9 @@ Confidence attaches at record level and is aggregated at envelope level per R-10
 
 **R-32.** Every artifact type definition MUST state the conditions under which each completeness state applies to that type.
 
-The completeness vocabulary is **closed**. An artifact MUST declare exactly one of `Complete`, `Partial`, `NotApplicable`, `Unavailable`, or `Failed`. A consumer carries the following obligations:
+**R-45.** An artifact MUST declare exactly one completeness state. The completeness vocabulary is **closed** and comprises `Complete`, `Partial`, `NotApplicable`, `Unavailable`, and `Failed`.
+
+A consumer carries the following obligations:
 
 | State | Consumer obligation |
 | --- | --- |
@@ -409,11 +474,15 @@ R-34 and R-35 are marked judgment-checkable. No mechanical check can determine w
 
 **R-19.** Where any record derives from an upstream artifact, the artifact MUST record the upstream address, its type and version, its subject revision, and which records depend on it.
 
-**R-20.** The derivation graph across a composition MUST be acyclic. A cycle MUST be detected at composition time and MUST fail before execution.
+**R-20.** The derivation graph across a composition MUST be acyclic.
 
-Lineage MUST be recorded per record where derivation is partial. An artifact in which some records derive from upstream input and others were independently established MUST NOT record blanket derivation, because doing so over-propagates the constraints of STD-0007 and understates conclusions that were independently supported.
+The detection of a cycle, its timing, and the resulting failure are validator behaviour and are stated by [STD-0012](validation-specification.md) R-10 and R-11.
 
-Regenerating an upstream artifact renders every downstream artifact deriving from it stale. A consumer MUST NOT present a stale artifact and a current artifact as concurrently valid.
+**R-46.** Lineage MUST be recorded per record where derivation is partial. An artifact in which some records derive from upstream input and others were independently established MUST NOT record blanket derivation, because doing so over-propagates the constraints of STD-0007 and understates conclusions that were independently supported.
+
+**R-47.** A consumer MUST NOT present a stale artifact and a current artifact as concurrently valid.
+
+Regenerating an upstream artifact renders every downstream artifact deriving from it stale.
 
 ## 12. Versioning Rules
 
@@ -447,7 +516,9 @@ A major version expresses evolution of one contract. A different assertion is a 
 
 Adding a value to a closed vocabulary is a major change. Adding a value to an open vocabulary is a minor change.
 
-**Cross-revision consumption.** Consuming an artifact produced against a different subject revision than the current run is permitted only where declared. The declaration MUST record both revisions and the reason for reuse. A conclusion drawn from a cross-revision input MUST be capped at `Medium` confidence and MUST NOT be recorded as `Verified`. The consumer obligation to declare such reuse is stated by STD-0011.
+**Cross-revision consumption.** Consuming an artifact produced against a different subject revision than the current run is permitted only where declared.
+
+**R-48.** A cross-revision declaration MUST record both revisions and the reason for reuse, and a conclusion drawn from a cross-revision input MUST be capped at `Medium` confidence and MUST NOT be recorded as `Verified`. The consumer obligation to declare such reuse is stated by STD-0011.
 
 ## 14. Producer Output Requirements
 
@@ -457,7 +528,14 @@ Adding a value to a closed vocabulary is a major change. Adding a value to an op
 
 R-28 states the properties of a well-formed artifact. **The behavioural obligations of producers and consumers — preconditions, guaranteed outputs, failure behaviour, substitution, and contract evolution — are defined by [STD-0011](contract-specification.md)** and are not restated here.
 
-**Retired requirements.** At version 1.2.0, requirements R-24, R-25, R-27, R-29, R-30, and R-31 were retired from this standard and their subject matter relocated to STD-0011, which owns participant obligations. Their identifiers are retired permanently and MUST NOT be reused, per [STD-0010](metadata-specification.md) R-18.
+**Retired requirements.** The following identifiers are retired permanently and are not reused, per [STD-0010](metadata-specification.md) R-18.
+
+| Identifier | Retired at | Relocated to | Reason |
+| --- | --- | --- | --- |
+| R-24, R-25, R-27, R-29, R-30, R-31 | 1.2.0 | STD-0011 | Participant obligations |
+| R-38 | 1.3.0 | STD-0012 R-04, R-05 | Validator behaviour |
+
+R-09 and R-20 were narrowed rather than retired at 1.3.0, their validator clauses relocating to STD-0012 while their consumer and object clauses remain here.
 
 ## 15. Required Artifact Type Definition Sections
 
@@ -484,21 +562,17 @@ R-28 states the properties of a well-formed artifact. **The behavioural obligati
 | Examples | Conformance fixtures, per section 16 |
 | Informative Notes | Rationale, caveats, and guidance, marked informative |
 
-A type definition MUST mark each of these sections normative or informative, per section 18.
+**R-49.** A type definition MUST mark each of these sections normative or informative, per section 18.
 
 ## 16. Validation Requirements
 
 *This section is normative.*
 
-**R-38.** A validator MUST reject an artifact that violates any blocking requirement of this standard. A validator MUST NOT skip an artifact it cannot interpret.
+**R-50.** Every artifact type definition MUST supply conformance fixtures covering its normal case, its empty case, its `NotApplicable` case, its `Partial` case, and its boundary cases.
 
-The governing rule is **fail closed**. An unknown artifact type, an incompatible version, an unparseable envelope, an unknown value in a closed vocabulary, an undeclared cross-revision input, a lineage cycle, or a violated propagation rule MUST each produce an error, never a silent skip. A validator that ignores what it cannot handle reports success on content it never examined.
+Fixtures are a property of the type definition and are therefore stated here. The procedure by which a producer or consumer demonstrates conformance against them is validator behaviour and is stated by [STD-0012](validation-specification.md) section 10.
 
-An unrecognized namespaced extension field MUST NOT cause validation failure.
-
-Every artifact type definition MUST supply conformance fixtures covering its normal case, its empty case, its `NotApplicable` case, its `Partial` case, and its boundary cases. A producer demonstrates conformance by emitting the fixtures; a consumer demonstrates conformance by reading them correctly.
-
-STD-0012 defines validator behavior, reporting, and the binding between requirement identities and checks. This standard states only what MUST be rejected.
+**Validator behaviour is not stated by this standard.** Rejection duties, fail-closed conditions, extension tolerance, coverage, severity, outcomes, exceptions, and reporting are all owned by [STD-0012](validation-specification.md).
 
 ## 17. Conformance Requirements
 
@@ -508,9 +582,13 @@ A producer conforms to this standard when the artifacts it emits satisfy R-28, R
 
 A consumer conforms to this standard when it satisfies R-35. Its behavioural conformance is defined by STD-0011 section 14.
 
-An artifact type definition conforms when it satisfies R-04, R-21, R-26, R-32, R-36, and R-37.
+An artifact type definition conforms when it satisfies R-04, R-21, R-26, R-32, R-36, R-37, R-49, and R-50.
 
-**Extension.** Organizations and plugins MAY add namespaced fields, record groups, values to open vocabularies, and artifact types. They MUST NOT remove required fields, change the meaning of framework fields, add values to closed vocabularies, or weaken completeness or evidence semantics.
+How conformance is evaluated and enforced is defined by [STD-0012](validation-specification.md).
+
+**Extension.** Organizations and plugins MAY add namespaced fields, record groups, values to open vocabularies, and artifact types.
+
+**R-51.** An extension MUST NOT remove required fields, change the meaning of framework fields, add values to closed vocabularies, or weaken completeness or evidence semantics.
 
 **R-39.** A process that reads and re-emits an artifact MUST preserve unrecognized namespaced fields unchanged.
 
@@ -524,7 +602,7 @@ A transformer that discards fields it does not understand silently destroys anot
 
 Per ADR-0003, every framework document declares the normativity of each of its sections in metadata. The declaration is authoritative; the italic marker beneath each heading in this document renders that declaration for a human reader and is not a second mechanism.
 
-A section declared normative may state requirements. A section declared informative MUST NOT state a requirement, and any obligation appearing in one has no force.
+The prohibition on stating a requirement in an informative section is [STD-0010](metadata-specification.md) R-19. Any obligation appearing in one has no force.
 
 The conceptual model for this declaration is in [Framework Core Architecture](../01-foundation/framework-core-architecture.md) section 12. **STD-0010 defines the canonical representation.** The front matter of this document demonstrates the intended shape; that shape is illustrative until STD-0010 is approved.
 

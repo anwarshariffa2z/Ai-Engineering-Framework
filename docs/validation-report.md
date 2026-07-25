@@ -1,7 +1,7 @@
 ---
 id: REF-0010
 title: Documentation Validation Report
-version: 1.0.9
+version: 1.1.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -59,6 +59,44 @@ Validation covered all Markdown documents in the repository except `LICENSE`, in
 | The Contract Specification Standard defines obligations without defining artifact structure, metadata representation, evidence semantics, or validator behaviour | Pass |
 | Participant obligations are defined in exactly one standard and referenced, not restated, by the Artifact Specification Standard | Pass |
 | Requirement identifiers retired from the Artifact Specification Standard are not reused | Pass |
+| The Validation Specification Standard declares section normativity and structured requirements in its metadata | Pass |
+| Every requirement in the Validation Specification Standard declares a normative level, checkability, severity, and scope | Pass |
+| No informative section of the Validation Specification Standard states a requirement | Pass |
+| The Validation Specification Standard defines validator behaviour without redefining artifact structure, metadata representation, evidence semantics, or participant obligations | Pass |
+| No validator behaviour is stated outside the Validation Specification Standard | Pass |
+| Every load-bearing normative obligation in the five core standards carries a requirement identifier | Pass |
+| Every requirement identifier is stated in the body and declared in metadata, in both directions, across all five core standards | Pass |
+
+## Requirement Traceability
+
+The five core standards declare the enforceable surface of the framework. Every identifier below is addressable as `STANDARD#R-nn` and is the binding point for a validator check, per STD-0012 R-01.
+
+| Standard | Requirements | Mechanical | Judgment | Retired |
+| --- | --- | --- | --- | --- |
+| STD-0007 Evidence and Confidence | 44 | 20 | 24 | — |
+| STD-0008 Artifact Specification | 44 | 40 | 4 | 7 |
+| STD-0010 Metadata Specification | 40 | 40 | 0 | — |
+| STD-0011 Contract Specification | 39 | 33 | 6 | — |
+| STD-0012 Validation Specification | 39 | 39 | 0 | — |
+| **Total** | **206** | **172** | **34** | **7** |
+
+Judgment-classified requirements are not exempt from enforcement. STD-0012 sections 8 and 9 govern them: those that a human can decide are routed to review, and those that cannot be decided by inspection at all are recorded as unenforceable rather than omitted.
+
+## Retired Requirement Registry
+
+Retired identifiers are permanently withdrawn and are never reused, per STD-0010 R-18. Their subject matter is recorded here so that a reader encountering a historical reference can locate its successor.
+
+| Standard | Identifier | Retired at | Relocated to | Reason |
+| --- | --- | --- | --- | --- |
+| STD-0008 | R-24 | 1.2.0 | STD-0011 R-09 | Participant obligation |
+| STD-0008 | R-25 | 1.2.0 | STD-0011 R-10 | Participant obligation |
+| STD-0008 | R-27 | 1.2.0 | STD-0011 R-27 | Participant obligation |
+| STD-0008 | R-29 | 1.2.0 | STD-0011 R-06 | Participant obligation |
+| STD-0008 | R-30 | 1.2.0 | STD-0011 R-11 | Participant obligation |
+| STD-0008 | R-31 | 1.2.0 | STD-0011 R-12 | Participant obligation |
+| STD-0008 | R-38 | 1.3.0 | STD-0012 R-04, R-05 | Validator behaviour |
+
+Three requirements were narrowed rather than retired, their validator clauses relocating while their remaining clauses stayed: STD-0008 R-09 and R-20, and STD-0011 R-36.
 
 ## Known Exceptions
 

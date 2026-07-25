@@ -1,7 +1,7 @@
 ---
 id: STD-0010
 title: Metadata Specification Standard
-version: 1.0.0
+version: 1.1.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -9,7 +9,7 @@ last_updated: 2026-07-25
 review_cycle: Annual
 category: Methodology
 tags: [metadata, schema, representation, front-matter, standard]
-related: [document-metadata-standard.md, document-id-standard.md, artifact-specification.md, ../01-foundation/framework-core-architecture.md, ../01-foundation/framework-artifact-model.md, ../ADR/ADR-0002-requirements-as-metadata.md, ../ADR/ADR-0003-normative-informative-separation.md, ../ADR/ADR-0004-depend-on-artifact-types.md]
+related: [document-metadata-standard.md, document-id-standard.md, artifact-specification.md, validation-specification.md, ../01-foundation/framework-core-architecture.md, ../01-foundation/framework-artifact-model.md, ../ADR/ADR-0002-requirements-as-metadata.md, ../ADR/ADR-0003-normative-informative-separation.md, ../ADR/ADR-0004-depend-on-artifact-types.md]
 normativity:
   "1": informative
   "2": normative
@@ -221,6 +221,16 @@ requirements:
     check: mechanical
     severity: blocking
     scope: migration
+  - id: R-39
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: vocabulary
+  - id: R-40
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: encoding
 ---
 
 # Metadata Specification Standard
@@ -339,7 +349,9 @@ R-09 resolves the open question of whether documents carrying declarations requi
 
 **R-10.** The `status` vocabulary is closed and comprises: `Draft`, `Approved`, `Accepted`, `Deprecated`, `Superseded`.
 
-`Accepted` applies to Decision objects only, whose lifecycle is `Proposed → Accepted → Superseded` per [Framework Core Architecture](../01-foundation/framework-core-architecture.md) section 4.8. A Decision MUST NOT use `Approved`, and a non-Decision object MUST NOT use `Accepted`.
+`Accepted` applies to Decision objects only, whose lifecycle is `Proposed → Accepted → Superseded` per [Framework Core Architecture](../01-foundation/framework-core-architecture.md) section 4.8.
+
+**R-39.** A Decision MUST NOT use `Approved`, and a non-Decision object MUST NOT use `Accepted`.
 
 Admitting `Accepted` records in the schema what the architecture already specifies and what every existing Decision Record already uses.
 
@@ -497,7 +509,7 @@ Extensions may add keys, add values to open vocabularies, and add entries to lis
 
 **R-36.** Front matter MUST be YAML, MUST be delimited by `---` on its own line at the start and end, MUST be the first content in the file, and MUST be encoded UTF-8 without a byte order mark.
 
-Keys MUST appear in the order given in section 5, followed by additional keys, followed by namespaced keys. List values MUST use either inline bracket form or block form consistently within a single key. Scalar values requiring quotation MUST use double quotes.
+**R-40.** Keys MUST appear in the order given in section 5, followed by additional keys, followed by namespaced keys. List values MUST use either inline bracket form or block form consistently within a single key. Scalar values requiring quotation MUST use double quotes.
 
 **R-37.** A document's metadata MUST parse as well-formed YAML. A document whose front matter does not parse MUST be rejected rather than partially interpreted.
 

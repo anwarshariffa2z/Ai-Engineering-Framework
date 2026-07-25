@@ -1,7 +1,7 @@
 ---
 id: STD-0007
 title: Evidence and Confidence Standard
-version: 1.0.0
+version: 1.1.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -9,7 +9,7 @@ last_updated: 2026-07-25
 review_cycle: Annual
 category: Methodology
 tags: [evidence, confidence, uncertainty, scoring, semantics, standard]
-related: [artifact-specification.md, metadata-specification.md, glossary.md, ../01-foundation/framework-core-architecture.md, ../01-foundation/framework-artifact-model.md, ../03-audit-engine/01-architecture-discovery.md, ../09-capabilities/CAP-0001-repository-audit.md]
+related: [artifact-specification.md, metadata-specification.md, validation-specification.md, glossary.md, ../01-foundation/framework-core-architecture.md, ../01-foundation/framework-artifact-model.md, ../03-audit-engine/01-architecture-discovery.md, ../09-capabilities/CAP-0001-repository-audit.md]
 normativity:
   "1": informative
   "2": normative
@@ -215,6 +215,41 @@ requirements:
     check: judgment
     severity: blocking
     scope: conflict
+  - id: R-38
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: confidence
+  - id: R-39
+    level: MUST
+    check: judgment
+    severity: blocking
+    scope: evidence
+  - id: R-40
+    level: MUST
+    check: judgment
+    severity: blocking
+    scope: evidence
+  - id: R-41
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: evidence
+  - id: R-42
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: scoring
+  - id: R-43
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: composition
+  - id: R-44
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: scoring
 ---
 
 # Evidence and Confidence Standard
@@ -316,7 +351,9 @@ An inference whose assumptions are not stated cannot be challenged, and an uncha
 
 `Unknown` is a determination, not a failure. It asserts that the question was asked and not answered, which is materially different from the question not having been asked — a distinction section 8 carries into completeness.
 
-**Unknown is not low confidence.** Confidence describes the quality of evidence supporting a conclusion. `Unknown` records that there is no conclusion. A record marked `Unknown` MUST NOT be assigned a confidence level for the conclusion it does not make.
+**Unknown is not low confidence.** Confidence describes the quality of evidence supporting a conclusion. `Unknown` records that there is no conclusion.
+
+**R-38.** A record marked `Unknown` MUST NOT be assigned a confidence level for the conclusion it does not make.
 
 ## 5. Evidence Provenance
 
@@ -332,7 +369,7 @@ Structure observed in one environment is not evidence about another. This is the
 
 Unattributed material may inform reasoning. It may not confirm it. This rule is what prevents an undated diagram or a remembered conversation from carrying the same weight as an inspected artifact.
 
-**Redaction.** Where evidence is redacted such that a reviewer cannot evaluate it, the conclusion it supports MUST be degraded per section 10. Redaction protects content; it does not preserve evidentiary weight.
+**Redaction.** Redaction protects content; it does not preserve evidentiary weight. The degradation it compels is stated by R-23.
 
 ## 6. Evidence Quality
 
@@ -347,13 +384,19 @@ Unattributed material may inform reasoning. It may not confirm it. This rule is 
 | `reported` | The evidence is an account of the thing by a party, without independent observation |
 | `undated` | The evidence has no reliable time or revision attribution |
 
-**Corroboration.** Two evidence items corroborate a conclusion only where they are independent. Two readings of the same artifact, two derivations from the same source, or one account repeated by two parties are a single item observed twice, and MUST NOT be treated as corroboration.
+**Corroboration.** Two evidence items corroborate a conclusion only where they are independent.
+
+**R-39.** Two readings of the same artifact, two derivations from the same source, or one account repeated by two parties are a single item observed twice, and MUST NOT be treated as corroboration.
 
 Corroboration raises confidence. It does not raise evidence state, which is governed by section 9.
 
-**Freshness.** Evidence describes a subject at a moment. It expires when the subject changes in a way that could alter the conclusion. Expired evidence MUST NOT be silently retained; it is either refreshed or the conclusion is degraded per section 10.
+**Freshness.** Evidence describes a subject at a moment. It expires when the subject changes in a way that could alter the conclusion.
 
-**Negative evidence.** Absence of an observation within a searched scope is evidence that it was not found there, using the recorded method. It is never evidence that the thing does not exist. A conclusion of absence MUST record the scope searched and the method used, or it is not a conclusion at all.
+**R-40.** Expired evidence MUST NOT be silently retained; it is either refreshed or the conclusion is degraded per section 10.
+
+**Negative evidence.** Absence of an observation within a searched scope is evidence that it was not found there, using the recorded method. It is never evidence that the thing does not exist.
+
+**R-41.** A conclusion of absence MUST record the scope searched and the method used, or it is not a conclusion at all.
 
 ## 7. Confidence Model
 
@@ -399,7 +442,7 @@ Completeness describes an examination, where evidence state describes a conclusi
 
 The distinction is the practical heart of this section. `NotApplicable` is a determination about the subject: it has no data stores, no user interface, no external integrations. `Unavailable` is a statement about the examination: it did not happen. Both yield an empty result. The first is knowledge; the second is a hole. A framework that loses the distinction will eventually report an untroubled result for a domain nobody examined, and will do so with structurally valid output.
 
-`NotApplicable` MUST NOT lower a score and MUST NOT be reported as a gap. `Unavailable` and `Failed` MUST NOT contribute to a score at all, and MUST be reported as reduced coverage per section 13.
+**R-42.** `NotApplicable` MUST NOT lower a score and MUST NOT be reported as a gap. `Unavailable` and `Failed` MUST NOT contribute to a score at all, and MUST be reported as reduced coverage per section 13.
 
 STD-0008 states the obligations a producer and consumer carry with respect to these states. This section states what they mean.
 
@@ -435,7 +478,7 @@ Degradation is lowering a conclusion's evidence state or confidence in response 
 
 **R-24.** Where a load-bearing input is withdrawn or invalidated, every conclusion derived from it MUST be degraded to `Unknown` unless independently supported.
 
-Degradation is not a penalty and MUST NOT be resisted. A conclusion that was correctly `Verified` last month and whose subject has since changed is not wrong; it is stale, and reporting it at its former state is what makes it wrong.
+Degradation is not a penalty and is not resisted. A conclusion that was correctly `Verified` last month and whose subject has since changed is not wrong; it is stale, and reporting it at its former state is what makes it wrong.
 
 **Asymmetry.** Degradation is automatic and promotion is not. Losing support degrades a conclusion without anyone deciding to; regaining support requires new evidence and an explicit act. This asymmetry is deliberate: the cost of an unnoticed degradation is a false assurance, and the cost of an unnoticed promotion opportunity is merely a conservative report.
 
@@ -471,7 +514,7 @@ An `Unknown` input does not make a conclusion uncertain. It removes the conclusi
 
 A set of `Medium` conclusions does not compose to a `High` one. Aggregation adds breadth, not certainty. The intuition that many moderate observations combine into a strong result holds only for independent measurements of the same quantity, which is not what an aggregation of distinct conclusions is.
 
-Where an aggregate is reported, the distribution MUST be available and not only the minimum: an aggregate of forty `High` conclusions and one `Low` is reported as `Low` under R-29, and a reader is entitled to see that this is what happened.
+**R-43.** Where an aggregate is reported, the distribution MUST be available and not only the minimum: an aggregate of forty `High` conclusions and one `Low` is reported as `Low` under R-29, and a reader is entitled to see that this is what happened.
 
 ## 13. Scoring Principles
 
@@ -487,13 +530,15 @@ This section states what a score means and the guards that apply to every scale 
 
 **R-34.** Any dimension scored at the lowest two levels of its scale MUST trigger an escalation regardless of the aggregate.
 
-A critical weakness MUST NOT be averaged away. This is the guard that distinguishes a scoring system from a reassurance mechanism.
+R-34 is the guard that distinguishes a scoring system from a reassurance mechanism: a critical weakness is never averaged away.
 
 **R-35.** Where an aggregate covers fewer than all declared dimensions, it MUST be reported as a bounded range with the absent dimensions named. It MUST NOT be reported as a mean over the dimensions present.
 
 R-35 prevents the partial-coverage failure: three domains examined out of eleven, averaged, and reported as a confident overall figure. The absent domains are not neutral, and treating them as though they were is a false claim about the subject.
 
-**The framework's scale.** Where a methodology uses the framework's common scale, `0` means no reliable evidence exists or the dimension is critically unfit, `1` means pervasive evidenced weakness, `2` significant evidenced risk, `3` adequate with material gaps, `4` sound with bounded inconsistencies, and `5` clear and evidence-backed. A methodology MAY define a different scale, and MUST state its meanings and its lowest two levels for the purposes of R-34.
+**The framework's scale.** Where a methodology uses the framework's common scale, `0` means no reliable evidence exists or the dimension is critically unfit, `1` means pervasive evidenced weakness, `2` significant evidenced risk, `3` adequate with material gaps, `4` sound with bounded inconsistencies, and `5` clear and evidence-backed.
+
+**R-44.** A methodology MAY define a different scale, and MUST state its meanings and its lowest two levels for the purposes of R-34.
 
 A score never substitutes for the findings beneath it. A reader who acts on a score without reading its findings has been given a number, not an assessment.
 
