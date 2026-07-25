@@ -29,20 +29,20 @@ This is the canonical registry for every framework document. A document is not c
 | AUD-0001 | Audit Engine Bootstrap | Audit Engine | Draft | Framework Maintainers | [document](03-audit-engine/00-bootstrap.md) | 0.1.0 | 2026-07-25 |
 | AUD-0002 | Architecture Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/01-architecture-discovery.md) | 2.0.0 | 2026-07-25 |
 | AUD-0003 | Database Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/02-database-discovery.md) | 3.0.0 | 2026-07-25 |
-| AUD-0004 | Frontend Discovery | Audit Engine | Draft | Framework Maintainers | [document](03-audit-engine/03-frontend-discovery.md) | 0.1.0 | 2026-07-25 |
-| AUD-0005 | Backend Discovery | Audit Engine | Draft | Framework Maintainers | [document](03-audit-engine/04-backend-discovery.md) | 0.1.1 | 2026-07-25 |
-| AUD-0006 | Business Workflow Discovery | Audit Engine | Draft | Framework Maintainers | [document](03-audit-engine/05-business-workflow-discovery.md) | 0.1.0 | 2026-07-25 |
-| AUD-0007 | Security and Permissions | Audit Engine | Draft | Framework Maintainers | [document](03-audit-engine/06-security-permissions.md) | 0.1.1 | 2026-07-25 |
-| AUD-0008 | Feature Inventory | Audit Engine | Draft | Framework Maintainers | [document](03-audit-engine/07-feature-inventory.md) | 0.1.0 | 2026-07-25 |
-| AUD-0009 | Operations Manual | Audit Engine | Draft | Framework Maintainers | [document](03-audit-engine/08-operations-manual.md) | 0.1.0 | 2026-07-25 |
-| AUD-0010 | Gap Analysis | Audit Engine | Draft | Framework Maintainers | [document](03-audit-engine/09-gap-analysis.md) | 0.1.0 | 2026-07-25 |
-| AUD-0011 | Runtime Verification | Audit Engine | Draft | Framework Maintainers | [document](03-audit-engine/10-runtime-verification.md) | 0.1.0 | 2026-07-25 |
+| AUD-0004 | Frontend Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/03-frontend-discovery.md) | 1.0.0 | 2026-07-26 |
+| AUD-0005 | Backend Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/04-backend-discovery.md) | 1.0.0 | 2026-07-26 |
+| AUD-0006 | Business Workflow Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/05-business-workflow-discovery.md) | 1.0.0 | 2026-07-26 |
+| AUD-0007 | Security and Permissions Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/06-security-permissions.md) | 1.0.0 | 2026-07-26 |
+| AUD-0008 | Feature Inventory Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/07-feature-inventory.md) | 1.0.0 | 2026-07-26 |
+| AUD-0009 | Operations Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/08-operations-manual.md) | 1.0.0 | 2026-07-26 |
+| AUD-0010 | Gap Analysis Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/09-gap-analysis.md) | 1.0.0 | 2026-07-26 |
+| AUD-0011 | Runtime Verification Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/10-runtime-verification.md) | 1.0.0 | 2026-07-26 |
 | AUD-0012 | Audit Engine Product Specification | Roadmap | Draft | Framework Maintainers | [document](07-roadmap/audit-engine-roadmap.md) | 1.0.1 | 2026-07-26 |
 | ADR-0001 | Establish a Documentation-First Framework | Architecture Decision Record | Accepted | Framework Maintainers | [document](ADR/ADR-0001-framework-foundation.md) | 1.0.0 | 2026-07-25 |
 | ADR-0002 | Express Requirements as Standard Metadata Rather Than as Rule Objects | Architecture Decision Record | Accepted | Framework Maintainers | [document](ADR/ADR-0002-requirements-as-metadata.md) | 1.0.0 | 2026-07-25 |
 | ADR-0003 | Declare Normativity at Section Granularity in Every Document | Architecture Decision Record | Accepted | Framework Maintainers | [document](ADR/ADR-0003-normative-informative-separation.md) | 1.0.0 | 2026-07-25 |
 | ADR-0004 | Depend on Artifact Types Rather Than on Producing Methodologies | Architecture Decision Record | Accepted | Framework Maintainers | [document](ADR/ADR-0004-depend-on-artifact-types.md) | 1.0.0 | 2026-07-25 |
-| CAP-0001 | Repository Audit Capability | Capability | Draft | Framework Maintainers | [document](09-capabilities/CAP-0001-repository-audit.md) | 1.0.0 | 2026-07-25 |
+| CAP-0001 | Repository Audit Capability | Capability | Draft | Framework Maintainers | [document](09-capabilities/CAP-0001-repository-audit.md) | 1.1.0 | 2026-07-26 |
 | CHK-0001 | Delivery Evidence Checklist | Methodology | Approved | Framework Maintainers | [document](02-methodology/delivery-evidence-checklist.md) | 1.0.0 | 2026-07-25 |
 | CMD-0001 | Change Management | Governance | Approved | Framework Maintainers | [document](06-governance/change-management.md) | 1.0.0 | 2026-07-25 |
 | EX-0001 | System Evidence Record Example | Example | Approved | Framework Maintainers | [document](08-examples/system-evidence-record.md) | 1.0.0 | 2026-07-25 |
@@ -56,8 +56,9 @@ This is the canonical registry for every framework document. A document is not c
 | REF-0007 | Security Policy | Reference | Approved | Framework Maintainers | [document](../SECURITY.md) | 1.0.1 | 2026-07-26 |
 | REF-0008 | Reference Library | Reference | Approved | Framework Maintainers | [document](05-reference/README.md) | 1.0.0 | 2026-07-25 |
 | REF-0009 | Framework Document Registry | Reference | Approved | Framework Maintainers | [document](DOCUMENT_INDEX.md) | 1.4.1 | 2026-07-25 |
-| REF-0010 | Documentation Validation Report | Reference | Approved | Framework Maintainers | [document](validation-report.md) | 1.3.1 | 2026-07-25 |
+| REF-0010 | Documentation Validation Report | Reference | Approved | Framework Maintainers | [document](validation-report.md) | 1.4.0 | 2026-07-26 |
 | REF-0011 | Framework Architecture Review | Roadmap | Draft | Framework Maintainers | [document](07-roadmap/framework-architecture-review.md) | 1.0.0 | 2026-07-25 |
+| REF-0012 | Artifact Type Inventory | Reference | Draft | Framework Maintainers | [document](07-roadmap/artifact-type-inventory.md) | 1.0.0 | 2026-07-26 |
 | STD-0001 | Document Metadata Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/document-metadata-standard.md) | 1.1.1 | 2026-07-26 |
 | STD-0002 | Framework Document ID Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/document-id-standard.md) | 1.1.0 | 2026-07-26 |
 | STD-0003 | Data Governance Standard | Development | Approved | Framework Maintainers | [document](04-development/data-governance-standard.md) | 1.0.0 | 2026-07-25 |

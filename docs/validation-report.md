@@ -1,11 +1,11 @@
 ---
 id: REF-0010
 title: Documentation Validation Report
-version: 1.3.1
+version: 1.4.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-25
+last_updated: 2026-07-26
 review_cycle: Event-driven
 category: Reference
 tags: [validation, documentation, quality]
@@ -34,7 +34,11 @@ Validation covered all Markdown documents in the repository except `LICENSE`, in
 | Database Discovery defines all fourteen DB-NNN audit artifacts | Pass |
 | Database Discovery reuses the evidence states, confidence levels, and health scale established by AUD-0002 without local redefinition | Pass |
 | DB-NNN audit artifact identifiers are held outside the framework document namespace and absent from the registry | Pass |
-| Remaining Audit Engine documents retain Draft structural status | Pass |
+| Frontend, Backend, Business Workflow, Security and Permissions, Feature Inventory, Operations, Gap Analysis, and Runtime Verification are complete, evidence-led, and registered as AUD-0004 through AUD-0011 | Pass |
+| Each new methodology consumes the core standards and redefines no evidence, confidence, completeness, or scoring concept | Pass |
+| Each new methodology declares its produced artifact types as namespaced type identities and carries no `requirements` key | Pass |
+| Every artifact type named by a methodology appears in the Artifact Type Inventory | Pass |
+| AUD-0001 Bootstrap retains Draft structural status | Pass |
 | The frozen architecture design set is registered and its links resolve | Pass |
 | Architecture design documents assert no normative requirements | Pass |
 | Each Architecture Decision Record decides exactly one question and follows the record template | Pass |
@@ -140,6 +144,10 @@ The repository is ready to scale through the ID, metadata, registry, and numbere
 
 Database Discovery introduces two conventions that later playbooks are expected to follow where their domain warrants: technology-family guidance applied only after the family is evidenced, and a fixed set of identified audit artifacts giving downstream playbooks a stable output contract. Its `DB-NNN` artifact identifiers name audit outputs rather than framework documents and are therefore governed by the playbook, not by the Framework Document ID Standard.
 
-Nine Audit Engine documents remain Draft structural placeholders: AUD-0001 and AUD-0004 through AUD-0011.
+One Audit Engine document remains a Draft structural placeholder: AUD-0001 Bootstrap.
+
+Ten methodologies are approved and none is executable. Every one declares the artifact types it produces, and no artifact type definition exists. Ninety-three types are registered in the [Artifact Type Inventory](07-roadmap/artifact-type-inventory.md), which is a register rather than a set of definitions. Execution is now bounded by the artifact model rather than by the methodology set.
+
+Ten of the twenty-two obligations reported as unenforceable are the safety boundaries declared by the audit methodologies. A methodology may not carry a `requirements` key under [STD-0010](02-methodology/metadata-specification.md) R-16, so a normative obligation it states cannot be bound to a check. These are the framework's most consequential prohibitions — do not modify the subject, do not read production records, do not reproduce credentials — and no validator can enforce any of them.
 
 The framework architecture design set — the core architecture, the artifact model, the repository audit capability, and the architecture review — is registered as Draft. These documents describe structure and assert no requirements; nothing in them constrains a contributor until a decision record accepts them and a standard makes their content normative.
