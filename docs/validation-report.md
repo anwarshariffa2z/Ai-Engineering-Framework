@@ -1,7 +1,7 @@
 ---
 id: REF-0010
 title: Documentation Validation Report
-version: 1.5.0
+version: 1.6.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -54,6 +54,8 @@ Validation covered all Markdown documents in the repository except `LICENSE`, in
 | Architecture design documents assert no normative requirements | Pass |
 | Each Architecture Decision Record decides exactly one question and follows the record template | Pass |
 | Architecture Decision Records reference supporting design documents rather than restating them | Pass |
+| The artifact instance identity record decides naming, resolution, and integrity separately and modifies no standard | Pass |
+| The Framework Artifact Model records its open addressing question as resolved by that record, with carriage into the standards outstanding | Pass |
 | The Artifact Specification Standard declares section normativity and structured requirements in its metadata | Pass |
 | Every requirement in the Artifact Specification Standard declares a normative level, checkability, severity, and scope | Pass |
 | No informative section of the Artifact Specification Standard states a requirement | Pass |
@@ -171,6 +173,8 @@ Database Discovery introduces two conventions that later playbooks are expected 
 One Audit Engine document remains a Draft structural placeholder: AUD-0001 Bootstrap.
 
 Ten methodologies are approved and every artifact type they declare is now declared in the corpus, once each, under [STD-0013](02-methodology/artifact-type-declaration-standard.md). Ninety-three declarations sit in ten documents under `docs/10-artifact-types/`. What remains missing before a run can occur is a producer implementation and a place for instances to live; neither is a framework document.
+
+How an artifact instance is named is decided by [ADR-0006](ADR/ADR-0006-artifact-instance-identity.md) and is no longer an open architectural question. The record modifies no standard, so the requirements that depend on an identity grammar — chiefly the artifact standard's lineage and addressing clauses and the contract standard's staleness clause — remain stated without it until STD-0008, STD-0010, STD-0011, and STD-0012 are revised. That revision is scheduled work rather than an unresolved design question.
 
 Ten of the twenty-two obligations reported as unenforceable are the safety boundaries declared by the audit methodologies. A methodology may not carry a `requirements` key under [STD-0010](02-methodology/metadata-specification.md) R-16, so a normative obligation it states cannot be bound to a check. These are the framework's most consequential prohibitions — do not modify the subject, do not read production records, do not reproduce credentials — and no validator can enforce any of them.
 

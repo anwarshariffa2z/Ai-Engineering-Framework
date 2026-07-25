@@ -1,7 +1,7 @@
 ---
 id: DOC-0001
 title: AI Engineering Framework
-version: 1.0.1
+version: 1.1.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -38,12 +38,16 @@ This is a framework repository, not a reference application. It defines the cont
 | --- | --- |
 | `docs/01-foundation/` | Core principles, architecture, and accountability. |
 | `docs/02-methodology/` | Lifecycle, documentation, and delivery methods. |
-| `docs/03-audit-engine/` | Draft structure for the future Audit Engine; no methodology or implementation. |
+| `docs/03-audit-engine/` | Audit Engine methodologies. |
 | `docs/04-development/` | Data, evaluation, reliability, and security standards. |
 | `docs/05-reference/` | Reference material intended to scale with the framework. |
 | `docs/06-governance/` | Risk, change, and incident governance. |
 | `docs/07-roadmap/` | Planned framework capabilities. |
 | `docs/08-examples/` | Complete, reusable adoption examples. |
+| `docs/09-capabilities/` | Capabilities that compose methodologies into an outcome. |
+| `docs/10-artifact-types/` | Artifact type declarations governing methodology outputs. |
+| `docs/ADR/` | Architecture Decision Records. |
+| `tools/` | The reference validator and its configuration. |
 | `.github/` | Contribution and automation configuration. |
 
 ## Principles
@@ -56,7 +60,7 @@ This is a framework repository, not a reference application. It defines the cont
 
 ## Status
 
-The framework foundation is documented and ready for adoption. The Audit Engine is specified in the roadmap but deliberately not implemented in this repository yet.
+The framework foundation is documented and ready for adoption. The Audit Engine is specified here as methodologies, standards, and artifact type declarations, and is validated by the reference validator in `tools/`. Producers that execute those methodologies belong to adopting repositories rather than to this one.
 
 ## License
 
