@@ -1,11 +1,11 @@
 ---
 id: STD-0010
 title: Metadata Specification Standard
-version: 1.1.0
+version: 1.2.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-25
+last_updated: 2026-07-26
 review_cycle: Annual
 category: Methodology
 tags: [metadata, schema, representation, front-matter, standard]
@@ -335,9 +335,11 @@ R-07 removes an ambiguity that currently exists: `related` entries appear in bot
 | `tags` | list of string | yes | lowercase, hyphen-separated |
 | `related` | list of reference | yes | R-07 |
 
-**R-09.** A document MAY carry additional keys defined by this standard or namespaced per R-08. Additional keys MUST follow the eleven core keys. An unrecognized namespaced key MUST NOT cause validation failure.
+**R-09.** A document MAY carry additional keys defined by this standard, defined by another framework standard, or namespaced per R-08. Additional keys MUST follow the eleven core keys. An unrecognized namespaced key MUST NOT cause validation failure.
 
 The additional keys this standard defines are `normativity` (section 7), `requirements` (section 8), `depends_on` and `references` (section 9), `compatibility` (section 10), `object_type`, `layer`, `context_cost`, and `meta_model_version`.
+
+One further key is defined by another framework standard: `artifact_types`, by [STD-0013](artifact-type-declaration-standard.md) R-31. A framework key is not an extension key and is not namespaced; R-33 governs extension keys, which are introduced by organizations and plugins rather than by the framework.
 
 R-09 resolves the open question of whether documents carrying declarations required by ADR-0002 and ADR-0003 remain conformant. They do: STD-0001 requires that the core keys be present and does not prohibit others.
 

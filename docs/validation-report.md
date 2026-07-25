@@ -1,7 +1,7 @@
 ---
 id: REF-0010
 title: Documentation Validation Report
-version: 1.4.0
+version: 1.5.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -39,6 +39,17 @@ Validation covered all Markdown documents in the repository except `LICENSE`, in
 | Each new methodology declares its produced artifact types as namespaced type identities and carries no `requirements` key | Pass |
 | Every artifact type named by a methodology appears in the Artifact Type Inventory | Pass |
 | AUD-0001 Bootstrap retains Draft structural status | Pass |
+| The Artifact Type Declaration Standard declares section normativity and structured requirements in its metadata | Pass |
+| Every requirement in the Artifact Type Declaration Standard declares a normative level, checkability, severity, and scope | Pass |
+| No informative section of the Artifact Type Declaration Standard states a requirement | Pass |
+| Every requirement the Artifact Specification Standard scoped to an artifact type is retired and restated by the Artifact Type Declaration Standard, or explicitly withdrawn | Pass |
+| No artifact type declaration states an obligation, and no declaration document carries a requirements key | Pass |
+| Every declared type identity matches the declared grammar and appears exactly once in the corpus | Pass |
+| Every declaration carries the ten required declaration fields and five conformance fixture cases | Pass |
+| Every evidence-bearing field, vocabulary field, and consumption-profile field names a field the type declares | Pass |
+| Every derives_from entry names a declared type, and the derivation graph is acyclic | Pass |
+| Every artifact type in the Artifact Type Inventory is declared exactly once, and no type is declared that the inventory does not list | Pass |
+| The validator holds no knowledge of any artifact type; framework metadata keys are read from configuration | Pass |
 | The frozen architecture design set is registered and its links resolve | Pass |
 | Architecture design documents assert no normative requirements | Pass |
 | Each Architecture Decision Record decides exactly one question and follows the record template | Pass |
@@ -87,13 +98,16 @@ Seven standards declare the enforceable surface of the framework. Every identifi
 | STD-0001 Document Metadata | 5 | 4 | 1 | 4 | — |
 | STD-0002 Framework Document ID | 8 | 5 | 3 | 5 | — |
 | STD-0007 Evidence and Confidence | 44 | 20 | 24 | 0 | — |
-| STD-0008 Artifact Specification | 37 | 35 | 2 | 0 | 14 |
+| STD-0008 Artifact Specification | 26 | 25 | 1 | 0 | 25 |
 | STD-0010 Metadata Specification | 40 | 40 | 0 | 27 | — |
 | STD-0011 Contract Specification | 44 | 37 | 7 | 0 | — |
 | STD-0012 Validation Specification | 39 | 39 | 0 | 6 | — |
-| **Total** | **217** | **180** | **37** | **42** | **14** |
+| STD-0013 Artifact Type Declaration | 36 | 29 | 7 | 26 | — |
+| **Total** | **242** | **199** | **43** | **68** | **25** |
 
-STD-0007, STD-0008, and STD-0011 carry no bound checks because their subjects — artifacts, producers, consumers, and conclusions — do not yet exist in the corpus. Each of their mechanical requirements is reported `not-evaluated` with that reason rather than assumed to pass.
+STD-0007, STD-0008, and STD-0011 carry no bound checks because their subjects — artifact instances, producers, consumers, and conclusions — do not exist in the corpus. Ninety-three artifact **types** are declared; no artifact **instance** is, because the framework ships types and never instances. Each of their mechanical requirements is reported `not-evaluated` with that reason rather than assumed to pass.
+
+The artifact type declaration milestone therefore activated no previously dormant requirement. It added a standard whose subject — the declaration — is present in the corpus, and twenty-six of its requirements bound immediately. The dormant requirements describe instances, and declaring a type does not produce one.
 
 Judgment-classified requirements are not exempt from enforcement. STD-0012 sections 8 and 9 govern them: those that a human can decide are routed to review, and those that cannot be decided by inspection at all are recorded as unenforceable rather than omitted.
 
@@ -117,6 +131,16 @@ Retired identifiers are permanently withdrawn and are never reused, per STD-0010
 | STD-0008 | R-35 | 1.4.0 | STD-0011 R-13 | Consumer obligation, duplicated |
 | STD-0008 | R-47 | 1.4.0 | STD-0011 R-43 | Consumer obligation |
 | STD-0008 | R-48 | 1.4.0 | STD-0011 R-44 | Consumer obligation |
+| STD-0008 | R-03, R-04 | 1.5.0 | STD-0013 R-03, R-04 | Artifact type declaration |
+| STD-0008 | R-21 | 1.5.0 | STD-0013 R-05 | Artifact type declaration |
+| STD-0008 | R-22 | 1.5.0 | STD-0013 R-15, R-24 | Split by what changed |
+| STD-0008 | R-23 | 1.5.0 | STD-0013 R-03 | Artifact type declaration |
+| STD-0008 | R-26 | 1.5.0 | STD-0013 R-13, R-14 | Artifact type declaration |
+| STD-0008 | R-32 | 1.5.0 | STD-0013 section 9 | Stated once rather than per type |
+| STD-0008 | R-36 | 1.5.0 | STD-0013 R-27 | Artifact type declaration |
+| STD-0008 | R-37 | 1.5.0 | STD-0013 sections 5 and 6 | Sections became declaration fields |
+| STD-0008 | R-49 | 1.5.0 | Withdrawn | A data record has no sections to mark |
+| STD-0008 | R-50 | 1.5.0 | STD-0013 R-29, R-30 | Artifact type declaration |
 
 Four requirements were narrowed rather than retired, their relocating clauses moving while their remaining clauses stayed: STD-0008 R-09, R-20, and R-33, and STD-0011 R-36.
 
@@ -146,7 +170,7 @@ Database Discovery introduces two conventions that later playbooks are expected 
 
 One Audit Engine document remains a Draft structural placeholder: AUD-0001 Bootstrap.
 
-Ten methodologies are approved and none is executable. Every one declares the artifact types it produces, and no artifact type definition exists. Ninety-three types are registered in the [Artifact Type Inventory](07-roadmap/artifact-type-inventory.md), which is a register rather than a set of definitions. Execution is now bounded by the artifact model rather than by the methodology set.
+Ten methodologies are approved and every artifact type they declare is now declared in the corpus, once each, under [STD-0013](02-methodology/artifact-type-declaration-standard.md). Ninety-three declarations sit in ten documents under `docs/10-artifact-types/`. What remains missing before a run can occur is a producer implementation and a place for instances to live; neither is a framework document.
 
 Ten of the twenty-two obligations reported as unenforceable are the safety boundaries declared by the audit methodologies. A methodology may not carry a `requirements` key under [STD-0010](02-methodology/metadata-specification.md) R-16, so a normative obligation it states cannot be bound to a check. These are the framework's most consequential prohibitions — do not modify the subject, do not read production records, do not reproduce credentials — and no validator can enforce any of them.
 

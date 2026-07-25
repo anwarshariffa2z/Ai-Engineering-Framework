@@ -20,9 +20,13 @@ Nothing about any individual document. The validator reads:
 - the requirement set, from the `requirements` declarations of every document that carries them, which STD-0010 R-16 permits only for standards;
 - the normativity of each section, from each document's `normativity` map;
 - the controlled vocabularies, from configuration that mirrors the vocabularies the standards declare closed;
+- the framework metadata key set, from configuration, so a standard that defines a new key is admitted without editing the tool;
+- the artifact type declarations, from the `artifact_types` list of every document that carries one;
 - the registry, from the document carrying the configured registry identifier.
 
 The only document-specific value in the entire tool is that registry identifier, in `validator/framework.config.json`. Everything else is derived from metadata.
+
+**It knows nothing about any artifact type.** The twenty-six checks bound to STD-0013 read each declaration as data: required declaration fields, field and vocabulary consistency, derivation acyclicity, fixture coverage, and identity uniqueness. Declaring a ninety-fourth type adds no check and changes no line of this tool.
 
 ### How checks bind
 
@@ -52,4 +56,6 @@ The report views are generated from the artifact, per STD-0012 R-37. They are ne
 
 ### Limits
 
-The validator cannot enforce an obligation that carries no requirement identifier. STD-0001 and STD-0002 predate ADR-0002 and declare no requirements, so the obligations they state — including registry agreement on version and status — are reported as unenforceable rather than checked. The registry report shows those disagreements for information, and marks them as unbound.
+The validator cannot enforce an obligation that carries no requirement identifier. Twenty-three such obligations remain, and ten of them are the safety boundaries the audit methodologies declare — do not modify the subject, do not read production records, do not reproduce credentials. A methodology may not carry requirements under STD-0010 R-16, so none of those prohibitions can be bound to a check. They are reported as unenforceable rather than omitted.
+
+**STD-0007, STD-0008, and STD-0011 have no bound checks.** Their subjects are artifact instances, producers, consumers, and conclusions, and the corpus contains none of them. The framework ships types and never instances, so declaring ninety-three artifact types did not activate any of these requirements and could not have. Each is reported `not-evaluated` with that reason.

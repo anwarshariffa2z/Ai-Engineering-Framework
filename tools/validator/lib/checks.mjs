@@ -196,9 +196,9 @@ export function buildChecks(ctx) {
   });
 
   define('STD-0010#R-08', () => {
-    const known = new Set([...config.coreKeys, 'normativity', 'requirements', 'depends_on', 'references',
-      'object_type', 'layer', 'context_cost', 'meta_model_version', 'authored', 'generated_by',
-      'source_revision', 'generated_at', 'name', 'about', 'labels']);
+    // Framework-defined keys come from configuration rather than from code, so a
+    // standard that defines a new key is admitted without editing the validator.
+    const known = new Set([...config.coreKeys, ...(config.frameworkKeys ?? [])]);
     const results = [];
     for (const doc of parsed) {
       const extension = doc.keyOrder.filter((k) => !known.has(k));
@@ -465,6 +465,199 @@ export function buildChecks(ctx) {
     const bad = run.results.filter((r) => r.outcome === 'pass' && r.evaluated === false);
     return bad.length ? [fail('validator', `${bad.length} unevaluated checks reported as pass`)]
       : [pass('validator', 'no unevaluated check is reported as pass')];
+  });
+
+  // ---- Artifact type declarations ----------------------------------------
+  // Every check below reads declarations as data. None knows any type.
+
+  const declarationDocs = parsed.filter((d) => Array.isArray(d.meta.artifact_types));
+  const declarations = [];
+  for (const doc of declarationDocs) {
+    for (const entry of doc.meta.artifact_types) {
+      if (entry && typeof entry === 'object') declarations.push({ doc, d: entry });
+    }
+  }
+  const declaredTypes = new Set(declarations.map(({ d }) => d.type).filter(Boolean));
+  const fieldsOf = (d) => [
+    ...(Array.isArray(d.required_fields) ? d.required_fields : []),
+    ...(Array.isArray(d.optional_fields) ? d.optional_fields : []),
+  ];
+  const each = (fn) => () => declarations.map(({ doc, d }) => {
+    const where = `${doc.path}:${d.type ?? '(untyped)'}`;
+    const problem = fn(d);
+    return problem ? fail(where, problem) : pass(where);
+  });
+  const asList = (value) => (Array.isArray(value) ? value : value === undefined ? [] : [value]);
+
+  const TYPE_ID = /^[a-z][a-z0-9]*\.[a-z]+\.[a-z]+$/;
+  const OBLIGATION = /\b(MUST|SHOULD|MAY|REQUIRED|SHALL)\b/;
+  const REQUIRED_KEYS = ['type', 'type_version', 'lifecycle', 'purpose', 'contract',
+    'producer_kind', 'subject_noun', 'required_fields', 'evidence_bearing_fields', 'fixtures'];
+  const OPTIONAL_KEYS = ['optional_fields', 'vocabularies', 'derives_from', 'consumption_profiles',
+    'completeness_notes', 'successor', 'deprecation_reason', 'notes'];
+  const FIXTURE_CASES = ['normal', 'empty', 'not_applicable', 'partial', 'boundary'];
+
+  define('STD-0013#R-01', each((d) => {
+    const carriers = [d.purpose, d.contract, d.notes, d.completeness_notes].filter((v) => typeof v === 'string');
+    const offending = carriers.filter((v) => OBLIGATION.test(v));
+    return offending.length ? `declaration text states an obligation: "${offending[0].slice(0, 60)}"` : null;
+  }));
+
+  define('STD-0013#R-02', () => declarationDocs.map((doc) =>
+    doc.meta.artifact_types.every((e) => e && typeof e === 'object' && !Array.isArray(e))
+      ? pass(doc.path, `${doc.meta.artifact_types.length} declarations parsed as structured records`)
+      : fail(doc.path, 'an artifact_types entry is not a structured record')));
+
+  define('STD-0013#R-04', each((d) =>
+    typeof d.type === 'string' && TYPE_ID.test(d.type) ? null : `type identity "${d.type}" does not match the declared grammar`));
+
+  define('STD-0013#R-05', each((d) =>
+    typeof d.type_version === 'string' && VERSION.test(d.type_version) ? null : `type_version "${d.type_version}" is not a semantic version`));
+
+  define('STD-0013#R-06', each((d) => {
+    const missing = REQUIRED_KEYS.filter((k) => d[k] === undefined || d[k] === '');
+    return missing.length ? `required declaration fields absent: ${missing.join(', ')}` : null;
+  }));
+
+  define('STD-0013#R-07', each((d) =>
+    ID.test(String(d.producer_kind ?? '')) ? `producer_kind "${d.producer_kind}" names a document identity` : null));
+
+  define('STD-0013#R-08', each((d) => {
+    const known = new Set([...REQUIRED_KEYS, ...OPTIONAL_KEYS]);
+    const unknown = Object.keys(d).filter((k) => !known.has(k));
+    return unknown.length ? `undeclared declaration fields: ${unknown.join(', ')}` : null;
+  }));
+
+  define('STD-0013#R-09', each((d) => {
+    const empty = OPTIONAL_KEYS.filter((k) => k in d && (d[k] === '' || (Array.isArray(d[k]) && d[k].length === 0)));
+    return empty.length ? `optional fields present but empty: ${empty.join(', ')}` : null;
+  }));
+
+  define('STD-0013#R-10', each((d) =>
+    asList(d.required_fields).length ? null : 'required_fields declares no field'));
+
+  define('STD-0013#R-11', each((d) => {
+    const all = fieldsOf(d);
+    const seen = new Set(); const repeated = new Set();
+    for (const f of all) { if (seen.has(f)) repeated.add(f); seen.add(f); }
+    return repeated.size ? `field declared more than once: ${[...repeated].join(', ')}` : null;
+  }));
+
+  define('STD-0013#R-12', each((d) => {
+    const all = new Set(fieldsOf(d));
+    const stray = asList(d.evidence_bearing_fields).filter((f) => !all.has(f));
+    return stray.length ? `evidence_bearing_fields names undeclared fields: ${stray.join(', ')}` : null;
+  }));
+
+  define('STD-0013#R-13', each((d) => {
+    const bad = asList(d.vocabularies).filter((v) => !v || !v.field || !v.kind || !Array.isArray(v.values));
+    return bad.length ? `${bad.length} vocabulary entries omit field, kind, or values` : null;
+  }));
+
+  define('STD-0013#R-14', each((d) => {
+    const bad = asList(d.vocabularies).filter((v) => v && v.kind !== 'closed' && v.kind !== 'open');
+    return bad.length ? `vocabulary kind outside the closed set: ${bad.map((v) => v.kind).join(', ')}` : null;
+  }));
+
+  define('STD-0013#R-16', each((d) => {
+    const all = new Set(fieldsOf(d));
+    const problems = [];
+    for (const v of asList(d.vocabularies)) {
+      if (!v) continue;
+      if (v.field && !all.has(v.field)) problems.push(`${v.field} is not a declared field`);
+      if (Array.isArray(v.values) && v.values.length === 0) problems.push(`${v.field} declares no value`);
+    }
+    return problems.length ? problems.join('; ') : null;
+  }));
+
+  define('STD-0013#R-18', each((d) =>
+    typeof d.subject_noun === 'string' && d.subject_noun.trim() !== '' ? null : 'subject_noun is absent'));
+
+  define('STD-0013#R-19', each((d) => {
+    const banned = ['confidence_rule', 'aggregation_rule', 'evidence_states', 'confidence_levels'];
+    const present = banned.filter((k) => k in d);
+    return present.length ? `declaration restates framework semantics: ${present.join(', ')}` : null;
+  }));
+
+  define('STD-0013#R-20', each((d) =>
+    asList(d.evidence_bearing_fields).length ? null : 'evidence_bearing_fields declares no field'));
+
+  define('STD-0013#R-22', each((d) => {
+    const stray = asList(d.derives_from).filter((t) => !declaredTypes.has(t));
+    return stray.length ? `derives_from names undeclared types: ${stray.join(', ')}` : null;
+  }));
+
+  define('STD-0013#R-21', () => {
+    const edges = new Map(declarations.map(({ d }) => [d.type, asList(d.derives_from)]));
+    const state = new Map();
+    const cycles = [];
+    const walk = (node, trail) => {
+      if (state.get(node) === 'done') return;
+      if (state.get(node) === 'open') { cycles.push([...trail, node].join(' -> ')); return; }
+      state.set(node, 'open');
+      for (const next of edges.get(node) ?? []) if (edges.has(next)) walk(next, [...trail, node]);
+      state.set(node, 'done');
+    };
+    for (const node of edges.keys()) walk(node, []);
+    return cycles.length
+      ? [fail('corpus', `derivation cycles: ${cycles.join('; ')}`)]
+      : [pass('corpus', `${edges.size} declared types form an acyclic derivation graph`)];
+  });
+
+  define('STD-0013#R-23', each((d) => {
+    const bad = asList(d.consumption_profiles).filter((p) => !p || !p.consumer || !Array.isArray(p.reads));
+    return bad.length ? `${bad.length} consumption profiles omit consumer or reads` : null;
+  }));
+
+  define('STD-0013#R-25', each((d) => {
+    const all = new Set(fieldsOf(d));
+    const stray = [];
+    for (const p of asList(d.consumption_profiles)) {
+      for (const f of (Array.isArray(p?.reads) ? p.reads : [])) if (!all.has(f)) stray.push(`${p.consumer}:${f}`);
+    }
+    return stray.length ? `profiles read undeclared fields: ${stray.join(', ')}` : null;
+  }));
+
+  define('STD-0013#R-26', each((d) =>
+    d.lifecycle === 'active' || d.lifecycle === 'deprecated' ? null : `lifecycle "${d.lifecycle}" is outside the closed vocabulary`));
+
+  define('STD-0013#R-27', each((d) => {
+    if (d.lifecycle !== 'deprecated') return null;
+    const missing = ['successor', 'deprecation_reason'].filter((k) => !d[k]);
+    if (missing.length) return `deprecated declaration omits ${missing.join(' and ')}`;
+    return declaredTypes.has(d.successor) ? null : `successor "${d.successor}" is not a declared type`;
+  }));
+
+  define('STD-0013#R-29', each((d) => {
+    const f = d.fixtures;
+    if (!f || typeof f !== 'object' || Array.isArray(f)) return 'fixtures is absent or is not a record';
+    const keys = Object.keys(f);
+    const missing = FIXTURE_CASES.filter((c) => !keys.includes(c) || !String(f[c]).trim());
+    const extra = keys.filter((c) => !FIXTURE_CASES.includes(c));
+    if (missing.length) return `fixture cases absent: ${missing.join(', ')}`;
+    return extra.length ? `fixture cases outside the declared five: ${extra.join(', ')}` : null;
+  }));
+
+  define('STD-0013#R-31', () => {
+    const results = declarationDocs.map((doc) => {
+      const problems = [];
+      if (doc.meta.object_type !== 'Guide') problems.push(`object_type is ${doc.meta.object_type ?? 'absent'}, not Guide`);
+      if ('requirements' in doc.meta) problems.push('carries a requirements key');
+      return problems.length ? fail(doc.path, problems.join('; ')) : pass(doc.path);
+    });
+    return results.length ? results : [pass('corpus', 'no declaration document present')];
+  });
+
+  define('STD-0013#R-32', () => {
+    const seen = new Map();
+    for (const { doc, d } of declarations) {
+      if (!d.type) continue;
+      seen.set(d.type, [...(seen.get(d.type) ?? []), doc.path]);
+    }
+    const duplicated = [...seen].filter(([, where]) => where.length > 1);
+    return duplicated.length
+      ? duplicated.map(([type, where]) => fail(type, `declared in ${where.length} documents: ${where.join(', ')}`))
+      : [pass('corpus', `${seen.size} type identities, each declared exactly once`)];
   });
 
   return checks;
