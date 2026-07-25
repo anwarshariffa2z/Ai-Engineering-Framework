@@ -1,15 +1,15 @@
 ---
 id: DOC-0001
 title: AI Engineering Framework
-version: 1.0.0
+version: 1.0.1
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-25
+last_updated: 2026-07-26
 review_cycle: Annual
 category: Foundation
 tags: [framework, overview]
-related: [docs/DOCUMENT_INDEX.md, docs/01-foundation/framework-architecture.md]
+related: [REF-0009, DOC-0002]
 ---
 
 # AI Engineering Framework
