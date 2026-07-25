@@ -1,0 +1,26 @@
+{
+  "corpusRoot": ".",
+  "include": ["**/*.md"],
+  "exclude": [".git/**", "node_modules/**", "validation/**", "tools/**"],
+  "registryDocumentId": "REF-0009",
+  "coreKeys": [
+    "id", "title", "version", "status", "owner",
+    "created", "last_updated", "review_cycle", "category", "tags", "related"
+  ],
+  "vocabularies": {
+    "status": ["Draft", "Approved", "Accepted", "Deprecated", "Superseded"],
+    "category": [
+      "Foundation", "Methodology", "Development", "Governance", "Reference",
+      "Roadmap", "Example", "Template", "Capability", "Audit Engine",
+      "Architecture Decision Record"
+    ],
+    "object_type": [
+      "Standard", "Methodology", "Capability", "Guide",
+      "Decision", "Manifest", "Artifact", "View"
+    ],
+    "level": ["MUST", "MUST_NOT", "SHOULD", "SHOULD_NOT", "MAY"],
+    "check": ["mechanical", "judgment"],
+    "severity": ["blocking", "advisory"]
+  },
+  "outputDirectory": "validation"
+}
