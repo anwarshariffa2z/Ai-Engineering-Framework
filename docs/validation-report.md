@@ -1,11 +1,11 @@
 ---
 id: REF-0010
 title: Documentation Validation Report
-version: 1.6.0
+version: 1.7.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-26
+last_updated: 2026-07-29
 review_cycle: Event-driven
 category: Reference
 tags: [validation, documentation, quality]
@@ -55,7 +55,12 @@ Validation covered all Markdown documents in the repository except `LICENSE`, in
 | Each Architecture Decision Record decides exactly one question and follows the record template | Pass |
 | Architecture Decision Records reference supporting design documents rather than restating them | Pass |
 | The artifact instance identity record decides naming, resolution, and integrity separately and modifies no standard | Pass |
-| The Framework Artifact Model records its open addressing question as resolved by that record, with carriage into the standards outstanding | Pass |
+| The Framework Artifact Model records its open addressing question as resolved by that record and carried into the standards | Pass |
+| The artifact instance identity decision is carried into the four standards it names, and into no others | Pass |
+| Identity, resolution, and integrity are stated as three separate obligations and are not collapsed into one field or one responsibility | Pass |
+| No requirement identifier was reused, and none was retired, in carrying that decision | Pass |
+| The carriage introduces no object type, no layer, no resolver contract, and no derivation rule for the run discriminator | Pass |
+| The deferred run discriminator derivation is recorded as an implementation question in the artifact standard rather than decided | Pass |
 | The Artifact Specification Standard declares section normativity and structured requirements in its metadata | Pass |
 | Every requirement in the Artifact Specification Standard declares a normative level, checkability, severity, and scope | Pass |
 | No informative section of the Artifact Specification Standard states a requirement | Pass |
@@ -100,14 +105,16 @@ Seven standards declare the enforceable surface of the framework. Every identifi
 | STD-0001 Document Metadata | 5 | 4 | 1 | 4 | — |
 | STD-0002 Framework Document ID | 8 | 5 | 3 | 5 | — |
 | STD-0007 Evidence and Confidence | 44 | 20 | 24 | 0 | — |
-| STD-0008 Artifact Specification | 26 | 25 | 1 | 0 | 25 |
-| STD-0010 Metadata Specification | 40 | 40 | 0 | 27 | — |
-| STD-0011 Contract Specification | 44 | 37 | 7 | 0 | — |
-| STD-0012 Validation Specification | 39 | 39 | 0 | 6 | — |
+| STD-0008 Artifact Specification | 32 | 31 | 1 | 0 | 25 |
+| STD-0010 Metadata Specification | 45 | 45 | 0 | 27 | — |
+| STD-0011 Contract Specification | 52 | 45 | 7 | 0 | — |
+| STD-0012 Validation Specification | 45 | 45 | 0 | 6 | — |
 | STD-0013 Artifact Type Declaration | 36 | 29 | 7 | 26 | — |
-| **Total** | **242** | **199** | **43** | **68** | **25** |
+| **Total** | **267** | **224** | **43** | **68** | **25** |
 
 STD-0007, STD-0008, and STD-0011 carry no bound checks because their subjects — artifact instances, producers, consumers, and conclusions — do not exist in the corpus. Ninety-three artifact **types** are declared; no artifact **instance** is, because the framework ships types and never instances. Each of their mechanical requirements is reported `not-evaluated` with that reason rather than assumed to pass.
+
+Twenty-five requirements were added in carrying [ADR-0006](ADR/ADR-0006-artifact-instance-identity.md) into the standards: six to STD-0008, five to STD-0010, eight to STD-0011, and six to STD-0012. All twenty-five are mechanical and blocking, and all twenty-five are dormant for the same reason as the requirements around them: their subjects are artifact instances, references, runs, and resolutions, none of which exist in the corpus. Bound checks are therefore unchanged at sixty-eight, and not-evaluated rises from 174 to 199. No identifier was reused and none was retired; R-06, R-10, R-19, R-28, R-29, and R-30 kept their identities because each remained true, and R-10, R-28, R-29, and R-30 were widened in place to admit the integrity group and the upstream digest.
 
 The artifact type declaration milestone therefore activated no previously dormant requirement. It added a standard whose subject — the declaration — is present in the corpus, and twenty-six of its requirements bound immediately. The dormant requirements describe instances, and declaring a type does not produce one.
 
@@ -174,7 +181,9 @@ One Audit Engine document remains a Draft structural placeholder: AUD-0001 Boots
 
 Ten methodologies are approved and every artifact type they declare is now declared in the corpus, once each, under [STD-0013](02-methodology/artifact-type-declaration-standard.md). Ninety-three declarations sit in ten documents under `docs/10-artifact-types/`. What remains missing before a run can occur is a producer implementation and a place for instances to live; neither is a framework document.
 
-How an artifact instance is named is decided by [ADR-0006](ADR/ADR-0006-artifact-instance-identity.md) and is no longer an open architectural question. The record modifies no standard, so the requirements that depend on an identity grammar — chiefly the artifact standard's lineage and addressing clauses and the contract standard's staleness clause — remain stated without it until STD-0008, STD-0010, STD-0011, and STD-0012 are revised. That revision is scheduled work rather than an unresolved design question.
+How an artifact instance is named is decided by [ADR-0006](ADR/ADR-0006-artifact-instance-identity.md) and carried into the standards it names: STD-0008 at 1.6.0, STD-0010 at 1.3.0, STD-0011 at 1.3.0, and STD-0012 at 1.1.0. The obligations that previously had no subject now have one. STD-0011 R-40 can be discharged because an identity grammar exists; STD-0008 R-19 has a defined upstream address; and R-43 staleness is a digest comparison rather than a claim. STD-0013 is untouched, which is the check that the separation [ADR-0005](ADR/ADR-0005-artifact-types-as-declarations.md) established holds.
+
+Two questions remain deferred inside that decision rather than open before it. A derivation rule for the run discriminator is not required by any standard, because an orchestrator supplies the discriminator and STD-0011 R-51 obliges it to keep discriminators distinct; STD-0008 section 20 records the residual risk, which is an orchestrator issuing one discriminator for two runs. A resolver contract is likewise not required: a resolution is declared as run-scoped data under STD-0010 R-45, and STD-0011 R-52 places the duty to declare it on the orchestrator, so no resolver abstraction, service, or object type enters the framework.
 
 Ten of the twenty-two obligations reported as unenforceable are the safety boundaries declared by the audit methodologies. A methodology may not carry a `requirements` key under [STD-0010](02-methodology/metadata-specification.md) R-16, so a normative obligation it states cannot be bound to a check. These are the framework's most consequential prohibitions — do not modify the subject, do not read production records, do not reproduce credentials — and no validator can enforce any of them.
 

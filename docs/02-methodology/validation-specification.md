@@ -1,15 +1,15 @@
 ---
 id: STD-0012
 title: Validation Specification Standard
-version: 1.0.0
+version: 1.1.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-25
+last_updated: 2026-07-29
 review_cycle: Annual
 category: Methodology
 tags: [validation, conformance, enforcement, reporting, standard]
-related: [artifact-specification.md, metadata-specification.md, evidence-and-confidence.md, contract-specification.md, ../01-foundation/framework-core-architecture.md, ../01-foundation/framework-artifact-model.md, ../ADR/ADR-0002-requirements-as-metadata.md, ../ADR/ADR-0003-normative-informative-separation.md, ../ADR/ADR-0004-depend-on-artifact-types.md]
+related: [artifact-specification.md, metadata-specification.md, evidence-and-confidence.md, contract-specification.md, ../01-foundation/framework-core-architecture.md, ../01-foundation/framework-artifact-model.md, ../ADR/ADR-0002-requirements-as-metadata.md, ../ADR/ADR-0003-normative-informative-separation.md, ../ADR/ADR-0004-depend-on-artifact-types.md, ../ADR/ADR-0006-artifact-instance-identity.md]
 normativity:
   "1": informative
   "2": normative
@@ -227,6 +227,36 @@ requirements:
     check: mechanical
     severity: blocking
     scope: conformance
+  - id: R-40
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: outcome
+  - id: R-41
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: outcome
+  - id: R-42
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: outcome
+  - id: R-43
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: outcome
+  - id: R-44
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: outcome
+  - id: R-45
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: outcome
 ---
 
 # Validation Specification Standard
@@ -439,6 +469,22 @@ R-27 receives the fail-closed enumeration migrated from STD-0008. The governing 
 
 R-28 receives the extension-tolerance rule migrated from STD-0008. Extension tolerance and fail-closed behaviour are complementary rather than contradictory: the validator fails on what it should understand and cannot, and tolerates what it was never meant to understand.
 
+**R-40.** A validator MUST emit `fail` where an artifact instance identity does not satisfy the grammar of [STD-0010](metadata-specification.md) R-41.
+
+**R-41.** A validator MUST emit `fail` where a content digest does not satisfy the representation of [STD-0010](metadata-specification.md) R-42.
+
+**R-42.** A validator MUST emit `fail` where a lineage entry is not an immutable reference, that is, where any component of the identity it names is unbound or the upstream content digest is absent.
+
+**R-43.** A validator MUST emit `fail` where a digest computed over a resolved artifact differs from the digest recorded in the reference that named it.
+
+**R-44.** A validator MUST emit `fail` where an identity the composition requires to be resolved cannot be resolved, and MUST NOT record an unresolvable identity as an absent one.
+
+**R-45.** A validator MUST emit `fail` where a lineage entry's recorded subject revision differs from the subject revision component of the artifact instance identity that entry names.
+
+R-40 through R-45 carry [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md) into validator behaviour and each binds to an obligation already stated elsewhere: R-40 and R-41 to the grammars of STD-0010, R-42 to [STD-0008](artifact-specification.md) R-56, R-43 to [STD-0011](contract-specification.md) R-47, R-44 to its R-48 and R-52, and R-45 to the internal agreement STD-0010 R-30 requires of a lineage entry. No condition is introduced that no requirement states.
+
+R-44 states the validator's counterpart of the consumer duty in STD-0011 R-48, and the two are deliberately not merged for the reason section 19 gives about R-27: a consumer fails closed to protect its own conclusions, a validator because checking is its function.
+
 **R-38.** A subject's outcome is `fail` where any check failed, `warn` where none failed and any warned, and `pass` only where every applicable check was evaluated and passed. A subject with `not-evaluated` checks MUST NOT be reported as `pass` without its coverage stated alongside.
 
 ## 13. Exception Handling
@@ -485,7 +531,7 @@ Validator outputs comprise: the validation artifact; a rendered report view; a c
 
 *This section is normative.*
 
-A validator conforms when it satisfies R-01 through R-07, evaluates in the order required by R-08 through R-11, classifies per R-12 through R-14, evaluates mechanical requirements per R-15, routes judgment requirements per R-16 through R-18, records unenforceable obligations per R-19, evaluates conformance per R-20 through R-22, derives severity per R-23 and R-24, emits outcomes per R-25 through R-28, handles exceptions per R-29 through R-31, reports per R-32 through R-34, and emits outputs per R-35 through R-37.
+A validator conforms when it satisfies R-01 through R-07, evaluates in the order required by R-08 through R-11, classifies per R-12 through R-14, evaluates mechanical requirements per R-15, routes judgment requirements per R-16 through R-18, records unenforceable obligations per R-19, evaluates conformance per R-20 through R-22, derives severity per R-23 and R-24, emits outcomes per R-25 through R-28, handles exceptions per R-29 through R-31, reports per R-32 through R-34, emits outputs per R-35 through R-37, and evaluates identity, integrity, and resolution conditions per R-40 through R-45.
 
 **R-39.** A validator that cannot satisfy a requirement of this standard MUST declare the shortfall in its coverage statement rather than omitting the requirement from its requirement set.
 

@@ -1,15 +1,15 @@
 ---
 id: STD-0008
 title: Artifact Specification Standard
-version: 1.5.0
+version: 1.6.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-26
+last_updated: 2026-07-29
 review_cycle: Annual
 category: Methodology
 tags: [artifacts, interoperability, versioning, contracts, standard]
-related: [document-metadata-standard.md, document-id-standard.md, evidence-and-confidence.md, contract-specification.md, validation-specification.md, ../01-foundation/framework-core-architecture.md, ../01-foundation/framework-artifact-model.md, ../ADR/ADR-0002-requirements-as-metadata.md, ../ADR/ADR-0003-normative-informative-separation.md, ../ADR/ADR-0004-depend-on-artifact-types.md, artifact-type-declaration-standard.md]
+related: [document-metadata-standard.md, document-id-standard.md, evidence-and-confidence.md, contract-specification.md, validation-specification.md, ../01-foundation/framework-core-architecture.md, ../01-foundation/framework-artifact-model.md, ../ADR/ADR-0002-requirements-as-metadata.md, ../ADR/ADR-0003-normative-informative-separation.md, ../ADR/ADR-0004-depend-on-artifact-types.md, ../ADR/ADR-0006-artifact-instance-identity.md, artifact-type-declaration-standard.md]
 normativity:
   "1": informative
   "2": normative
@@ -163,6 +163,36 @@ requirements:
     check: mechanical
     severity: blocking
     scope: extension
+  - id: R-52
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: artifact
+  - id: R-53
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: run
+  - id: R-54
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: artifact
+  - id: R-55
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: artifact
+  - id: R-56
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: lineage
+  - id: R-57
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: artifact
 ---
 
 # Artifact Specification Standard
@@ -172,6 +202,7 @@ requirements:
 - [ADR-0002](../ADR/ADR-0002-requirements-as-metadata.md) — requirements as standard metadata
 - [ADR-0003](../ADR/ADR-0003-normative-informative-separation.md) — section-level normativity
 - [ADR-0004](../ADR/ADR-0004-depend-on-artifact-types.md) — depend on artifact types, not producers
+- [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md) — logical identity, resolvable location, verifiable integrity
 
 **Unblocks**
 
@@ -191,9 +222,9 @@ This standard makes the [Framework Artifact Model](../01-foundation/framework-ar
 
 It implements decisions already taken. It does not revisit them. Where a reader wants the reasoning behind a rule here, it is in the design documents referenced above, and this standard deliberately does not restate it.
 
-**In scope.** Artifact identity, envelope, required and optional metadata, completeness declaration, evidence and confidence attachment points, lineage, and artifact well-formedness.
+**In scope.** Artifact identity, envelope, required and optional metadata, completeness declaration, evidence and confidence attachment points, content integrity, reference form, lineage, and artifact well-formedness.
 
-**Out of scope.** The content of any specific artifact type; the methodologies that produce or consume artifacts; serialization format and file layout; storage, transport, and access control; the canonical syntax for metadata, which [STD-0010](metadata-specification.md) defines; the meaning of evidence, confidence, and completeness, which [STD-0007](evidence-and-confidence.md) defines; and the obligations of producers and consumers, which [STD-0011](contract-specification.md) defines; and the declaration, versioning, and conformance of artifact types, which [STD-0013](artifact-type-declaration-standard.md) defines.
+**Out of scope.** The content of any specific artifact type; the methodologies that produce or consume artifacts; serialization format and file layout; the resolution of an identity to physical storage, which is deployment-specific data per [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md) and whose participant obligations are [STD-0011](contract-specification.md)'s; storage, transport, and access control; the canonical syntax for metadata, which [STD-0010](metadata-specification.md) defines; the meaning of evidence, confidence, and completeness, which [STD-0007](evidence-and-confidence.md) defines; and the obligations of producers and consumers, which [STD-0011](contract-specification.md) defines; and the declaration, versioning, and conformance of artifact types, which [STD-0013](artifact-type-declaration-standard.md) defines.
 
 **On metadata representation.** Where this standard requires that something be declared in metadata, the canonical representation is defined by [STD-0010](metadata-specification.md).
 
@@ -253,7 +284,19 @@ An artifact type is declared, not defined in prose. Its identity, version, field
 
 The obligation on a consumer to address artifacts by identity rather than by path or producer is stated by [STD-0011](contract-specification.md) R-40.
 
-Instances are not independently versioned. Their type is versioned; their identity is their run and type.
+**R-52.** An artifact instance identity MUST be composed of a subject authority, a subject name, a subject revision, a run discriminator, a type identity, and a type version, of which the first four compose the run identity and the last two compose the type identity that R-06 requires.
+
+**R-53.** A run identity MUST comprise a subject authority, a subject name, a subject revision, and a run discriminator that distinguishes runs over the same subject at the same revision which differ in declared scope, authorization, or executor.
+
+**R-54.** An artifact instance identity MUST be derivable from the components of R-52 alone, MUST NOT be allocated by a registry or a service, MUST NOT encode a host, a locator, a filesystem path, or a repository location, and MUST be reproduced exactly by a re-execution presenting the same components.
+
+The subject authority is a namespace reserved by an organization, in the sense [STD-0010](metadata-specification.md) R-08 defines. The type identity and type version are the declaration's, per [STD-0013](artifact-type-declaration-standard.md). The canonical serialization of an identity is stated by [STD-0010](metadata-specification.md) R-41.
+
+Identity is therefore derived rather than issued. Two parties that know the subject, the revision, the run, and the type compute the same identity without coordinating, and nothing has to allocate one before an artifact can be requested. Where a copy of an artifact can be fetched is a resolution, declared per run, and renames nothing when it changes. The obligation to declare a resolution and the duty on a consumer facing an unresolvable identity are stated by [STD-0011](contract-specification.md) R-52 and R-48.
+
+Instances are not independently versioned. Their type is versioned; their identity is their run and type. Re-running a methodology produces a new run and therefore a new identity, not a new version of an existing artifact.
+
+The obligation on an orchestrator to assign discriminators that do not collide is stated by [STD-0011](contract-specification.md) R-51. The rule by which a discriminator is derived from a run's declared scope and authorization is deliberately not stated here; section 20 records why.
 
 ## 5. The Universal Artifact Envelope
 
@@ -263,7 +306,7 @@ Instances are not independently versioned. Their type is versioned; their identi
 
 This is the property that allows generic machinery — resolvers, validators, lineage checkers, staleness detection — to process artifacts of types it does not know. Under R-08 a consumer encountering an unknown type can still determine what the artifact describes, whether it is current, whether it is complete, and who produced it, and can therefore make a correct decision to reject it rather than a guess.
 
-The envelope comprises eight groups: identity, type, subject, scope, completeness, provenance, lineage, and assessment. Sections 6 and 7 state which members of each group are required and which are optional.
+The envelope comprises nine groups: identity, type, subject, scope, completeness, provenance, integrity, lineage, and assessment. Sections 6 and 7 state which members of each group are required and which are optional. Integrity is a group of its own because a digest is neither a name nor a location: it is computed after the artifact exists, it changes whenever the bytes change, and collapsing it into identity would make an artifact unrequestable before it is produced.
 
 **R-09.** A consumer MUST NOT infer an artifact's type, subject, or completeness from its body.
 
@@ -292,8 +335,13 @@ The duty to reject an artifact whose envelope cannot be parsed is validator beha
 | Provenance | Generation time | When the artifact was produced |
 | Provenance | Authorization boundary | The authorization in force during production |
 | Provenance | Redaction state | Whether content was withheld, and of what class |
+| Integrity | Content digest | A digest over this artifact's serialization, per R-55 |
 | Assessment | Aggregate evidence state | The weakest state among load-bearing records |
 | Assessment | Aggregate confidence | The lowest confidence among load-bearing records |
+
+**R-55.** A content digest MUST be computed over the artifact's canonical serialization excluding the digest member itself, and MUST NOT be used as, or substituted for, the artifact's identity.
+
+The exclusion is what makes the member computable at all: a digest taken over a serialization containing itself has no fixed point. The representation of a digest is stated by [STD-0010](metadata-specification.md) R-42. What a digest is for — deciding whether two byte sequences are the same artifact, and detecting that an upstream artifact was regenerated — is participant behaviour and is stated by [STD-0011](contract-specification.md) R-47 and R-49.
 
 **R-17.** Where an artifact records any observation not derived from the subject's source, it MUST declare the environment in which that observation was made.
 
@@ -380,6 +428,14 @@ The obligation on a producer to declare completeness honestly is stated by [STD-
 
 **R-19.** Where any record derives from an upstream artifact, the artifact MUST record the upstream address, its type and version, its subject revision, and which records depend on it.
 
+**R-56.** The upstream address R-19 requires MUST be an immutable reference: an artifact instance identity with every component of R-52 bound, together with the content digest of the artifact it names.
+
+A reference that leaves the run discriminator or the subject revision unbound — "the most recent run of this subject, this type" — is mutable and resolves differently over time. Both forms are legitimate, and lineage admits only the first. A mutable reference in lineage would allow an upstream input to re-point after a downstream conclusion had been drawn from it, which would leave R-19 lineage and [STD-0011](contract-specification.md) R-43 staleness detection without a subject.
+
+**R-57.** A reference that leaves the run which produced it MUST carry a summary of the referenced artifact's envelope, comprising its identity, type version, subject revision, completeness state, redaction state, aggregate evidence state, and aggregate confidence.
+
+R-57 gives a reference the property R-08 gives an envelope. A consumer can decide whether it is entitled to use an artifact without fetching it, and can therefore reject one it cannot fetch rather than guessing. A lineage edge is identity to identity, and an identity already carries a subject authority, so an edge leaving the repository is indistinguishable in form from one that does not; no further mechanism is required for cross-repository lineage.
+
 **R-20.** The derivation graph across a composition MUST be acyclic.
 
 The detection of a cycle, its timing, and the resulting failure are validator behaviour and are stated by [STD-0012](validation-specification.md) R-10 and R-11.
@@ -458,7 +514,7 @@ Conformance fixtures are a property of a type declaration and are required by [S
 
 *This section is normative.*
 
-An artifact conforms when it satisfies R-01, R-02, R-06, R-08 through R-15, R-17 through R-19, R-33, R-40, and R-42 through R-46.
+An artifact conforms when it satisfies R-01, R-02, R-06, R-08 through R-15, R-17 through R-19, R-33, R-40, R-42 through R-46, and R-52 through R-57.
 
 Producer and consumer conformance is not defined by this standard. Both are defined by [STD-0011](contract-specification.md) section 14, which owns participant obligations.
 
@@ -512,7 +568,9 @@ The distinction between `NotApplicable` and `Unavailable` (R-35) is the interpre
 
 Honest completeness declaration is the conformance requirement most likely to be violated undetectably. A producer that examined half its declared scope and declared `Complete` is structurally valid and semantically corrupt, and no mechanical check can catch it. Conformance fixtures reduce the risk; they do not remove it.
 
-This standard says nothing about where artifacts are stored or how a consumer reaches an artifact produced in another repository. That question is recorded as open in [Framework Artifact Model](../01-foundation/framework-artifact-model.md) section 19 and is out of scope here. Nothing in this standard depends on its resolution.
+Where artifacts are stored, and how a consumer reaches an artifact produced in another repository, was recorded as open in [Framework Artifact Model](../01-foundation/framework-artifact-model.md) section 19 and is decided by [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md): identity is logical, location is resolvable, and integrity is verifiable. This standard states the first and the third as properties of an instance, in R-52 through R-57. It states nothing about the second, because a resolution is deployment-specific data rather than a property of an artifact, and an identity that encoded one would be renamed every time the artifact moved.
+
+**The run discriminator is a deferred implementation question, not an open architectural one.** [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md) considered making the discriminator a function of a run's declared scope and authorization, and deferred it because it would bind identity to fields whose canonical serialization is unspecified. R-53 states what a discriminator does, and [STD-0011](contract-specification.md) R-51 obliges an orchestrator to assign distinct ones; neither states how one is derived. A producer invoked with a discriminator supplied by its orchestrator needs no derivation rule, so nothing in the framework is blocked on it. What remains uncovered is a careless orchestrator issuing one discriminator for two runs, which R-51 forbids and no inspection of a single artifact detects.
 
 ## 21. Related Documents
 

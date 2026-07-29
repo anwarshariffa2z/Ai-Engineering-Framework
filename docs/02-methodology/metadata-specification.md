@@ -1,15 +1,15 @@
 ---
 id: STD-0010
 title: Metadata Specification Standard
-version: 1.2.0
+version: 1.3.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-26
+last_updated: 2026-07-29
 review_cycle: Annual
 category: Methodology
 tags: [metadata, schema, representation, front-matter, standard]
-related: [document-metadata-standard.md, document-id-standard.md, artifact-specification.md, validation-specification.md, ../01-foundation/framework-core-architecture.md, ../01-foundation/framework-artifact-model.md, ../ADR/ADR-0002-requirements-as-metadata.md, ../ADR/ADR-0003-normative-informative-separation.md, ../ADR/ADR-0004-depend-on-artifact-types.md]
+related: [document-metadata-standard.md, document-id-standard.md, artifact-specification.md, validation-specification.md, ../01-foundation/framework-core-architecture.md, ../01-foundation/framework-artifact-model.md, ../ADR/ADR-0002-requirements-as-metadata.md, ../ADR/ADR-0003-normative-informative-separation.md, ../ADR/ADR-0004-depend-on-artifact-types.md, ../ADR/ADR-0006-artifact-instance-identity.md]
 normativity:
   "1": informative
   "2": normative
@@ -231,6 +231,31 @@ requirements:
     check: mechanical
     severity: blocking
     scope: encoding
+  - id: R-41
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: artifact
+  - id: R-42
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: artifact
+  - id: R-43
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: artifact
+  - id: R-44
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: artifact
+  - id: R-45
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: run
 ---
 
 # Metadata Specification Standard
@@ -241,6 +266,7 @@ requirements:
 - [ADR-0003](../ADR/ADR-0003-normative-informative-separation.md) — normativity declaration representation
 - [ADR-0004](../ADR/ADR-0004-depend-on-artifact-types.md) — dependency and compatibility representation
 - [STD-0008](artifact-specification.md) — the canonical representation it defers to this standard
+- [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md) — the serialization of an artifact instance identity and of a content digest
 
 **Unblocks**
 
@@ -259,7 +285,7 @@ This standard defines the canonical representation of framework metadata. Where 
 
 **It formalizes representation only.** It does not define what an artifact is, what evidence means, or how validation behaves. Those belong to STD-0008, STD-0007, and STD-0012 respectively. Where this standard names a vocabulary owned elsewhere, it specifies the encoding and defers the meaning, and it says so at each point.
 
-**In scope.** Value grammars; document front matter schema; controlled vocabularies for metadata-owned fields; normativity declaration schema; requirement declaration schema; dependency metadata; compatibility metadata; artifact metadata representation; provenance metadata for generated objects; extension and namespacing rules; encoding and ordering; and migration of existing documents.
+**In scope.** Value grammars; document front matter schema; controlled vocabularies for metadata-owned fields; normativity declaration schema; requirement declaration schema; dependency metadata; compatibility metadata; artifact metadata representation; the serialization of an artifact instance identity and of a content digest; run-scoped resolution declarations; provenance metadata for generated objects; extension and namespacing rules; encoding and ordering; and migration of existing documents.
 
 **Out of scope.** Artifact semantics, evidence semantics, validator behavior, identifier allocation policy, serialization of artifact bodies, and storage or transport.
 
@@ -314,6 +340,16 @@ R-07 removes an ambiguity that currently exists: `related` entries appear in bot
 **R-08.** A **namespaced name** MUST match the form `namespace.name`, where `namespace` is a lowercase identifier reserved by an organization or plugin and `name` is a lowercase identifier. The namespace `framework` is reserved.
 
 **R-35.** A **fragment address** MUST match the form `IDENTITY#FRAGMENT`, where `FRAGMENT` is the identity of a declaration within the referenced object.
+
+**R-41.** An **artifact instance identity** MUST be serialized as `<subject-authority>/<subject-name>@<subject-revision>#<run-discriminator>/<type-identity>@<type-version>`, where `subject-authority` and `subject-name` are lowercase identifiers, `subject-revision` and `run-discriminator` are non-empty tokens of lowercase alphanumerics, hyphen, underscore, and period, `type-identity` is an artifact type identity per [STD-0013](artifact-type-declaration-standard.md) R-04, and `type-version` is a version per R-05.
+
+The subject authority is a namespace reserved per R-08 and denotes an organization, never a host. The components and their meaning are [STD-0008](artifact-specification.md) R-52's; this standard states only how the composition is written.
+
+**R-42.** A **content digest** MUST be serialized as `algorithm:value`, where `algorithm` is a lowercase alphanumeric token naming the digest algorithm and `value` is its lowercase hexadecimal output.
+
+**R-43.** An artifact instance identity MUST NOT appear as an entry in `related`, `depends_on`, or `references`, and is admissible only as the value of an envelope identity member, a lineage member, a reference summary member, or a resolution entry.
+
+R-43 settles the admissibility question R-07 leaves open. A reference under R-07 addresses a framework document, and its two forms — an object identity and a document-relative path — both resolve within the repository. An artifact instance identity resolves to an artifact instance, which is a different kind of subject with a different resolution mechanism, and admitting it into the document reference keys would make an unresolvable entry indistinguishable from a broken link.
 
 ## 5. Document Front Matter Schema
 
@@ -462,7 +498,7 @@ Vocabulary policy for an enumerated field, required by STD-0008, is declared in 
 
 This section specifies how the artifact envelope required by STD-0008 section 6 is represented. It does not define envelope semantics, which STD-0008 owns.
 
-**R-28.** An artifact envelope MUST be represented as a mapping with the eight groups named by STD-0008 section 5: `identity`, `type`, `subject`, `scope`, `completeness`, `provenance`, `lineage`, `assessment`.
+**R-28.** An artifact envelope MUST be represented as a mapping with the nine groups named by STD-0008 section 5: `identity`, `type`, `subject`, `scope`, `completeness`, `provenance`, `integrity`, `lineage`, `assessment`.
 
 **R-29.** Envelope member names MUST be lowercase with underscore separation, and MUST correspond one-to-one with the members STD-0008 requires.
 
@@ -474,10 +510,19 @@ This section specifies how the artifact envelope required by STD-0008 section 6 
 | `scope` | `declared_scope`, `exclusions` |
 | `completeness` | `state`, `reason` |
 | `provenance` | `producer_id`, `producer_version`, `executor_class`, `generated_at`, `authorization`, `redaction_state`, `environment` |
+| `integrity` | `digest` |
 | `lineage` | `derives_from` |
 | `assessment` | `evidence_state`, `confidence` |
 
-**R-30.** Each entry in `derives_from` MUST carry the upstream run identity, artifact type identity, type version, subject revision, and the identities of the records that depend on it.
+The `run_id` member is an artifact instance identity's run component and the `digest` member is a content digest, written per R-41 and R-42 respectively.
+
+**R-30.** Each entry in `derives_from` MUST carry the upstream artifact instance identity, its type version, its subject revision, its content digest, and the identities of the records that depend on it.
+
+**R-44.** An envelope summary carried by a reference MUST be represented as a mapping with the members `identity`, `type_version`, `subject_revision`, `completeness_state`, `redaction_state`, `evidence_state`, and `confidence`, corresponding one-to-one with the members [STD-0008](artifact-specification.md) R-57 requires.
+
+**R-45.** A resolution declaration MUST be run-scoped, MUST be represented as a list in which each entry carries an artifact instance identity and a locator, and MUST NOT appear within an artifact envelope.
+
+A locator is an opaque string whose interpretation belongs to the deployment that wrote it. This standard states no grammar for it, because a filesystem, an object store, a registry, and a service all denote a location differently, and a framework grammar over them would either bless one or describe none. What the framework fixes is that a resolution is written as data, per run, separately from the identity it resolves.
 
 Record-level and evidence-level metadata are represented within the artifact body. Their required members are stated by STD-0008 sections 8 and 9; their meaning is owned by STD-0007.
 
@@ -523,7 +568,7 @@ A document conforms when it satisfies R-03, R-09, R-13, R-14, R-36, and R-37, an
 
 A Standard additionally conforms when it satisfies R-16 through R-20.
 
-An artifact conforms when its envelope satisfies R-28 through R-30.
+An artifact conforms when its envelope satisfies R-28 through R-30, its identity and digest values satisfy R-41 through R-43, and any reference summary it carries satisfies R-44. A run's resolution declaration conforms when it satisfies R-45.
 
 A generated object additionally conforms when it satisfies R-31 and R-32.
 
