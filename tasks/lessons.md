@@ -78,3 +78,31 @@ The artifact type declaration framework bound 26 new checks and activated zero p
 ### The last blocker moved three times, and the third move changed its kind
 
 CAP-0001's readiness gap was "nine methodologies missing", then "no artifact type definitions", now "instance identity". The first two were closed by writing documents. The third could not be, which is why it needed an ADR rather than another milestone of authoring. A blocker that keeps regenerating is a sign the real question has not been named yet.
+
+## Lesson — 2026-07-26 (release)
+
+### Verify the branch, not the memory of the branch
+
+Every report for two sessions said the work sat on `feature/milestone-7-methodology-refactor`. It sat on `main`. That branch had been merged by PR #4 and the checkout to `main` happened afterwards; nothing re-checked it, and seven commits accumulated on `main` in violation of the repository's own rule. It surfaced only because the release script asked for a branch rename, which is a step that cannot succeed on `main`.
+
+The repair was cheap because commits are movable: branch off the tip first, then reset the branch pointer back to `origin/main`, then publish through the PR. Nothing was lost, and all seven commits still reached `main` through the merge commit.
+
+**Rule: `git branch --show-current` before the first commit of a session, not after the last.** A fact that is cheap to check and expensive to assume should never be carried in memory across a compaction.
+
+### Splitting entangled commits needs the working tree to equal the commit tree
+
+Four commits shared `docs/DOCUMENT_INDEX.md` and two shared the validation report. Staging alone was not enough: the validator reads the working tree, so an untracked file present but unregistered would have failed a commit that did not contain it.
+
+The procedure that worked: back up every final file, generate each intermediate registry state programmatically from the final one by reverting the later commits' rows, move not-yet-committed new files out of the tree entirely, `git checkout HEAD --` the files belonging to later commits, validate, stage, commit, then restore forward. Each of the four trees validated standalone at exit 0, which is the property that makes a bisect meaningful.
+
+Cost check afterwards: every file byte-identical to the approved state, verified by `cmp` against the backups rather than by inspection.
+
+### A release entry is not a commit log
+
+The changelog was written per release with four to six lines each, not per milestone. Ten milestones compress to three tags without losing anything a reader needs, because the commit history is already authoritative for detail. Reconstructing intermediate milestones into the changelog would have duplicated `git log` in a file that then has to be maintained.
+
+### The stale sentence a release exposes is the one that was true when written
+
+CAP-0001 read "This **is** the framework's last **open** architectural question." Accurate when written, contradictory the moment ADR-0006 was promoted to Accepted. Nothing detects that class of defect: the link resolves, the metadata agrees, the validator passes.
+
+Found only by re-reading the documents that assert repository state — CAP-0001, the READMEs, the validation report — against the claim the release makes. Worth doing once per release, and only for documents that describe status rather than rules.

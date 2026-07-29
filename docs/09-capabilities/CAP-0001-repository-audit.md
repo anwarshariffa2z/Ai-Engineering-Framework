@@ -1,11 +1,11 @@
 ---
 id: CAP-0001
 title: Repository Audit Capability
-version: 1.3.1
+version: 1.3.2
 status: Draft
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-26
+last_updated: 2026-07-29
 review_cycle: Annual
 category: Capability
 tags: [capability, audit, repository, contract, evidence]
@@ -201,7 +201,7 @@ This capability is **partially fulfillable at the current framework revision**, 
 | Gap analysis | AUD-0010 | Approved |
 | Runtime verification | AUD-0011 | Approved |
 
-**Ten of eleven methodologies are approved, and every artifact type they declare is declared in the corpus.** The specification of this capability is complete except in one respect, and that respect is architectural rather than implementational: how an artifact instance is identified and addressed is decided in principle by [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md) and not yet carried into the standards it names. Until it is, a producer has no identity to record and a consumer has no identity to resolve.
+**Ten of eleven methodologies are approved, and every artifact type they declare is declared in the corpus.** How an artifact instance is identified and addressed is decided by [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md) and carried into the standards it names: a producer records an identity per [STD-0008](../02-methodology/artifact-specification.md) R-52, and a consumer resolves one under the duties of [STD-0011](../02-methodology/contract-specification.md) R-47 through R-52. What the capability still lacks is implementational rather than architectural: no producer exists to emit an instance of any declared type.
 
 A run at this revision produces a valid but partial audit whose composed health is a bounded range (section 11.3). The capability is honest about this by design: a capability that claims readiness it does not have is worse than one that does not exist, because consumers act on the claim.
 
@@ -357,9 +357,9 @@ This is a property of the design rather than a limitation of it. A capability wh
 
 This capability is Draft. Its gaps are disclosed rather than deferred, because a public contract that conceals its own preconditions is not a contract.
 
-**One architectural decision remains to be carried into the standards.** The ordering in section 9.1 requires that one methodology's artifacts be readable by another, which requires that an artifact instance have a name. [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md) decides that name: a logical identity composed of subject authority, subject name, subject revision, run discriminator, and type at version, with location resolved separately and a content digest supplying immutability. The decision is recorded; the standards it affects — STD-0008, STD-0010, STD-0011, and STD-0012 — have not yet been revised to state it.
+**The artifact instance identity decision is carried into the standards.** The ordering in section 9.1 requires that one methodology's artifacts be readable by another, which requires that an artifact instance have a name. [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md) decides that name — a logical identity composed of subject authority, subject name, subject revision, run discriminator, and type at version, with location resolved separately and a content digest supplying immutability — and STD-0008, STD-0010, STD-0011, and STD-0012 now state it. One question is deferred inside that decision rather than left open: how a run discriminator is derived. A producer invoked with a discriminator supplied by its orchestrator does not need the rule, and [STD-0011](../02-methodology/contract-specification.md) R-51 states the duty that stands in for it.
 
-**This was the framework's last open architectural question, and it is now decided rather than outstanding.** [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md) is Accepted; what remains is authoring, not design. Every artifact type this capability composes is declared: ninety-three declarations under [STD-0013](../02-methodology/artifact-type-declaration-standard.md), one per type registered in the [Artifact Type Inventory](../07-roadmap/artifact-type-inventory.md). The specification of what this capability produces is complete. What is outstanding is the specification of how its outputs are named, and no amount of implementation would supply it.
+**No architectural question remains outstanding for this capability.** Every artifact type it composes is declared: ninety-three declarations under [STD-0013](../02-methodology/artifact-type-declaration-standard.md), one per type registered in the [Artifact Type Inventory](../07-roadmap/artifact-type-inventory.md). The specification of what this capability produces, and of how its outputs are named, resolved, and verified, is complete. What is outstanding is implementation.
 
 **One of eleven methodologies does not exist.** [AUD-0001](../03-audit-engine/00-bootstrap.md) Bootstrap remains a structural placeholder, and the ordering in section 9.1 begins with it.
 

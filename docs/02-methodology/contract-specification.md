@@ -1,15 +1,15 @@
 ---
 id: STD-0011
 title: Contract Specification Standard
-version: 1.2.0
+version: 1.3.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-25
+last_updated: 2026-07-29
 review_cycle: Annual
 category: Methodology
 tags: [contracts, producers, consumers, compatibility, obligations, standard]
-related: [artifact-specification.md, metadata-specification.md, evidence-and-confidence.md, validation-specification.md, ../01-foundation/framework-core-architecture.md, ../01-foundation/framework-artifact-model.md, ../ADR/ADR-0002-requirements-as-metadata.md, ../ADR/ADR-0003-normative-informative-separation.md, ../ADR/ADR-0004-depend-on-artifact-types.md, ../09-capabilities/CAP-0001-repository-audit.md]
+related: [artifact-specification.md, metadata-specification.md, evidence-and-confidence.md, validation-specification.md, ../01-foundation/framework-core-architecture.md, ../01-foundation/framework-artifact-model.md, ../ADR/ADR-0002-requirements-as-metadata.md, ../ADR/ADR-0003-normative-informative-separation.md, ../ADR/ADR-0004-depend-on-artifact-types.md, ../ADR/ADR-0006-artifact-instance-identity.md, ../09-capabilities/CAP-0001-repository-audit.md]
 normativity:
   "1": informative
   "2": normative
@@ -249,6 +249,46 @@ requirements:
     check: mechanical
     severity: blocking
     scope: consumer
+  - id: R-45
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: producer
+  - id: R-46
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: producer
+  - id: R-47
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: consumer
+  - id: R-48
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: consumer
+  - id: R-49
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: consumer
+  - id: R-50
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: consumer
+  - id: R-51
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: orchestrator
+  - id: R-52
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: orchestrator
 ---
 
 # Contract Specification Standard
@@ -258,6 +298,7 @@ requirements:
 - [ADR-0002](../ADR/ADR-0002-requirements-as-metadata.md) — requirements declared in metadata
 - [ADR-0003](../ADR/ADR-0003-normative-informative-separation.md) — section-level normativity
 - [ADR-0004](../ADR/ADR-0004-depend-on-artifact-types.md) — the type as the contract between parties
+- [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md) — the duties attaching to identity, resolution, and integrity
 
 **Unblocks**
 
@@ -277,7 +318,7 @@ Three neighbouring standards hold adjacent responsibilities. [STD-0008](artifact
 
 **The dividing test.** An obligation that describes a well-formed *artifact* belongs to STD-0008. An obligation that describes a well-behaved *participant* belongs here. A producer emitting a required field is artifact well-formedness; a producer honouring a deprecation notice before withdrawing a guarantee is participant behaviour. Section 16 records that this boundary was drawn during implementation and what moved.
 
-**In scope.** The contract model; producer and consumer obligations; preconditions and postconditions; required inputs and guaranteed outputs; failure conditions; compatibility obligations; contract evolution and deprecation; substitution and equivalence; and conformance rules.
+**In scope.** The contract model; producer, consumer, and orchestrator obligations, including identity production, resolution, integrity verification, and lineage consumption; preconditions and postconditions; required inputs and guaranteed outputs; failure conditions; compatibility obligations; contract evolution and deprecation; substitution and equivalence; and conformance rules.
 
 **Out of scope.** Artifact structure, envelope membership, and type versioning semantics, which belong to STD-0008. Metadata representation, which belongs to STD-0010. Evidence and confidence meaning, which belongs to STD-0007. Validator behavior and reporting, which belong to STD-0012.
 
@@ -337,6 +378,12 @@ R-05 is the central producer obligation and is judgment-checkable. It covers dec
 
 **R-41.** A producer MUST declare a scope adequate for a consumer to determine what absence of a record means. It MUST NOT emit an artifact whose scope declaration leaves absence uninterpretable.
 
+**R-45.** A producer MUST derive the identity of every artifact it emits from the run identity and the type identity, per [STD-0008](artifact-specification.md) R-52, and MUST NOT assign an identity by any other means.
+
+**R-46.** A producer MUST compute the content digest of every artifact it emits and MUST declare it in that artifact's envelope.
+
+R-45 and R-46 are separate obligations because they are separate concerns. A producer that names an artifact has said which artifact it is; a producer that digests it has said which bytes it is. Neither substitutes for the other, and a producer that discharged only the first would emit lineage no downstream party could verify.
+
 R-41 was relocated from STD-0008 at version 1.2.0. What absence means is defined by [STD-0007](evidence-and-confidence.md); the obligation to declare a scope that makes it determinable is the producer's.
 
 A producer is not obliged to find anything. It is obliged to look within its declared scope, to report honestly what it found and did not find, and to be clear about which is which.
@@ -367,6 +414,16 @@ R-13 is the consumer obligation with the widest reach. A consumer that reads a `
 
 **R-44.** A consumer consuming an artifact produced against a different subject revision MUST declare both revisions and the reason for reuse, MUST cap any conclusion drawn from that input at `Medium` confidence, and MUST NOT record such a conclusion as `Verified`.
 
+**R-47.** A consumer MUST verify the content digest of an artifact it has resolved against the digest recorded in the reference it followed, and MUST NOT consume the artifact where the two differ.
+
+**R-48.** Where a consumer cannot resolve an identity it requires, it MUST record that input `Unavailable`, MUST declare its own degradation per R-14, and MUST NOT interpret an unresolvable identity as absence of the artifact or of the thing the artifact would have described.
+
+**R-49.** A consumer MUST treat a difference between an upstream artifact's current content digest and the digest recorded in its lineage as regeneration of that upstream artifact, and MUST treat every record deriving from it as stale for the purpose of R-43.
+
+**R-50.** A consumer MUST evaluate a reference naming a run other than the one it is executing against that reference's envelope summary, per [STD-0008](artifact-specification.md) R-57, before resolving it, and MUST reject the reference where the summary is absent.
+
+R-47 through R-50 are the consumer half of [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md). R-48 fails closed and reuses the existing treatment of a missing input rather than inventing one: unresolvable is a recoverable deployment condition with a duty attached, not a malformed reference and not an empty finding. R-49 is what makes R-43 mechanical — before it, staleness was a claim; a digest that differs is regeneration by inspection. R-50 lets a consumer refuse an artifact it cannot fetch, which a consumer obliged to fetch before deciding could never do.
+
 R-40 through R-44 were relocated from STD-0008 at version 1.2.0. They are consumer obligations rather than properties of an artifact, and their subject matter is unchanged.
 
 A consumer is entitled to rely on a producer's guarantees. It is not entitled to assume anything a producer did not guarantee, and the difference between the two is stated in the contract rather than inferred from the output.
@@ -384,6 +441,14 @@ A consumer is entitled to rely on a producer's guarantees. It is not entitled to
 Preconditions are the contract's entry gate. Typical preconditions are access to the subject at a stated revision, an authorization boundary, availability of a required input artifact, and an executor meeting the producer's declared requirements.
 
 **R-37.** A producer that discovers mid-execution that a precondition it declared does not in fact hold MUST treat the situation as a failure under section 10 rather than continuing on a weaker basis.
+
+**R-51.** An orchestrator MUST assign each run a discriminator distinct from that of every other run it composes over the same subject at the same subject revision.
+
+**R-52.** An orchestrator MUST declare, for each run it composes, the resolution of every artifact instance identity that run produces or consumes, and MUST record as unresolvable any identity for which it declares none.
+
+R-51 and R-52 are run-composition duties rather than producer duties, and they are the two that make identity usable in practice. A producer invoked with a discriminator and a resolution supplied by its orchestrator needs neither a derivation rule nor a directory service. R-51 closes the collision that [STD-0008](artifact-specification.md) R-53 leaves open, and R-52 gives R-48 a subject: an identity is unresolvable when the run that composed it declared no resolution for it, or when the resolution it declared does not yield the artifact.
+
+Resolution is declared as data, per [STD-0010](metadata-specification.md) R-45. No party is obliged to implement a particular resolver, and the framework names none; two conforming deployments may resolve one identity to different bytes, and R-47 is what reveals it.
 
 ## 7. Postconditions
 
@@ -502,11 +567,11 @@ Substitution is what ADR-0004 exists to enable, and R-34 states its price precis
 
 The procedure by which conformance is demonstrated against a type's fixtures is validator behaviour and is stated by [STD-0012](validation-specification.md) section 10.
 
-A producer conforms when it satisfies R-03 through R-08, its preconditions satisfy R-15, its postconditions satisfy R-18 and R-19, its inputs satisfy R-20 and R-21, its guarantees satisfy R-23 and R-24, its failure behaviour satisfies R-25 and R-26, and its compatibility satisfies R-28 and R-29.
+A producer conforms when it satisfies R-03 through R-08, R-45 and R-46, its preconditions satisfy R-15, its postconditions satisfy R-18 and R-19, its inputs satisfy R-20 and R-21, its guarantees satisfy R-23 and R-24, its failure behaviour satisfies R-25 and R-26, and its compatibility satisfies R-28 and R-29.
 
-A consumer conforms when it satisfies R-09 through R-14, R-27, and R-30.
+A consumer conforms when it satisfies R-09 through R-14, R-27, R-30, and R-47 through R-50.
 
-An orchestrator conforms when it satisfies R-16, R-17, and the preflight obligation in section 11.
+An orchestrator conforms when it satisfies R-16, R-17, R-51, R-52, and the preflight obligation in section 11.
 
 Declaration without demonstration is not conformance. Demonstration without declaration leaves a consumer unable to discover what it may rely upon. [STD-0012](validation-specification.md) defines how conformance is checked and reported; this standard defines only what conformance is.
 

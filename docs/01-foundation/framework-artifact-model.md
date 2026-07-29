@@ -1,11 +1,11 @@
 ---
 id: DOC-0007
 title: Framework Artifact Model
-version: 1.1.0
+version: 1.1.1
 status: Draft
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-26
+last_updated: 2026-07-29
 review_cycle: Event-driven
 category: Foundation
 tags: [architecture, artifacts, interoperability, versioning, contracts]
@@ -60,7 +60,8 @@ ARTIFACT
 │   ├── Completeness  whether the body can be interpreted, and how
 │   ├── Provenance    who produced it, how, when, under what authority
 │   ├── Lineage       which artifacts it derives from
-│   └── Assessment    aggregate evidence state and confidence
+│   ├── Assessment    aggregate evidence state and confidence
+│   └── Integrity     a content digest over this artifact's serialization
 └── BODY              type-specific
     └── Records       each carrying evidence state, confidence, evidence refs
 ```
@@ -377,7 +378,7 @@ Each scenario shows the model resolving a case that would otherwise break indepe
 
 ## 19. Open Questions
 
-**Q-01 — Where do artifact instances live, and how are runs addressed across repositories? Resolved.** [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md) decides it: an instance is named by a logical identity, its location is resolved separately, and its integrity is verified by content digest. Carriage of that decision into STD-0008, STD-0010, STD-0011, and STD-0012 remains implementation work.
+**Q-01 — Where do artifact instances live, and how are runs addressed across repositories? Resolved.** [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md) decides it: an instance is named by a logical identity, its location is resolved separately, and its integrity is verified by content digest. That decision is carried into STD-0008 at 1.6.0, STD-0010 at 1.3.0, STD-0011 at 1.3.0, and STD-0012 at 1.1.0, and this question is closed in both design and standard.
 
 **Q-02 — Is the envelope serialization-independent in practice?** The design assumes it, but a concrete serialization may impose constraints the abstract model does not anticipate.
 

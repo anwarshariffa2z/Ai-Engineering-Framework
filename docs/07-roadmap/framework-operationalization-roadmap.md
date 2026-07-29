@@ -1,11 +1,11 @@
 ---
 id: REF-0023
 title: Framework Operationalization Roadmap
-version: 1.0.0
+version: 1.1.0
 status: Draft
 owner: Framework Maintainers
 created: 2026-07-26
-last_updated: 2026-07-26
+last_updated: 2026-07-29
 review_cycle: Event-driven
 category: Roadmap
 tags: [roadmap, operationalization, adoption, tooling]
@@ -47,7 +47,7 @@ What construction delivered:
 | --- | --- |
 | Frozen object model — eight object types across five layers | Framework Core Architecture |
 | Frozen layer model and the three permanent asymmetries | Framework Core Architecture |
-| Complete standards suite — eight standards, 242 requirements | `docs/02-methodology/` |
+| Complete standards suite — eight standards, 242 requirements at the close of construction and 267 after ADR-0006 carriage | `docs/02-methodology/` |
 | Complete methodology suite — ten approved methodologies | `docs/03-audit-engine/` |
 | Artifact declaration framework — one standard, ninety-three declarations | [STD-0013](../02-methodology/artifact-type-declaration-standard.md), `docs/10-artifact-types/` |
 | Generic reference validator — sixty-eight bound checks, no type-specific logic | `tools/validator/` |
@@ -56,13 +56,15 @@ What construction delivered:
 
 No architectural question remains open. The two sub-decisions [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md) defers — a derivation rule for the run discriminator, and whether the framework specifies a resolver contract — are refinements inside an accepted decision, and both are recorded there.
 
+Carriage of that decision into the standards found neither refinement necessary. The discriminator is supplied to a producer by its orchestrator, which [STD-0011](../02-methodology/contract-specification.md) R-51 obliges to keep distinct; a derivation rule remains a deferred implementation question rather than a precondition, and [STD-0008](../02-methodology/artifact-specification.md) section 20 records it as one. Resolution is declared as run-scoped data under [STD-0010](../02-methodology/metadata-specification.md) R-45 and [STD-0011](../02-methodology/contract-specification.md) R-52, so no resolver contract, abstraction, or object type was introduced.
+
 ## 3. What Operationalization Means
 
 *This section is informative.*
 
 Construction asked whether the framework is coherent. Operationalization asks whether it survives contact with a real repository.
 
-The distinction is practical. The framework ships artifact *types* and has never produced an artifact *instance*, which is why 174 of its 242 requirements are reported not-evaluated rather than passing: their subjects — instances, producers, consumers, and conclusions — do not exist in the corpus. Producing the first conforming instance is what moves those requirements from dormant to enforced, and no further document can do it.
+The distinction is practical. The framework ships artifact *types* and has never produced an artifact *instance*, which is why 199 of its 267 requirements are reported not-evaluated rather than passing: their subjects — instances, producers, consumers, and conclusions — do not exist in the corpus. Producing the first conforming instance is what moves those requirements from dormant to enforced, and no further document can do it.
 
 Nothing in this phase redesigns the architecture. Where a workstream needs normative support it revises an existing standard under an accepted decision, which is authoring rather than architecture.
 
@@ -74,10 +76,10 @@ Ordered by dependency, not by priority. The first four are prerequisites for the
 
 | Workstream | Outcome |
 | --- | --- |
-| Carry ADR-0006 into STD-0008 | The identity grammar behind R-06, the content digest as an envelope member, and the definition of an upstream address in R-19 |
-| Carry ADR-0006 into STD-0010 | Admissibility of an artifact identity under the R-07 reference grammar, and the canonical serialization of an identity string |
-| Carry ADR-0006 into STD-0011 | Immutable references in lineage, the duty on a consumer facing an unresolvable identity, and staleness defined by digest change |
-| Carry ADR-0006 into STD-0012 | Validator behavior on an unresolvable identity and on a mutable reference found in lineage |
+| Carry ADR-0006 into STD-0008 | **Delivered at 1.6.0.** R-52 through R-54 give R-06 its composition, R-55 makes the content digest an envelope member, and R-56 defines the upstream address of R-19 as an immutable reference |
+| Carry ADR-0006 into STD-0010 | **Delivered at 1.3.0.** R-41 serializes an identity, R-42 a digest, R-43 settles admissibility against R-07, and R-44 and R-45 represent the envelope summary and a run's resolution declaration |
+| Carry ADR-0006 into STD-0011 | **Delivered at 1.3.0.** R-45 and R-46 place identity and digest production on the producer, R-47 through R-50 place verification, unresolvable-input, staleness, and cross-run duties on the consumer, and R-51 and R-52 place discriminator distinctness and resolution declaration on the orchestrator |
+| Carry ADR-0006 into STD-0012 | **Delivered at 1.1.0.** R-40 through R-45 state validator behavior on an invalid identity, an invalid digest, a mutable lineage reference, a digest mismatch, an unresolvable identity, and a lineage entry disagreeing with the revision it names |
 | Reference Producers | An executable implementation of at least one methodology, emitting conforming instances of its declared types |
 | Reference Artifact Corpus | A published set of conforming instances, including the boundary and failure cases each declaration's fixtures describe |
 | Validator Expansion | Activation of the instance-scoped requirements in STD-0007, STD-0008, and STD-0011 against that corpus |
@@ -93,7 +95,7 @@ Ordered by dependency, not by priority. The first four are prerequisites for the
 
 *This section is informative.*
 
-The four carriage workstreams precede the producer workstreams, because a producer cannot record a lineage reference the standards do not define. The corpus precedes validator expansion, because a check without a subject is a check that cannot run. Everything after that is parallelizable.
+The four carriage workstreams are delivered, and they preceded the producer workstreams because a producer cannot record a lineage reference the standards do not define. A reference producer can now derive an identity, digest its output, and record lineage without inventing an identity model, and a consumer can identify, resolve, and integrity-check that output using framework-defined contracts alone. The corpus precedes validator expansion, because a check without a subject is a check that cannot run. Everything after that is parallelizable.
 
 ## 6. Known Remaining Work Outside the Workstreams
 
