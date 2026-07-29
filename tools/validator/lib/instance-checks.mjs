@@ -258,11 +258,19 @@ export function buildInstanceChecks({ instances, declarations, documents, define
   declare('STD-0008#R-33', each((artifact) => (artifact.envelope?.provenance?.redaction_state
     ? [] : ['no redaction state is declared'])));
 
+  // R-43 governs optional members: "A producer that declares an optional member
+  // MUST populate it or omit it." A member R-10 requires is not optional, and an
+  // empty value is how a required member states that there is nothing to state —
+  // a run that excluded nothing declares an empty exclusion list. Applying R-43
+  // to a required member would be the validator strengthening the requirement,
+  // which STD-0012 R-03 forbids.
   declare('STD-0008#R-43', each((artifact) => {
     const problems = [];
     for (const [group, members] of Object.entries(GROUP_MEMBERS)) {
       const value = artifact.envelope?.[group] ?? {};
+      const required = REQUIRED_MEMBERS[group] ?? [];
       for (const member of members) {
+        if (required.includes(member)) continue;
         if (!(member in value)) continue;
         const declared = value[member];
         const empty = declared === null || declared === ''
