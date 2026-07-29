@@ -64,7 +64,7 @@ This is the canonical registry for every framework document. A document is not c
 | REF-0013 | Architecture Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/architecture-types.md) | 1.1.0 | 2026-07-29 |
 | REF-0014 | Database Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/database-types.md) | 1.1.0 | 2026-07-29 |
 | REF-0015 | Frontend Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/frontend-types.md) | 1.0.0 | 2026-07-26 |
-| REF-0016 | Backend Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/backend-types.md) | 1.0.0 | 2026-07-26 |
+| REF-0016 | Backend Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/backend-types.md) | 1.1.0 | 2026-07-29 |
 | REF-0017 | Business Workflow Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/workflow-types.md) | 1.0.0 | 2026-07-26 |
 | REF-0018 | Security Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/security-types.md) | 1.0.0 | 2026-07-26 |
 | REF-0019 | Feature Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/feature-types.md) | 1.0.0 | 2026-07-26 |
