@@ -1,7 +1,7 @@
 ---
 id: STD-0008
 title: Artifact Specification Standard
-version: 1.6.0
+version: 1.6.1
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -341,7 +341,7 @@ The duty to reject an artifact whose envelope cannot be parsed is validator beha
 
 **R-55.** A content digest MUST be computed over the artifact's canonical serialization excluding the digest member itself, and MUST NOT be used as, or substituted for, the artifact's identity.
 
-The exclusion is what makes the member computable at all: a digest taken over a serialization containing itself has no fixed point. The representation of a digest is stated by [STD-0010](metadata-specification.md) R-42. What a digest is for — deciding whether two byte sequences are the same artifact, and detecting that an upstream artifact was regenerated — is participant behaviour and is stated by [STD-0011](contract-specification.md) R-47 and R-49.
+The exclusion is what makes the member computable at all: a digest taken over a serialization containing itself has no fixed point. The canonical serialization the digest is computed over is stated by [STD-0010](metadata-specification.md) R-46, and the representation of the digest itself by its R-42. Without a normative serialization, two conforming producers could digest one artifact differently and integrity would rest on their happening to agree. What a digest is for — deciding whether two byte sequences are the same artifact, and detecting that an upstream artifact was regenerated — is participant behaviour and is stated by [STD-0011](contract-specification.md) R-47 and R-49.
 
 **R-17.** Where an artifact records any observation not derived from the subject's source, it MUST declare the environment in which that observation was made.
 

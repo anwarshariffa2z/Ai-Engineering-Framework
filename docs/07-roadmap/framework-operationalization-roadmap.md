@@ -1,7 +1,7 @@
 ---
 id: REF-0023
 title: Framework Operationalization Roadmap
-version: 1.2.0
+version: 1.2.1
 status: Draft
 owner: Framework Maintainers
 created: 2026-07-26
@@ -97,7 +97,7 @@ Ordered by dependency, not by priority. The first four are prerequisites for the
 
 The four carriage workstreams are delivered, and they preceded the producer workstreams because a producer cannot record a lineage reference the standards do not define. A reference producer can now derive an identity, digest its output, and record lineage without inventing an identity model, and a consumer can identify, resolve, and integrity-check that output using framework-defined contracts alone. The corpus precedes validator expansion, because a check without a subject is a check that cannot run. Everything after that is parallelizable.
 
-The AUD-0002 vertical slice moved fifty-one requirements from dormant to evaluated: bound checks rose from sixty-eight to one hundred and nineteen, and not-evaluated fell from 199 to 148. Nothing was activated by writing a check; each of the fifty-one binds to a requirement that already existed and became evaluable only because an instance now exists to evaluate it. The next step is expansion to [AUD-0003](../03-audit-engine/02-database-discovery.md) Database Discovery, whose producer consumes AUD-0002's artifacts and is therefore the first test of lineage across two methodologies rather than within one.
+The AUD-0002 vertical slice moved fifty-three requirements from dormant to evaluated: bound checks rose from sixty-eight to one hundred and twenty-one, and not-evaluated fell from 199 to 148. Nothing was activated by writing a check; each of the fifty-three binds to a requirement that already existed and became evaluable only because an instance now exists to evaluate it. The next step is expansion to [AUD-0003](../03-audit-engine/02-database-discovery.md) Database Discovery, whose producer consumes AUD-0002's artifacts and is therefore the first test of lineage across two methodologies rather than within one.
 
 ## 6. Known Remaining Work Outside the Workstreams
 

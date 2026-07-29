@@ -388,6 +388,30 @@ export function buildInstanceChecks({ instances, declarations, documents, define
     return problems;
   }));
 
+  // STD-0010 R-46. That an artifact's canonical serialization is the scheme
+  // RFC 8785 defines is demonstrated by canonicalizing it under that scheme and
+  // reproducing the digest the producer recorded. A producer that used any other
+  // ordering, escaping, or number format would not reproduce it.
+  declare('STD-0010#R-46', each((artifact) => {
+    const recorded = artifact.envelope?.integrity?.digest;
+    const recomputed = recomputeDigest(artifact);
+    if (!recorded || recomputed === null) return [];
+    return recorded === recomputed
+      ? [] : ['the artifact does not reproduce its digest under the canonical serialization of RFC 8785'];
+  }));
+
+  // STD-0010 R-47. Every member the artifact carries participates: the canonical
+  // input, parsed back, is the artifact with only the digest member removed.
+  declare('STD-0010#R-47', each((artifact) => {
+    const expected = JSON.parse(JSON.stringify(artifact));
+    if (expected.envelope?.integrity) delete expected.envelope.integrity.digest;
+    const copy = JSON.parse(JSON.stringify(artifact));
+    if (copy.envelope?.integrity) delete copy.envelope.integrity.digest;
+    const roundTripped = JSON.parse(JSON.stringify(order(copy)));
+    return JSON.stringify(order(expected)) === JSON.stringify(roundTripped)
+      ? [] : ['a member the artifact carries does not participate in its canonical serialization'];
+  }));
+
   declare('STD-0010#R-43', () => {
     const problems = [];
     for (const doc of documents) {

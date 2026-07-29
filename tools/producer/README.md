@@ -32,15 +32,16 @@ A reader who mistakes `run-0001` for a framework derivation algorithm has read i
 wrong: it is a name the orchestrator chose, and the only obligation on it is
 distinctness within a subject and revision.
 
-**Canonical serialization.** STD-0008 R-55 requires a digest over "the artifact's
-canonical serialization" and no standard fixes what that is. This implementation
-uses: JSON, UTF-8, object members ordered lexicographically at every depth, arrays
-in document order, no insignificant whitespace, no trailing newline, with the
-`integrity.digest` member removed from the digest input. On-disk artifacts are
+**Canonical serialization.** STD-0010 R-46 makes it the JSON Canonicalization
+Scheme of RFC 8785, and R-47 requires every member the artifact carries to
+participate in it. This implementation produces that form with the platform's own
+JSON writer plus a recursive member sort — ECMAScript `JSON.stringify` already
+gives UTF-8 without a BOM, no insignificant whitespace, RFC 8259 shortest-form
+escaping, and the number format RFC 8785 defines by reference to ECMAScript; the
+default string comparison sorts by UTF-16 code unit, which is the order RFC 8785
+requires. No third-party canonicalizer is used. On-disk artifacts are
 pretty-printed; the digest is defined over the canonical bytes, so layout cannot
-change it. The validator applies the same form. This is a reference implementation
-choice, recorded below as a standards ambiguity rather than presented as a
-framework decision.
+change it. The validator applies the same form and checks it.
 
 **Record shape.** A record carries its type-declared fields under `fields`, and its
 framework metadata — `record_id`, `evidence`, `scope_reason`, `load_bearing`,
@@ -98,14 +99,18 @@ were general. Extracting now would be designing for a producer that does not exi
 
 ## Standards ambiguities found
 
-Recorded rather than resolved. None blocks implementation, and none was worked
-around by changing a standard.
+1. **Canonical serialization of an artifact was undefined. Closed.** STD-0008 R-55
+   required a digest over a canonical serialization that no standard fixed, so two
+   conforming producers could digest one artifact differently and the integrity leg
+   of ADR-0006 rested on their happening to agree. STD-0010 R-46 now adopts RFC 8785
+   and R-47 requires every member to participate. This implementation's output
+   already satisfied both: no artifact changed and no digest moved.
 
-1. **Canonical serialization of an artifact is undefined.** STD-0008 R-55 and
-   STD-0010 R-42 assume one without stating it. Two conforming implementations can
-   therefore compute different digests over the same artifact, which weakens the
-   cross-party integrity guarantee ADR-0006 intends. A future STD-0010 requirement
-   fixing the form would close it.
+The three below are recorded rather than resolved. Each is deferred until AUD-0003
+supplies a second implementation, because the current implementation remains
+conforming under existing standards and standardizing an accidental property of the
+first producer is the more expensive mistake.
+
 2. **The aggregate of an empty record set is undefined.** STD-0008 R-10 requires an
    aggregate evidence state and confidence unconditionally; STD-0007 R-29 and R-30
    define both as a minimum over load-bearing conclusions. An `Unavailable` or

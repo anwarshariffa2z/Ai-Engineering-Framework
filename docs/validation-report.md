@@ -1,7 +1,7 @@
 ---
 id: REF-0010
 title: Documentation Validation Report
-version: 1.7.0
+version: 1.8.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -95,6 +95,13 @@ Validation covered all Markdown documents in the repository except `LICENSE`, in
 | Evidence states, confidence levels, and the health scale are defined in exactly one standard and referenced by both methodologies | Pass |
 | Methodologies declare only their own health dimensions, not the scale or its guards | Pass |
 | Participant and semantic obligations are held by the standards that own them, with none remaining in the artifact standard | Pass |
+| The AUD-0002 reference producer emits conforming instances of every artifact type that methodology declares, and of no other | Pass |
+| Every artifact instance verifies against its own content digest under the canonical serialization of RFC 8785 | Pass |
+| Every lineage entry is an immutable reference carrying a bound identity and an upstream digest | Pass |
+| Every identity the reference run produces or consumes carries a resolution or is recorded unresolvable | Pass |
+| Completeness states Complete, Partial, NotApplicable, and Unavailable are each reached by at least one instance | Pass |
+| No record marked Unknown carries a confidence level or a score, and each carries the scope reason that bounds it | Pass |
+| No artifact instance identity appears in a document reference key | Pass |
 
 ## Requirement Traceability
 
@@ -104,15 +111,17 @@ Eight standards declare the enforceable surface of the framework. Every identifi
 | --- | --- | --- | --- | --- | --- |
 | STD-0001 Document Metadata | 5 | 4 | 1 | 4 | — |
 | STD-0002 Framework Document ID | 8 | 5 | 3 | 5 | — |
-| STD-0007 Evidence and Confidence | 44 | 20 | 24 | 0 | — |
-| STD-0008 Artifact Specification | 32 | 31 | 1 | 0 | 25 |
-| STD-0010 Metadata Specification | 45 | 45 | 0 | 27 | — |
-| STD-0011 Contract Specification | 52 | 45 | 7 | 0 | — |
-| STD-0012 Validation Specification | 45 | 45 | 0 | 6 | — |
+| STD-0007 Evidence and Confidence | 44 | 20 | 24 | 13 | — |
+| STD-0008 Artifact Specification | 32 | 31 | 1 | 21 | 25 |
+| STD-0010 Metadata Specification | 47 | 47 | 0 | 36 | — |
+| STD-0011 Contract Specification | 52 | 45 | 7 | 4 | — |
+| STD-0012 Validation Specification | 45 | 45 | 0 | 12 | — |
 | STD-0013 Artifact Type Declaration | 36 | 29 | 7 | 26 | — |
-| **Total** | **267** | **224** | **43** | **68** | **25** |
+| **Total** | **269** | **226** | **43** | **121** | **25** |
 
-STD-0007, STD-0008, and STD-0011 carry no bound checks because their subjects — artifact instances, producers, consumers, and conclusions — do not exist in the corpus. Ninety-three artifact **types** are declared; no artifact **instance** is, because the framework ships types and never instances. Each of their mechanical requirements is reported `not-evaluated` with that reason rather than assumed to pass.
+STD-0007, STD-0008, and STD-0011 carried no bound checks for as long as their subjects — artifact instances, producers, consumers, and conclusions — were absent from the corpus. The AUD-0002 reference producer supplied the first of those subjects: fourteen conforming instances of the fourteen artifact types that methodology declares, with a run-scoped resolution declaration beside them. Fifty-three checks bound as a result, taking the total from sixty-eight to one hundred and twenty-one, and every one of them binds to a requirement that already existed. None was written to raise a count.
+
+What remains not-evaluated is not evenly distributed and the reasons differ. Forty-three requirements are judgment-classified and routed to human review. Forty-six range over producers, consumers, and orchestrators that are not registered as corpus objects, which no artifact can supply. Twenty-nine are validator self-conformance. The remainder state conditions that do not arise in the reference run — no environment-derived observation, no transformer, no cross-run lineage edge — and each reports that rather than repeating a reason that has expired.
 
 Twenty-five requirements were added in carrying [ADR-0006](ADR/ADR-0006-artifact-instance-identity.md) into the standards: six to STD-0008, five to STD-0010, eight to STD-0011, and six to STD-0012. All twenty-five are mechanical and blocking, and all twenty-five are dormant for the same reason as the requirements around them: their subjects are artifact instances, references, runs, and resolutions, none of which exist in the corpus. Bound checks are therefore unchanged at sixty-eight, and not-evaluated rises from 174 to 199. No identifier was reused and none was retired; R-06, R-10, R-19, R-28, R-29, and R-30 kept their identities because each remained true, and R-10, R-28, R-29, and R-30 were widened in place to admit the integrity group and the upstream digest.
 
@@ -180,6 +189,8 @@ Database Discovery introduces two conventions that later playbooks are expected 
 One Audit Engine document remains a Draft structural placeholder: AUD-0001 Bootstrap.
 
 Ten methodologies are approved and every artifact type they declare is now declared in the corpus, once each, under [STD-0013](02-methodology/artifact-type-declaration-standard.md). Ninety-three declarations sit in ten documents under `docs/10-artifact-types/`. What remains missing before a run can occur is a producer implementation and a place for instances to live; neither is a framework document.
+
+The canonical serialization of an artifact is defined by [STD-0010](02-methodology/metadata-specification.md) R-46, which adopts the JSON Canonicalization Scheme of RFC 8785 by reference rather than defining a framework-specific scheme. Before that revision, STD-0008 R-55 required a digest over a canonical serialization no standard fixed, so two conforming producers could digest one artifact differently and the integrity leg of ADR-0006 rested on their happening to agree. The reference producer's existing output already satisfied RFC 8785, so no artifact changed and no digest moved.
 
 How an artifact instance is named is decided by [ADR-0006](ADR/ADR-0006-artifact-instance-identity.md) and carried into the standards it names: STD-0008 at 1.6.0, STD-0010 at 1.3.0, STD-0011 at 1.3.0, and STD-0012 at 1.1.0. The obligations that previously had no subject now have one. STD-0011 R-40 can be discharged because an identity grammar exists; STD-0008 R-19 has a defined upstream address; and R-43 staleness is a digest comparison rather than a claim. STD-0013 is untouched, which is the check that the separation [ADR-0005](ADR/ADR-0005-artifact-types-as-declarations.md) established holds.
 

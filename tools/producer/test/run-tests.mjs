@@ -88,6 +88,38 @@ test('STD-0008#R-55', 'canonical serialization is stable under member reordering
   assert(a === b, `${a} !== ${b}`);
 });
 
+test('STD-0010#R-46', 'canonical output conforms to RFC 8785 member ordering', () => {
+  // Section 3.2.3: members are ordered by the UTF-16 code units of their names.
+  const canonical = canonicalize({ '\u20ac': 1, '\n': 2, a: 3, 1: 4, '\u0080': 5 });
+  assert(canonical === '{"1":4,"\\n":2,"a":3,"\u0080":5,"\u20ac":1}', canonical);
+});
+
+test('STD-0010#R-46', 'canonical output conforms to RFC 8785 number serialization', () => {
+  // Section 3.2.2.3 defines number output by reference to ECMAScript.
+  const vectors = [[0, '0'], [-0, '0'], [1e30, '1e+30'], [0.000001, '0.000001'], [1e-7, '1e-7'], [5e-324, '5e-324'], [9007199254740992, '9007199254740992'], [1.1, '1.1']];
+  for (const [value, expected] of vectors) {
+    assert(canonicalize(value) === expected, `${value} serialized as ${canonicalize(value)}, expected ${expected}`);
+  }
+});
+
+test('STD-0010#R-46', 'canonical output escapes as RFC 8785 requires and passes Unicode through', () => {
+  assert(canonicalize({ k: 'a\u00e9\u20ac"\\\t\u0001' }) === '{"k":"a\u00e9\u20ac\\"\\\\\\t\\u0001"}', canonicalize({ k: 'a\u00e9\u20ac"\\\t\u0001' }));
+});
+
+test('STD-0010#R-46', 'a value RFC 8785 cannot serialize is refused rather than written as null', () => {
+  let threw = false;
+  try { canonicalize({ k: Number.POSITIVE_INFINITY }); } catch { threw = true; }
+  assert(threw, 'a non-finite number was canonicalized');
+});
+
+test('STD-0010#R-47', 'every member participates, including an unrecognized namespaced field', () => {
+  const extended = JSON.parse(JSON.stringify(scope));
+  extended.body.records[0].fields['acme.review_state'] = 'pending';
+  const input = digestInput(extended);
+  assert(input.includes('acme.review_state'), 'an extension field was dropped from the digest input');
+  assert(computeDigest(extended) !== scope.envelope.integrity.digest, 'adding a member left the digest unchanged');
+});
+
 test('STD-0008#R-55', 'the digest excludes the digest member from its own input', () => {
   const input = digestInput(scope);
   assert(!input.includes(scope.envelope.integrity.digest), 'the digest appears in its own input');

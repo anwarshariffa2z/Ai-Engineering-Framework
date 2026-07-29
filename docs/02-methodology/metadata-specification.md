@@ -1,7 +1,7 @@
 ---
 id: STD-0010
 title: Metadata Specification Standard
-version: 1.3.0
+version: 1.4.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -256,6 +256,16 @@ requirements:
     check: mechanical
     severity: blocking
     scope: run
+  - id: R-46
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: artifact
+  - id: R-47
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: artifact
 ---
 
 # Metadata Specification Standard
@@ -285,7 +295,7 @@ This standard defines the canonical representation of framework metadata. Where 
 
 **It formalizes representation only.** It does not define what an artifact is, what evidence means, or how validation behaves. Those belong to STD-0008, STD-0007, and STD-0012 respectively. Where this standard names a vocabulary owned elsewhere, it specifies the encoding and defers the meaning, and it says so at each point.
 
-**In scope.** Value grammars; document front matter schema; controlled vocabularies for metadata-owned fields; normativity declaration schema; requirement declaration schema; dependency metadata; compatibility metadata; artifact metadata representation; the serialization of an artifact instance identity and of a content digest; run-scoped resolution declarations; provenance metadata for generated objects; extension and namespacing rules; encoding and ordering; and migration of existing documents.
+**In scope.** Value grammars; document front matter schema; controlled vocabularies for metadata-owned fields; normativity declaration schema; requirement declaration schema; dependency metadata; compatibility metadata; artifact metadata representation; the serialization of an artifact instance identity and of a content digest; the canonical serialization of an artifact; run-scoped resolution declarations; provenance metadata for generated objects; extension and namespacing rules; encoding and ordering; and migration of existing documents.
 
 **Out of scope.** Artifact semantics, evidence semantics, validator behavior, identifier allocation policy, serialization of artifact bodies, and storage or transport.
 
@@ -560,6 +570,16 @@ Extensions may add keys, add values to open vocabularies, and add entries to lis
 
 **R-37.** A document's metadata MUST parse as well-formed YAML. A document whose front matter does not parse MUST be rejected rather than partially interpreted.
 
+**R-46.** The canonical serialization of an artifact MUST be the JSON Canonicalization Scheme defined by [RFC 8785](https://www.rfc-editor.org/rfc/rfc8785), applied to the artifact as a JSON value.
+
+RFC 8785 fixes every property a reproducible digest depends on and this standard adds none of its own: UTF-8 without a byte order mark, object members ordered by the UTF-16 code units of their names at every depth, array order preserved as written, no insignificant whitespace, shortest-form string escaping, ECMAScript number serialization, and the literal `null`. A framework-specific scheme was considered and rejected: the properties are identical, and a second specification of them would be a second thing to get wrong.
+
+The digest input is the canonical serialization with one member removed, and that exclusion belongs to [STD-0008](artifact-specification.md) R-55 rather than here. A canonical serialization is a property of an artifact; which of its bytes a digest is taken over is a property of the digest.
+
+**R-47.** Every member an artifact carries MUST participate in its canonical serialization, including namespaced extension fields and members the serializing party does not recognize.
+
+R-47 is what keeps integrity and extension tolerance from contradicting each other. [STD-0008](artifact-specification.md) R-39 obliges a transformer to preserve fields it does not understand; a transformer that preserved them in the artifact and omitted them from the digest input would compute a digest for an artifact nobody holds, and every consumer verifying it would reject a faithful copy.
+
 ## 15. Conformance
 
 *This section is normative.*
@@ -568,7 +588,7 @@ A document conforms when it satisfies R-03, R-09, R-13, R-14, R-36, and R-37, an
 
 A Standard additionally conforms when it satisfies R-16 through R-20.
 
-An artifact conforms when its envelope satisfies R-28 through R-30, its identity and digest values satisfy R-41 through R-43, and any reference summary it carries satisfies R-44. A run's resolution declaration conforms when it satisfies R-45.
+An artifact conforms when its envelope satisfies R-28 through R-30, its identity and digest values satisfy R-41 through R-43, any reference summary it carries satisfies R-44, and its canonical serialization satisfies R-46 and R-47. A run's resolution declaration conforms when it satisfies R-45.
 
 A generated object additionally conforms when it satisfies R-31 and R-32.
 

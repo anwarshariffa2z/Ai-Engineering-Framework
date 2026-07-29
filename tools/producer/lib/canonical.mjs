@@ -2,17 +2,22 @@
 //
 // Framework-generic. Holds no knowledge of any artifact type or methodology.
 //
-// STD-0008 R-55 requires a content digest computed over the artifact's canonical
-// serialization excluding the digest member itself. Neither STD-0008 nor STD-0010
-// fixes what that canonical serialization is, so this module states the form this
-// reference implementation uses and applies it identically on both sides of a
-// verification. The form is recorded in tools/producer/README.md and reported as
-// a standards ambiguity rather than treated as a framework decision.
+// STD-0010 R-46 makes the canonical serialization of an artifact the JSON
+// Canonicalization Scheme of RFC 8785, and R-47 requires every member the artifact
+// carries to participate in it. STD-0008 R-55 requires the content digest to be
+// computed over that serialization with the digest member excluded.
 //
-// Canonical form: JSON, UTF-8, object members ordered lexicographically at every
-// depth, arrays in document order, no insignificant whitespace, no trailing
-// newline. The digest is computed over that byte sequence with the digest member
-// removed, so it is independent of how the artifact is laid out on disk.
+// This implementation produces JCS output using the platform's own JSON writer:
+// ECMAScript `JSON.stringify` emits UTF-8 without a byte order mark, no
+// insignificant whitespace, RFC 8259 shortest-form escaping, and the number format
+// RFC 8785 section 3.2.2.3 requires, because that section is defined by reference
+// to ECMAScript. The one thing it does not do is order object members, so this
+// module sorts them recursively; the default string comparison is over UTF-16 code
+// units, which is the order RFC 8785 section 3.2.3 specifies. No third-party
+// canonicalizer is required, and none is used.
+//
+// The digest is computed over the canonical bytes rather than over the file, so it
+// is independent of how an artifact is laid out on disk.
 
 import { createHash } from 'node:crypto';
 
@@ -22,8 +27,15 @@ function order(value) {
   if (Array.isArray(value)) return value.map(order);
   if (value && typeof value === 'object') {
     const out = {};
+    // Array ordering is preserved as written; member ordering is by UTF-16 code
+    // unit, which is what the default comparison gives.
     for (const key of Object.keys(value).sort()) out[key] = order(value[key]);
     return out;
+  }
+  if (typeof value === 'number' && !Number.isFinite(value)) {
+    // RFC 8785 admits no serialization for these, and JSON.stringify would write
+    // null, silently changing what the digest covers.
+    throw new Error('a non-finite number has no canonical serialization under RFC 8785');
   }
   return value;
 }
