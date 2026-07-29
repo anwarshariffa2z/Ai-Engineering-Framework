@@ -98,7 +98,7 @@ Validation covered all Markdown documents in the repository except `LICENSE`, in
 
 ## Requirement Traceability
 
-Seven standards declare the enforceable surface of the framework. Every identifier below is addressable as `STANDARD#R-nn` and is the binding point for a validator check, per STD-0012 R-01.
+Eight standards declare the enforceable surface of the framework. Every identifier below is addressable as `STANDARD#R-nn` and is the binding point for a validator check, per STD-0012 R-01.
 
 | Standard | Requirements | Mechanical | Judgment | Bound | Retired |
 | --- | --- | --- | --- | --- | --- |
