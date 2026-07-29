@@ -1,11 +1,11 @@
 ---
 id: REF-0013
 title: Architecture Artifact Type Declarations
-version: 1.0.0
+version: 1.1.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-26
-last_updated: 2026-07-26
+last_updated: 2026-07-29
 review_cycle: Annual
 category: Reference
 tags: [artifacts, declarations, architecture]
@@ -207,6 +207,7 @@ artifact_types:
       - field: candidate
         kind: open
         values: [modular-monolith, layered, microservices, service-oriented, event-driven, serverless, client-heavy, plugin-platform, pipeline, hybrid]
+    derives_from: [framework.architecture.modules, framework.architecture.layers]
     fixtures:
       normal: One record per classification candidate found within the declared scope, each carrying supporting_evidence and a confidence level.
       empty: The declared scope was examined in full and contained no classification candidate; completeness is Complete and the record set is empty.
@@ -330,7 +331,7 @@ artifact_types:
     required_fields: [risk, cause, impact, supporting_records, likelihood_rationale, evidence_state, confidence]
     optional_fields: [next_verification, reversibility]
     evidence_bearing_fields: [supporting_records]
-    derives_from: [framework.architecture.modules, framework.architecture.dependencies, framework.architecture.layers, framework.architecture.configuration, framework.architecture.deployment]
+    derives_from: [framework.architecture.scope, framework.architecture.modules, framework.architecture.dependencies, framework.architecture.layers, framework.architecture.configuration, framework.architecture.build, framework.architecture.deployment]
     fixtures:
       normal: One record per architecture risk found within the declared scope, each carrying supporting_records and a confidence level.
       empty: The declared scope was examined in full and contained no architecture risk; completeness is Complete and the record set is empty.

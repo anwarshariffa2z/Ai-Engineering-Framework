@@ -1,11 +1,11 @@
 ---
 id: REF-0014
 title: Database Artifact Type Declarations
-version: 1.0.0
+version: 1.1.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-26
-last_updated: 2026-07-26
+last_updated: 2026-07-29
 review_cycle: Annual
 category: Reference
 tags: [artifacts, declarations, database]
@@ -312,7 +312,7 @@ artifact_types:
     required_fields: [risk, cause, impact, affected_entities, supporting_records, likelihood_rationale, evidence_state, confidence]
     optional_fields: [reversibility, owner_candidate]
     evidence_bearing_fields: [supporting_records]
-    derives_from: [framework.database.constraints, framework.database.security, framework.database.lifecycle, framework.database.performance]
+    derives_from: [framework.database.schema, framework.database.constraints, framework.database.entities, framework.database.security, framework.database.lifecycle, framework.database.performance]
     fixtures:
       normal: One record per database risk found within the declared scope, each carrying supporting_records and a confidence level.
       empty: The declared scope was examined in full and contained no database risk; completeness is Complete and the record set is empty.
