@@ -1,4 +1,4 @@
-# Reference Producer — AUD-0002 Architecture Discovery
+# Reference Producers — AUD-0002 Architecture Discovery and AUD-0003 Database Discovery
 
 The first executable implementation of a framework methodology. It exists to prove
 that the standards in force can produce, resolve, consume, integrity-check, and
@@ -80,22 +80,44 @@ this audit did not look at the deployment. Both carry zero records.
 
 ## Component classification
 
-| Component | Classification |
-| --- | --- |
-| `lib/canonical.mjs` | Framework-generic — serialization and digest |
-| `lib/identity.mjs` | Framework-generic — identity composition and reference forms |
-| `lib/envelope.mjs` | Framework-generic — the nine envelope groups and aggregation |
-| `lib/declarations.mjs` | Framework-generic — declaration loading and conformance |
-| `lib/store.mjs` | Framework-generic — persistence and resolution declaration |
-| `lib/resolver.mjs` | Framework-generic — resolution, verification, consumer duties |
-| `consume.mjs` | Framework-generic — reads any artifact of any type |
-| `index.mjs` | Methodology-generic run scaffolding, with an AUD-0002 run context and one import of the methodology |
-| `lib/architecture-discovery.mjs` | AUD-0002-specific — what to examine and what the evidence supports |
-| `fixtures/subject-repo/` | AUD-0002-specific |
+| Component | Classification | Second producer's effect |
+| --- | --- | --- |
+| `lib/canonical.mjs` | Framework-generic — serialization and digest | Reused unchanged |
+| `lib/identity.mjs` | Framework-generic — identity composition and reference forms | Reused unchanged |
+| `lib/envelope.mjs` | Framework-generic — the nine envelope groups and aggregation | One comment added; behaviour unchanged |
+| `lib/declarations.mjs` | Framework-generic — declaration loading and conformance | Reused unchanged |
+| `lib/store.mjs` | Framework-generic — persistence and resolution declaration | Reused unchanged |
+| `lib/resolver.mjs` | Framework-generic — resolution, verification, consumer duties | Reused unchanged |
+| `consume.mjs` | Framework-generic — reads any artifact of any type | Made tolerant of a run declaring no unresolvable identity |
+| `index.mjs` | Methodology-generic run scaffolding | Gained a composed run and shared gate and write helpers |
+| `cross-run.mjs` | Framework-generic — the cross-run reference scenario | New |
+| `lib/architecture-discovery.mjs` | AUD-0002-specific — how the methodology shapes a record | Subject judgements moved out; logic unchanged |
+| `lib/database-discovery.mjs` | AUD-0003-specific — the same, plus the consumption of upstream types | New |
+| `lib/architecture-subjects.mjs`, `lib/database-subjects.mjs` | Subject-specific — the judgements each methodology reached about one subject | New |
+| `fixtures/subject-repo/`, `fixtures/subject-repo-db/` | Subject-specific | One new |
 
-The scaffolding in `index.mjs` is not extracted into a generic run module. One
-working producer is evidence; a second one is what would show which parts of it
-were general. Extracting now would be designing for a producer that does not exist.
+### What the second producer showed
+
+Six of the seven generic modules were reused without modification, which is the
+result the first producer predicted but could not demonstrate. The two that moved
+did so for reasons a second producer was needed to see.
+
+The first is the subject split. A conclusion such as *"src/domain holds the ordering
+rules"* is a judgement about a subject, not a rule of a methodology, and no producer
+can derive it. In one producer that distinction is invisible, because the subject and
+the methodology arrive together. With two subjects it is unavoidable, so the
+judgements now live in `*-subjects.mjs` and the discovery modules hold only the
+methodology. Both producers converged on the same split independently, which is the
+first evidence that it is structural rather than incidental.
+
+The second is `index.mjs`. Its gate and write steps are now shared by both runs and
+are genuinely identical, but the two run functions are not: a composed run must write
+and declare its first methodology's output before its second can resolve it, and a
+single-methodology run has no such ordering. **A generic producer runtime should not
+be extracted yet.** What is shared is thirty lines of gate-and-write; what differs is
+the sequencing, and sequencing is the part a third producer would test. Two producers
+show the duplication is real. They do not yet show the two orchestrations mean the
+same thing.
 
 ## Standards ambiguities found
 
@@ -106,25 +128,71 @@ were general. Extracting now would be designing for a producer that does not exi
    and R-47 requires every member to participate. This implementation's output
    already satisfied both: no artifact changed and no digest moved.
 
-The three below are recorded rather than resolved. Each is deferred until AUD-0003
-supplies a second implementation, because the current implementation remains
-conforming under existing standards and standardizing an accidental property of the
-first producer is the more expensive mistake.
+2. **The aggregate of an empty record set is undefined. Confirmed by a second
+   producer; still deferred.** AUD-0003 produces one `NotApplicable` artifact with no
+   records, and the same reading applies — the bottom of each lattice, `Unknown` and
+   `Low`, as the only value that cannot overstate. Two independent producers reaching
+   the same reading is evidence the reading is natural, not evidence that the standard
+   states it. A clarification would still be worth making, and it is not urgent:
+   nothing observed depends on which way it is settled.
 
-2. **The aggregate of an empty record set is undefined.** STD-0008 R-10 requires an
-   aggregate evidence state and confidence unconditionally; STD-0007 R-29 and R-30
-   define both as a minimum over load-bearing conclusions. An `Unavailable` or
-   `NotApplicable` artifact has none. This implementation takes the bottom of each
-   lattice — `Unknown` and `Low` — as the only reading that cannot overstate.
-3. **Required fields versus Unknown records.** STD-0013 R-33 requires an artifact to
-   carry every field its type lists as required, while STD-0007 R-38 and R-42 forbid
-   the confidence and score those lists include on a record that reaches no
-   conclusion. R-33 ranges over the artifact rather than each record, which is the
-   reading applied here, but the two standards would read better if one said so.
-4. **The record's own representation is unspecified.** STD-0010 section 11 states
-   that record-level metadata lives in the body and defers its members to STD-0008,
-   which names the members without fixing where they sit relative to type-declared
-   fields. The `fields` separation above is this implementation's answer.
+3. **Required fields versus Unknown records. Closed by STD-0013 R-37.** AUD-0003
+   produces eight Unknown records across `lifecycle` and `health` — every lifecycle
+   record in the run is Unknown — and each carries the fields its evidence supports
+   while omitting the conclusion-bearing ones. A second producer showed the pattern
+   is a normal outcome rather than an edge case: in a domain whose deployed state is
+   unobservable, Unknown is what an honest record usually says. It also showed the
+   ambiguity was not academic. The validator had been exempting Unknown records from
+   STD-0013 R-33 on its own authority, which STD-0012 R-03 forbids, because the only
+   alternatives a producer had were to invent a value or to suppress the record.
+   **R-37** now states the third option and is the only qualification R-33 receives:
+   carry the record, carry what the evidence supports, omit the rest, and bound the
+   omission with the scope reason STD-0008 R-44 already required. It is
+   judgment-checkable and deliberately unbound — an artifact that omitted a field
+   honestly and one that fabricated a value are equally well-formed, so a check
+   would assume the requirement rather than evaluate it.
+
+4. **The record's own representation is unspecified. Closed by STD-0008 R-58.** The
+   `fields` separation was carried into AUD-0003 unchanged and needed no adjustment
+   for a domain with entirely different field families, including records whose
+   natural shape is an absence. Convergence across two independent methodologies is
+   what made it safe to standardize, and the same latent defect appeared here as in
+   ambiguity 3: the validator's R-35 arm already read only `fields`, silently
+   exempting the framework's own record members from a prohibition that on its face
+   reached them. **R-58** fixes the boundary — `record_id`, `evidence`,
+   `scope_reason`, `load_bearing`, and `load_bearing_inputs` are the framework's and
+   are the same for every type; everything a declaration supplies sits in `fields`.
+   It standardizes where a type's fields sit and says nothing about what they are:
+   neither methodology's field family appears in the standard.
+
+### A fifth, found by the second producer
+
+5. **Lineage granularity is asymmetric. Deferred.** STD-0008 R-46 requires a lineage
+   entry to name the downstream records that depend on it, and nothing names the
+   *upstream* records they depend on. Propagation under STD-0007 R-26 and R-28 is
+   therefore computed against an upstream artifact's aggregate rather than against
+   the records actually used, so a single `Low` record anywhere in an upstream
+   artifact caps every conclusion drawn from any part of it. That is conservative
+   and never overstates, which is why this implementation accepts it, and it is why
+   several AUD-0003 conclusions carry lower confidence than their own evidence
+   supports. Closing it would mean a record-to-record reference, which is a new
+   identity form and a change to ADR-0006, and one consumer is not enough evidence
+   to justify either. Revisit when a second consuming producer exists.
+
+## Declaration corrections this milestone made
+
+Three type declarations recorded a `derives_from` set narrower than the lineage the
+runs actually produced: `framework.database.risks` drew on `schema` and `entities`,
+`framework.architecture.classification` declared no derivation at all while drawing
+on `modules` and `layers`, and `framework.architecture.risks` listed five of the
+seven types it used. In every case the instance lineage was right and the
+declaration was incomplete, so the declarations were corrected. No entry was
+removed, the graph over all ninety-three types remains acyclic, and **no
+`type_version` moved**: a `derives_from` entry supplies an operand to STD-0013 R-21
+and R-22, which range over the corpus graph, and to no requirement that ranges over
+an instance, so no artifact's conformance changed and every AUD-0002 digest is what
+it was. Nothing in STD-0013 classifies a change to `derives_from` the way R-15
+classifies a vocabulary change; that gap is recorded, not closed by inference.
 
 No architectural contradiction was found. No accepted decision needed reopening, no
 object type was added, and no resolver contract, service, or interface was created.
