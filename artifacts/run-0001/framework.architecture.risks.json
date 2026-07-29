@@ -1,0 +1,130 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-architecture-discovery@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered",
+            "evidence_id": "risk-0001-e1",
+            "location": "package.json",
+            "observation": "build script names a path not present in scope",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "cause": "package.json declares a build script whose target is absent from the subject at this revision",
+          "confidence": "Medium",
+          "evidence_state": "Inferred",
+          "impact": "a consumer relying on the build artifact flow has nothing to rely on",
+          "likelihood_rationale": "the command is declared in two places and the script is absent from both",
+          "next_verification": "read the build script at a revision where it is present, or execute the command under authorization",
+          "reversibility": "reversible",
+          "risk": "the declared build command cannot be shown to produce anything",
+          "supporting_records": "build-0001"
+        },
+        "load_bearing_inputs": [
+          "framework.architecture.build"
+        ],
+        "record_id": "risk-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-architecture-discovery@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered",
+            "evidence_id": "risk-0002-e1",
+            "location": "restricted/",
+            "observation": "path present and not opened",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "cause": "the deployment definitions sit outside the authorization boundary of this run",
+          "confidence": "Medium",
+          "evidence_state": "Inferred",
+          "impact": "no conclusion about how the service reaches an environment can be drawn from this artifact set",
+          "likelihood_rationale": "the boundary is declared and the artifact was recorded Unavailable rather than empty",
+          "next_verification": "re-run with authorization covering restricted/",
+          "reversibility": "reversible",
+          "risk": "deployment topology is unexamined",
+          "supporting_records": "scope-0004"
+        },
+        "load_bearing_inputs": [
+          "framework.architecture.deployment"
+        ],
+        "record_id": "risk-0002"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Inferred/Medium": 2
+      },
+      "evidence_state": "Inferred"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.risks",
+      "run_id": "example/orders-service@rev-0001#run-0001"
+    },
+    "integrity": {
+      "digest": "sha256:cc6a815c546d6bc169166fe4f11ad56364f0ae3b07e7f765861a7767b831bf1e"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "risk-0001"
+          ],
+          "digest": "sha256:824d4470038dc3e82e31df200c0fda5d1a969fe58671ad8d681bd4635bc98910",
+          "identity": "example/orders-service@rev-0001#run-0001/framework.architecture.build@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "risk-0002"
+          ],
+          "digest": "sha256:189c43cd368ca9d50a8ad27e7899601c08ce26baf81cc11ceba87ebc57aac7a6",
+          "identity": "example/orders-service@rev-0001#run-0001/framework.architecture.scope@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision, excluding restricted/",
+      "environment": "static inspection of subject source; no execution environment was entered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-architecture-discovery",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": [
+        {
+          "path": "restricted/",
+          "reason": "outside the authorization boundary declared for this run"
+        }
+      ]
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "note": "A reference to an artifact produced by another party, in another run, over another subject. It carries the envelope summary STD-0008 R-57 requires of a reference that leaves its producing run, and no locator is available to this deployment. It exists so that the consumer can exercise STD-0011 R-50 evaluation and R-48 unresolvable treatment against a reference that is well formed rather than defective.",
+  "identity": "other/payments-service@rev-0007#run-0001/framework.architecture.scope@1.0.0",
+  "type_version": "1.0.0",
+  "subject_revision": "rev-0007",
+  "digest": "sha256:6f2c1b0d9a7e4c3b8d5f0a1e2c7b4d9f6a3e8c1b0d7f4a2e9c6b3d8f5a0e1c72",
+  "summary": {
+    "identity": "other/payments-service@rev-0007#run-0001/framework.architecture.scope@1.0.0",
+    "type_version": "1.0.0",
+    "subject_revision": "rev-0007",
+    "completeness_state": "Complete",
+    "redaction_state": "none",
+    "evidence_state": "Observed",
+    "confidence": "High"
+  }
+}

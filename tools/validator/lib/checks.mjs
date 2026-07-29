@@ -3,6 +3,8 @@
 // is reported as an unbound obligation by the coverage report instead.
 
 import { resolveReference } from './corpus.mjs';
+import { loadInstances, declarationIndex } from './instances.mjs';
+import { buildInstanceChecks } from './instance-checks.mjs';
 
 const ID = /^[A-Z]{1,4}-\d{4}$/;
 const VERSION = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
@@ -658,6 +660,19 @@ export function buildChecks(ctx) {
     return duplicated.length
       ? duplicated.map(([type, where]) => fail(type, `declared in ${where.length} documents: ${where.join(', ')}`))
       : [pass('corpus', `${seen.size} type identities, each declared exactly once`)];
+  });
+
+  // ---- Artifact instances -------------------------------------------------
+  // Requirements whose subjects are instances rather than documents. They were
+  // dormant while the corpus held none; each check below binds to a requirement
+  // that already existed, and nothing is bound whose subject is still absent.
+
+  const instances = loadInstances(root, config);
+  buildInstanceChecks({
+    instances,
+    declarations: declarationIndex(parsed),
+    documents: parsed,
+    define,
   });
 
   return checks;

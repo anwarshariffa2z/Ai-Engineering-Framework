@@ -1,0 +1,48 @@
+{
+  "body": {
+    "records": []
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Low",
+      "evidence_state": "Unknown"
+    },
+    "completeness": {
+      "reason": "deployment definitions are present under restricted/ and sit outside the authorization boundary declared for this run; authorization was refused rather than the subject lacking a deployment",
+      "state": "Unavailable"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.deployment",
+      "run_id": "example/orders-service@rev-0001#run-0001"
+    },
+    "integrity": {
+      "digest": "sha256:1ab74f647041a723bde1af0259fb2127035220eac5b2d131e95ae6e75f13b7ae"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision, excluding restricted/",
+      "environment": "static inspection of subject source; no execution environment was entered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-architecture-discovery",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": [
+        {
+          "path": "restricted/",
+          "reason": "outside the authorization boundary declared for this run"
+        }
+      ]
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

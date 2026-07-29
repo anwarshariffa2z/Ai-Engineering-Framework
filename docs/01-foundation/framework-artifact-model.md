@@ -59,9 +59,9 @@ ARTIFACT
 │   ├── Scope         what was examined, and what was not
 │   ├── Completeness  whether the body can be interpreted, and how
 │   ├── Provenance    who produced it, how, when, under what authority
+│   ├── Integrity     a content digest over this artifact's serialization
 │   ├── Lineage       which artifacts it derives from
-│   ├── Assessment    aggregate evidence state and confidence
-│   └── Integrity     a content digest over this artifact's serialization
+│   └── Assessment    aggregate evidence state and confidence
 └── BODY              type-specific
     └── Records       each carrying evidence state, confidence, evidence refs
 ```

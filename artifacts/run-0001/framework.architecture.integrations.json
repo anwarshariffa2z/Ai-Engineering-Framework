@@ -1,0 +1,48 @@
+{
+  "body": {
+    "records": []
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Low",
+      "evidence_state": "Unknown"
+    },
+    "completeness": {
+      "reason": "the subject declares no outbound client, no inbound integration beyond its own entry point, and no external transport; the system exchanges nothing with any external system",
+      "state": "NotApplicable"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.integrations",
+      "run_id": "example/orders-service@rev-0001#run-0001"
+    },
+    "integrity": {
+      "digest": "sha256:f3d823008cf859e839ca8d6078591f5866c50452fff188a1ecaa8389378bf06c"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision, excluding restricted/",
+      "environment": "static inspection of subject source; no execution environment was entered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-architecture-discovery",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": [
+        {
+          "path": "restricted/",
+          "reason": "outside the authorization boundary declared for this run"
+        }
+      ]
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

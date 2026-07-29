@@ -1,7 +1,7 @@
 ---
 id: REF-0023
 title: Framework Operationalization Roadmap
-version: 1.1.0
+version: 1.2.1
 status: Draft
 owner: Framework Maintainers
 created: 2026-07-26
@@ -64,7 +64,7 @@ Carriage of that decision into the standards found neither refinement necessary.
 
 Construction asked whether the framework is coherent. Operationalization asks whether it survives contact with a real repository.
 
-The distinction is practical. The framework ships artifact *types* and has never produced an artifact *instance*, which is why 199 of its 267 requirements are reported not-evaluated rather than passing: their subjects — instances, producers, consumers, and conclusions — do not exist in the corpus. Producing the first conforming instance is what moves those requirements from dormant to enforced, and no further document can do it.
+The distinction is practical. For as long as the framework shipped artifact *types* and no artifact *instance*, 199 of its 267 requirements were reported not-evaluated rather than passing: their subjects — instances, producers, consumers, and conclusions — did not exist in the corpus. Producing the first conforming instances is what moved them from dormant to enforced, and no further document could have done it. One methodology now has a reference producer, and 148 requirements remain dormant for the same reason: the subjects they range over are consumers, orchestrators, compositions, and conclusions that the corpus still does not contain.
 
 Nothing in this phase redesigns the architecture. Where a workstream needs normative support it revises an existing standard under an accepted decision, which is authoring rather than architecture.
 
@@ -80,7 +80,7 @@ Ordered by dependency, not by priority. The first four are prerequisites for the
 | Carry ADR-0006 into STD-0010 | **Delivered at 1.3.0.** R-41 serializes an identity, R-42 a digest, R-43 settles admissibility against R-07, and R-44 and R-45 represent the envelope summary and a run's resolution declaration |
 | Carry ADR-0006 into STD-0011 | **Delivered at 1.3.0.** R-45 and R-46 place identity and digest production on the producer, R-47 through R-50 place verification, unresolvable-input, staleness, and cross-run duties on the consumer, and R-51 and R-52 place discriminator distinctness and resolution declaration on the orchestrator |
 | Carry ADR-0006 into STD-0012 | **Delivered at 1.1.0.** R-40 through R-45 state validator behavior on an invalid identity, an invalid digest, a mutable lineage reference, a digest mismatch, an unresolvable identity, and a lineage entry disagreeing with the revision it names |
-| Reference Producers | An executable implementation of at least one methodology, emitting conforming instances of its declared types |
+| Reference Producers | **Partially delivered.** AUD-0002 Architecture Discovery has an executable reference producer emitting conforming instances of all fourteen types it declares, with a consumer, a run-scoped resolution declaration, and a requirement-addressed test suite under `tools/producer/`. The workstream completes when the remaining methodologies have one |
 | Reference Artifact Corpus | A published set of conforming instances, including the boundary and failure cases each declaration's fixtures describe |
 | Validator Expansion | Activation of the instance-scoped requirements in STD-0007, STD-0008, and STD-0011 against that corpus |
 | CI/CD Integration | Validation on every pull request, and a release process that gates on it |
@@ -96,6 +96,8 @@ Ordered by dependency, not by priority. The first four are prerequisites for the
 *This section is informative.*
 
 The four carriage workstreams are delivered, and they preceded the producer workstreams because a producer cannot record a lineage reference the standards do not define. A reference producer can now derive an identity, digest its output, and record lineage without inventing an identity model, and a consumer can identify, resolve, and integrity-check that output using framework-defined contracts alone. The corpus precedes validator expansion, because a check without a subject is a check that cannot run. Everything after that is parallelizable.
+
+The AUD-0002 vertical slice moved fifty-three requirements from dormant to evaluated: bound checks rose from sixty-eight to one hundred and twenty-one, and not-evaluated fell from 199 to 148. Nothing was activated by writing a check; each of the fifty-three binds to a requirement that already existed and became evaluable only because an instance now exists to evaluate it. The next step is expansion to [AUD-0003](../03-audit-engine/02-database-discovery.md) Database Discovery, whose producer consumes AUD-0002's artifacts and is therefore the first test of lineage across two methodologies rather than within one.
 
 ## 6. Known Remaining Work Outside the Workstreams
 
