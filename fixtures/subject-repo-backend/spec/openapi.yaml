@@ -1,0 +1,35 @@
+openapi: 3.0.3
+info:
+  title: orders-api
+  version: 3.1.0
+paths:
+  /orders:
+    get:
+      operationId: listOrders
+      responses:
+        "200": { description: order list }
+    post:
+      operationId: placeOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [customerId, items, currency]
+              properties:
+                customerId: { type: string }
+                items: { type: array }
+                currency: { type: string }
+      responses:
+        "201": { description: created }
+  /orders/{id}/cancel:
+    post:
+      operationId: cancelOrder
+      responses:
+        "204": { description: cancelled }
+  /reports/daily:
+    get:
+      operationId: dailyReport
+      responses:
+        "200": { description: report }

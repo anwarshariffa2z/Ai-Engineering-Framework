@@ -1,0 +1,5 @@
+{
+  "port": "${env:PORT}",
+  "adminRoutesEnabled": "${env:ADMIN_ROUTES_ENABLED}",
+  "requireTenantScope": "${env:REQUIRE_TENANT_SCOPE}"
+}
