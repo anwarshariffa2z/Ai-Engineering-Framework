@@ -21,6 +21,7 @@ import { executeRun, executeComposedRun, RUN_CONTEXT, COMPOSED_RUN_CONTEXT } fro
 import { consume } from '../consume.mjs';
 import { runDatabaseDiscovery, CONSUMED_TYPES } from '../lib/database-discovery.mjs';
 import { crossRunScenario } from '../cross-run.mjs';
+import { buildInstanceChecks } from '../../validator/lib/instance-checks.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(join(here, '..', '..', '..'));
@@ -470,6 +471,129 @@ test('STD-0010#R-46', 'every emitted artifact satisfies the canonical serializat
     assert(serialized === canonicalize(JSON.parse(serialized)), `${type} is not stable under a canonical round trip`);
     assert(computeDigest(artifact) === artifact.envelope.integrity.digest, `${type} carries a digest it does not compute to`);
   }
+});
+
+// ---- validator regression: the members a check may reach ---------------------
+//
+// These drive the validator's own checks against synthetic artifacts rather than
+// against the reference runs, because the states under test are ones a conforming
+// producer never emits. Each asserts that a check evaluates the requirement it is
+// bound to and no more, per STD-0012 R-03.
+
+function runCheck(address, artifact) {
+  const collected = [];
+  buildInstanceChecks({
+    instances: { artifacts: [{ path: 'synthetic', artifact }], resolutions: [] },
+    declarations: syntheticDeclarations,
+    documents: [],
+    define: (bound, fn) => { if (bound === address) collected.push(fn); },
+  });
+  assert(collected.length === 1, `${address} is not bound exactly once`);
+  return collected[0]().flat();
+}
+
+const outcomes = (results) => results.map((r) => r.outcome);
+const details = (results) => results.map((r) => r.detail ?? '').join(' | ');
+
+const syntheticDeclarations = new Map([['framework.synthetic.probe', {
+  type: 'framework.synthetic.probe',
+  type_version: '1.0.0',
+  required_fields: ['finding', 'evidence_state', 'confidence'],
+  optional_fields: ['detail'],
+}]]);
+
+function probe({ scope, assessment, records }) {
+  return {
+    envelope: {
+      identity: { run_id: 'example/probe@rev-0001#run-9999', artifact_type: 'framework.synthetic.probe' },
+      type: { type_version: '1.0.0' },
+      subject: { subject_ref: 'example/probe', subject_revision: 'rev-0001' },
+      scope: scope ?? { declared_scope: 'the synthetic subject', exclusions: [] },
+      completeness: { state: 'Complete' },
+      provenance: {
+        producer_id: 'synthetic', producer_version: '1.0.0', executor_class: 'automated',
+        generated_at: '2026-07-29T00:00:00Z', authorization: 'test fixture', redaction_state: 'none',
+      },
+      integrity: { digest: 'sha256:0' },
+      assessment: assessment ?? { evidence_state: 'Observed', confidence: 'High' },
+    },
+    body: { records: records ?? [] },
+  };
+}
+
+test('STD-0008#R-43', 'a required member holding an empty collection is accepted', () => {
+  // scope.exclusions is required by R-10. A run that excluded nothing declares an
+  // empty list, and R-43 — which governs only a declared optional member — must
+  // not reach it. This is the state that produced nineteen false failures.
+  const results = runCheck('STD-0008#R-43', probe({
+    scope: { declared_scope: 'the synthetic subject', exclusions: [] },
+  }));
+  assert(outcomes(results).every((o) => o === 'pass'), `required empty member failed R-43: ${details(results)}`);
+});
+
+test('STD-0008#R-43', 'a declared optional member left empty is reported', () => {
+  const results = runCheck('STD-0008#R-43', probe({
+    assessment: { evidence_state: 'Observed', confidence: 'High', distribution: {} },
+  }));
+  assert(outcomes(results).includes('fail'), 'an empty declared optional member was not reported');
+  assert(details(results).includes('assessment.distribution'), `the wrong member was reported: ${details(results)}`);
+});
+
+test('STD-0012#R-03', 'the validator does not reinterpret a required member as optional', () => {
+  // Every member R-10 requires must be exempt from R-43 for the same reason, not
+  // only the one that surfaced the defect. Omitting a required member is R-10's
+  // to report, and R-43 must stay silent about it either way.
+  const absent = runCheck('STD-0008#R-43', probe({
+    scope: { declared_scope: 'the synthetic subject' },
+  }));
+  assert(outcomes(absent).every((o) => o === 'pass'), `R-43 reported an absent required member: ${details(absent)}`);
+  for (const [group, members] of [['completeness', ['state']], ['integrity', ['digest']]]) {
+    for (const member of members) {
+      const artifact = probe({});
+      artifact.envelope[group][member] = '';
+      const results = runCheck('STD-0008#R-43', artifact);
+      assert(outcomes(results).every((o) => o === 'pass'), `R-43 reached required member ${group}.${member}`);
+    }
+  }
+});
+
+test('STD-0008#R-58', 'a record carries its type-declared values in fields', () => {
+  const good = runCheck('STD-0008#R-58', probe({
+    records: [{
+      record_id: 'probe-0001',
+      fields: { finding: 'a finding', evidence_state: 'Observed', confidence: 'High' },
+      evidence: [{ evidence_id: 'probe-0001-e1' }],
+      load_bearing: true,
+    }],
+  }));
+  assert(outcomes(good).every((o) => o === 'pass'), `a conforming record failed R-58: ${details(good)}`);
+
+  const beside = runCheck('STD-0008#R-58', probe({
+    records: [{ record_id: 'probe-0001', finding: 'a finding', fields: { evidence_state: 'Observed' } }],
+  }));
+  assert(outcomes(beside).includes('fail'), 'a type-declared field sitting beside fields was not reported');
+
+  const missing = runCheck('STD-0008#R-58', probe({ records: [{ record_id: 'probe-0001' }] }));
+  assert(outcomes(missing).includes('fail'), 'a record with no fields member was not reported');
+});
+
+test('STD-0013#R-37', 'a record marked Unknown is exempt from required_fields and remains a record', () => {
+  // R-33's only qualification. The record is present, counted, and addressable;
+  // what R-37 licenses mechanically is that R-33 stops applying to it. Whether the
+  // omission is honest is judgment and is deliberately not asserted here.
+  const unknown = runCheck('STD-0008#R-02', probe({
+    records: [{
+      record_id: 'probe-0001',
+      fields: { evidence_state: 'Unknown' },
+      scope_reason: 'the determination could not be made from the evidence in scope',
+    }],
+  }));
+  assert(outcomes(unknown).every((o) => o === 'pass'), `an Unknown record was held to required_fields: ${details(unknown)}`);
+
+  const concluding = runCheck('STD-0008#R-02', probe({
+    records: [{ record_id: 'probe-0001', fields: { evidence_state: 'Observed', confidence: 'High' } }],
+  }));
+  assert(outcomes(concluding).includes('fail'), 'a concluding record was exempted from required_fields');
 });
 
 // ---- report -----------------------------------------------------------------
