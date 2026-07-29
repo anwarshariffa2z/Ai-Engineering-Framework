@@ -1,11 +1,11 @@
 ---
 id: STD-0013
 title: Artifact Type Declaration Standard
-version: 1.0.0
+version: 1.1.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-26
-last_updated: 2026-07-26
+last_updated: 2026-07-29
 review_cycle: Annual
 category: Methodology
 tags: [artifacts, declarations, types, validation]
@@ -216,6 +216,11 @@ requirements:
     check: judgment
     severity: blocking
     scope: artifact
+  - id: R-37
+    level: MUST
+    check: judgment
+    severity: blocking
+    scope: record
 ---
 
 # Artifact Type Declaration Standard
@@ -448,6 +453,14 @@ These are the requirements that range over declarations. They are the reason the
 **R-36.** An artifact's completeness state MUST be assigned under the condition this standard's section 9 states for it.
 
 R-36 is judgment-checkable. A producer that examined half its declared scope and declared `Complete` is structurally valid and semantically wrong, and no inspection of the artifact reveals it.
+
+**R-37.** A record whose evidence state is `Unknown` MUST NOT carry a value for a field in `required_fields` that its evidence does not support, and MUST omit that field rather than populate it.
+
+R-37 qualifies R-33 and is the only qualification R-33 receives. A record marked `Unknown` reaches no conclusion — [STD-0008](artifact-specification.md) R-13 admits it on exactly that basis, and [STD-0007](evidence-and-confidence.md) R-38 forbids it a confidence. A type's `required_fields` list is written for a record that concludes, and most of what it names is the conclusion: an entity's deletion path, a dimension's calculated score. Requiring such a record to carry every one of them would leave a producer two options, both of which the framework forbids elsewhere — invent a value, which [STD-0011](contract-specification.md) R-05 forbids as a dishonest declaration, or suppress the record, which destroys the finding that the determination could not be made. R-37 states the third: carry the record, carry the fields the evidence does support, omit the rest, and bound the omission with the scope reason [STD-0008](artifact-specification.md) R-44 requires.
+
+R-37 is judgment-checkable. Whether the evidence a record carries supports a value it also carries is a claim about meaning, and an artifact that omits a field and an artifact that fabricated one are equally well-formed. A validator that treats every field a record omits as licensed by R-37 has not evaluated R-37; it has assumed it. What a validator may do mechanically is stop applying R-33 to a record marked `Unknown`, which is what R-37 licenses and what [STD-0012](validation-specification.md) R-03 would otherwise forbid it from doing on its own authority.
+
+`Unknown` is an evidence state and nothing more. It is not an absence, it is not a completeness state, and a record carrying it is a record: [STD-0008](artifact-specification.md) section 8 states this and this standard does not restate it. What each evidence state means remains [STD-0007](evidence-and-confidence.md)'s and is not affected by this requirement.
 
 The obligation on an artifact to declare the type it claims and to conform to it is [STD-0008](artifact-specification.md) R-02; this section defines what that conformance consists of.
 

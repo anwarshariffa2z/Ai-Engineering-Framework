@@ -1,7 +1,7 @@
 ---
 id: STD-0008
 title: Artifact Specification Standard
-version: 1.6.1
+version: 1.7.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -193,6 +193,11 @@ requirements:
     check: mechanical
     severity: blocking
     scope: artifact
+  - id: R-58
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: record
 ---
 
 # Artifact Specification Standard
@@ -382,9 +387,17 @@ An optional member that is present but empty is not equivalent to an absent memb
 
 **R-44.** A record marked Unknown MUST carry the scope reason that bounds the unknown.
 
+**R-58.** A record MUST carry the values of its type-declared fields in a `fields` member, distinct from the framework record members `record_id`, `evidence`, `scope_reason`, `load_bearing`, and `load_bearing_inputs`.
+
 A record marked Unknown asserts that a determination could not be made. A record with no evidence and no Unknown marking is not a conforming record, because it asserts something the artifact cannot support.
 
-What absence of a record means is defined by [STD-0007](evidence-and-confidence.md) sections 6 and 8. The obligation on a producer to declare a scope adequate for absence to be interpretable is stated by [STD-0011](contract-specification.md) R-41.
+**An Unknown record is a record.** It is present, it is counted, it carries an identity, and it is addressable by a lineage entry and by a consumer. It is not a placeholder for a record and it is not an absence: what absence of a record means is defined by [STD-0007](evidence-and-confidence.md) sections 6 and 8, and a record that is present cannot state it. Nor is Unknown a completeness state — completeness is declared once per artifact under section 10 and describes the scope the run examined, while an evidence state describes what one record concluded. An artifact whose completeness is `Complete` may consist entirely of Unknown records: the run examined its declared scope in full and found, for each subject within it, that no determination could be made.
+
+Which fields such a record carries is governed by its type, not by this standard. The obligation to carry a type's `required_fields` is [STD-0013](artifact-type-declaration-standard.md) R-33, the prohibition on carrying an undeclared field is its R-35, and the qualification those two receive where a record reaches no conclusion — including the prohibition on populating a field with a value the record's evidence does not support — is its R-37. This standard states neither, and is not to be read as relaxing either.
+
+R-58 fixes the boundary the two sets of members sit on. The members it names are this standard's, are the same for every artifact of every type, and are not supplied by a declaration; everything a declaration supplies sits inside `fields`. Separating them is what lets STD-0013 R-35 be applied literally to a record rather than with a standing list of exceptions for the framework's own members, and it is why a type declaration cannot declare a field that collides with one of them. This standard fixes where a type's fields sit, and states nothing about what they are: naming them is a declaration's business under STD-0013, and no methodology's field family appears here.
+
+The obligation on a producer to declare a scope adequate for absence to be interpretable is stated by [STD-0011](contract-specification.md) R-41.
 
 ## 9. Evidence and Confidence Attachment Points
 
@@ -514,7 +527,7 @@ Conformance fixtures are a property of a type declaration and are required by [S
 
 *This section is normative.*
 
-An artifact conforms when it satisfies R-01, R-02, R-06, R-08 through R-15, R-17 through R-19, R-33, R-40, R-42 through R-46, and R-52 through R-57.
+An artifact conforms when it satisfies R-01, R-02, R-06, R-08 through R-15, R-17 through R-19, R-33, R-40, R-42 through R-46, and R-52 through R-58.
 
 Producer and consumer conformance is not defined by this standard. Both are defined by [STD-0011](contract-specification.md) section 14, which owns participant obligations.
 
