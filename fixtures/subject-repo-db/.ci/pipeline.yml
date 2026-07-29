@@ -1,0 +1,9 @@
+stages:
+  - id: install
+    run: npm ci
+  - id: generate
+    run: npx prisma generate
+  - id: test
+    run: npm test
+  - id: release
+    run: npm start

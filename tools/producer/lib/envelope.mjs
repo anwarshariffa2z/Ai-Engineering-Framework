@@ -81,6 +81,9 @@ export function buildArtifact({ run, artifactType, typeVersion, declaredScope, e
     },
     scope: {
       declared_scope: declaredScope,
+      // Required by STD-0008 R-10, so it is present even where nothing was
+      // excluded. An empty list is how a run states that it excluded nothing;
+      // R-43 governs optional members and does not reach a required one.
       exclusions,
     },
     completeness: {

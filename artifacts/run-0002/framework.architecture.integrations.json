@@ -1,0 +1,106 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "integration-0001-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "a database client is constructed at module load",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "integration-0001-e2",
+            "location": "config/database.json",
+            "observation": "a connection target is declared by reference",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "activity": "configured",
+          "adapter_path": "src/data/order-repository.js",
+          "auth_boundary": "credential referenced by environment variable",
+          "confidence": "High",
+          "direction": "outbound",
+          "evidence_state": "Observed",
+          "integration": "primary relational store",
+          "protocol": "postgresql"
+        },
+        "record_id": "integration-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "integration-0002-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "a cache client is constructed at module load from the declared configuration",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "activity": "configured",
+          "adapter_path": "src/data/order-repository.js",
+          "auth_boundary": "credential referenced by environment variable",
+          "confidence": "High",
+          "direction": "outbound",
+          "evidence_state": "Observed",
+          "integration": "cache store",
+          "protocol": "redis"
+        },
+        "record_id": "integration-0002"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 2
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.integrations",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:1c82d402134e8251af4fc123b5f9fd5dc7057e9894ab20581c3b0aa836d7e9ee"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

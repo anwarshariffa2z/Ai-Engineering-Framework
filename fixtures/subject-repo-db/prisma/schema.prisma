@@ -1,0 +1,45 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  fullName  String
+  createdAt DateTime @default(now())
+  orders    Order[]
+}
+
+model Order {
+  id         String      @id @default(uuid())
+  customerId String
+  status     String
+  placedAt   DateTime    @default(now())
+  customer   Customer    @relation(fields: [customerId], references: [id])
+  items      OrderItem[]
+
+  @@index([customerId])
+}
+
+model OrderItem {
+  orderId  String
+  lineNo   Int
+  sku      String
+  quantity Int
+  order    Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@id([orderId, lineNo])
+}
+
+model AuditEvent {
+  id        String   @id @default(uuid())
+  actor     String
+  action    String
+  payload   String
+  recordedAt DateTime @default(now())
+}

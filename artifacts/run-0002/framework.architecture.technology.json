@@ -1,0 +1,166 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "technology-0001-e1",
+            "location": "package.json",
+            "observation": "package manifest declares an ES module entry point",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "ecosystem": "npm",
+          "evidence_state": "Observed",
+          "role": "runtime",
+          "technology": "node"
+        },
+        "record_id": "technology-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "technology-0002-e1",
+            "location": "package.json",
+            "observation": "declared as a runtime dependency and constructed in the data module",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "ecosystem": "npm",
+          "evidence_state": "Observed",
+          "is_transitive": false,
+          "role": "data",
+          "technology": "@prisma/client",
+          "version_constraint": "5.9.1"
+        },
+        "record_id": "technology-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "technology-0003-e1",
+            "location": "package.json",
+            "observation": "declared as a runtime dependency and constructed in the data module",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "ecosystem": "npm",
+          "evidence_state": "Observed",
+          "is_transitive": false,
+          "role": "data",
+          "technology": "ioredis",
+          "version_constraint": "^5.3.0"
+        },
+        "record_id": "technology-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "technology-0004-e1",
+            "location": "package.json",
+            "observation": "declared as a development dependency and invoked by the start script",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "ecosystem": "npm",
+          "evidence_state": "Observed",
+          "is_transitive": false,
+          "role": "development-support",
+          "technology": "prisma",
+          "version_constraint": "^5.9.0"
+        },
+        "record_id": "technology-0004"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "technology-0005-e1",
+            "location": "package.json",
+            "observation": "test script invokes the platform test runner",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "evidence_state": "Observed",
+          "role": "test",
+          "technology": "node-test-runner"
+        },
+        "record_id": "technology-0005"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 5
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.technology",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:8ac7558167cecccc3db05f1e367418e64c7d116c1a8f63923cc3007638da91fb"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

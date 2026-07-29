@@ -58,11 +58,11 @@ This is the canonical registry for every framework document. A document is not c
 | REF-0007 | Security Policy | Reference | Approved | Framework Maintainers | [document](../SECURITY.md) | 1.0.1 | 2026-07-26 |
 | REF-0008 | Reference Library | Reference | Approved | Framework Maintainers | [document](05-reference/README.md) | 1.0.0 | 2026-07-25 |
 | REF-0009 | Framework Document Registry | Reference | Approved | Framework Maintainers | [document](DOCUMENT_INDEX.md) | 1.6.0 | 2026-07-29 |
-| REF-0010 | Documentation Validation Report | Reference | Approved | Framework Maintainers | [document](validation-report.md) | 1.8.0 | 2026-07-29 |
+| REF-0010 | Documentation Validation Report | Reference | Approved | Framework Maintainers | [document](validation-report.md) | 1.10.0 | 2026-07-29 |
 | REF-0011 | Framework Architecture Review | Roadmap | Draft | Framework Maintainers | [document](07-roadmap/framework-architecture-review.md) | 1.0.0 | 2026-07-25 |
 | REF-0012 | Artifact Type Inventory | Reference | Approved | Framework Maintainers | [document](07-roadmap/artifact-type-inventory.md) | 1.1.0 | 2026-07-26 |
-| REF-0013 | Architecture Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/architecture-types.md) | 1.0.0 | 2026-07-26 |
-| REF-0014 | Database Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/database-types.md) | 1.0.0 | 2026-07-26 |
+| REF-0013 | Architecture Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/architecture-types.md) | 1.1.0 | 2026-07-29 |
+| REF-0014 | Database Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/database-types.md) | 1.1.0 | 2026-07-29 |
 | REF-0015 | Frontend Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/frontend-types.md) | 1.0.0 | 2026-07-26 |
 | REF-0016 | Backend Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/backend-types.md) | 1.0.0 | 2026-07-26 |
 | REF-0017 | Business Workflow Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/workflow-types.md) | 1.0.0 | 2026-07-26 |
@@ -71,7 +71,7 @@ This is the canonical registry for every framework document. A document is not c
 | REF-0020 | Operations Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/operations-types.md) | 1.0.0 | 2026-07-26 |
 | REF-0021 | Gap Analysis Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/gap-types.md) | 1.0.0 | 2026-07-26 |
 | REF-0022 | Runtime Verification Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/runtime-types.md) | 1.0.0 | 2026-07-26 |
-| REF-0023 | Framework Operationalization Roadmap | Roadmap | Draft | Framework Maintainers | [document](07-roadmap/framework-operationalization-roadmap.md) | 1.2.1 | 2026-07-29 |
+| REF-0023 | Framework Operationalization Roadmap | Roadmap | Draft | Framework Maintainers | [document](07-roadmap/framework-operationalization-roadmap.md) | 1.4.0 | 2026-07-29 |
 | STD-0001 | Document Metadata Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/document-metadata-standard.md) | 1.1.1 | 2026-07-26 |
 | STD-0002 | Framework Document ID Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/document-id-standard.md) | 1.1.0 | 2026-07-26 |
 | STD-0003 | Data Governance Standard | Development | Approved | Framework Maintainers | [document](04-development/data-governance-standard.md) | 1.0.0 | 2026-07-25 |
@@ -79,11 +79,11 @@ This is the canonical registry for every framework document. A document is not c
 | STD-0005 | Reliability Standard | Development | Approved | Framework Maintainers | [document](04-development/reliability-standard.md) | 1.0.0 | 2026-07-25 |
 | STD-0006 | Security Standard | Development | Approved | Framework Maintainers | [document](04-development/security-standard.md) | 1.0.0 | 2026-07-25 |
 | STD-0007 | Evidence and Confidence Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/evidence-and-confidence.md) | 1.1.0 | 2026-07-25 |
-| STD-0008 | Artifact Specification Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/artifact-specification.md) | 1.6.1 | 2026-07-29 |
+| STD-0008 | Artifact Specification Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/artifact-specification.md) | 1.7.0 | 2026-07-29 |
 | STD-0010 | Metadata Specification Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/metadata-specification.md) | 1.4.0 | 2026-07-29 |
 | STD-0011 | Contract Specification Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/contract-specification.md) | 1.3.0 | 2026-07-29 |
 | STD-0012 | Validation Specification Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/validation-specification.md) | 1.1.0 | 2026-07-29 |
-| STD-0013 | Artifact Type Declaration Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/artifact-type-declaration-standard.md) | 1.0.0 | 2026-07-26 |
+| STD-0013 | Artifact Type Declaration Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/artifact-type-declaration-standard.md) | 1.1.0 | 2026-07-29 |
 | TMP-0001 | Architecture Decision Record Template | Template | Approved | Framework Maintainers | [document](ADR/ADR-template.md) | 1.0.0 | 2026-07-25 |
 | TMP-0002 | Pull Request Template | Template | Approved | Framework Maintainers | [document](../.github/pull_request_template.md) | 1.0.0 | 2026-07-25 |
 | TMP-0003 | Framework Defect Report Template | Template | Approved | Framework Maintainers | [document](../.github/ISSUE_TEMPLATE/bug_report.md) | 1.0.0 | 2026-07-25 |

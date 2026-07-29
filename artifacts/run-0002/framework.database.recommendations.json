@@ -1,0 +1,220 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "recommendation-0001-e1",
+            "location": "package.json",
+            "observation": "the start script couples the two",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "action": "separate schema change from process start and adopt an ordered, reversible mechanism",
+          "confidence": "Low",
+          "deferral_risk": "a column removal reaches a deployed environment with no preserving step and no reversal",
+          "evidence_state": "Observed",
+          "owner_candidate": "the team that owns the release pipeline",
+          "priority": 1,
+          "problem": "the release stage applies schema with data loss accepted as a side effect of starting the process",
+          "source_records": "risk-0001",
+          "verification": "a release that changes no schema leaves the structure unchanged, and a structural change is applied by a reviewed step with a recorded order"
+        },
+        "record_id": "recommendation-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "recommendation-0002-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "the interpolation site",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "action": "parameterize the raw lookup path",
+          "confidence": "Low",
+          "deferral_risk": "the condition under which injection is possible remains open",
+          "evidence_state": "Observed",
+          "owner_candidate": "the team that owns the data module",
+          "priority": 1,
+          "problem": "an external value is interpolated into a statement string",
+          "source_records": "risk-0005",
+          "verification": "the path passes the value as a parameter and a security review confirms no interpolated statement remains"
+        },
+        "record_id": "recommendation-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "recommendation-0003-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "one datasource reference",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "action": "issue a distinct credential for structural change",
+          "confidence": "Low",
+          "deferral_risk": "a compromise of the application reaches the schema",
+          "evidence_state": "Inferred",
+          "owner_candidate": "the team that owns the database credentials",
+          "priority": 2,
+          "problem": "one credential reference serves the application workload and the schema push",
+          "source_records": "risk-0003",
+          "verification": "the application credential can no longer alter structure, confirmed against the store grants"
+        },
+        "record_id": "recommendation-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "recommendation-0004-e1",
+            "location": "src/domain/orders.js",
+            "observation": "the loop",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "action": "bound the order list and resolve customers in one read",
+          "confidence": "Low",
+          "deferral_risk": "response time and memory grow with the entity",
+          "evidence_state": "Observed",
+          "owner_candidate": "the team that owns the data module",
+          "priority": 2,
+          "problem": "an unfiltered read is followed by one lookup per row",
+          "source_records": "risk-0004",
+          "verification": "the list path declares a limit and the customer is resolved by a single read for the page"
+        },
+        "record_id": "recommendation-0004"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "recommendation-0005-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "the cache write",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "action": "declare an expiry on the cached customer and classify the fields it holds",
+          "confidence": "Low",
+          "deferral_risk": "a copy of personal data persists in a store nobody has classified",
+          "evidence_state": "Observed",
+          "owner_candidate": "the data steward",
+          "priority": 2,
+          "problem": "candidate personal data is copied into a second store with no expiry and no classification register",
+          "source_records": "risk-0006",
+          "verification": "the cache write declares an expiry and a steward has confirmed the classification of the fields"
+        },
+        "record_id": "recommendation-0005"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "recommendation-0006-e1",
+            "location": "src/data/audit-log.js",
+            "observation": "the write path with no counterpart",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "action": "state a retention position for every entity, beginning with the audit event",
+          "confidence": "Low",
+          "deferral_risk": "an append-only entity holding free text grows without bound and without a stated obligation",
+          "evidence_state": "Observed",
+          "owner_candidate": "the data steward",
+          "priority": 3,
+          "problem": "no entity carries a retention period, an enforcing mechanism, or a deletion path",
+          "source_records": "risk-0007",
+          "verification": "each entity has a stated period with a scheduled mechanism, and the mechanism has been observed to run"
+        },
+        "record_id": "recommendation-0006"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Low",
+      "distribution": {
+        "Inferred/Low": 1,
+        "Observed/Low": 5
+      },
+      "evidence_state": "Inferred"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.database.recommendations",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:b325a59c3d1c4ca58463c3202d8d7e683f07769da474b924fb5bb6147eceb0a1"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "recommendation-0001",
+            "recommendation-0002",
+            "recommendation-0003",
+            "recommendation-0004",
+            "recommendation-0005",
+            "recommendation-0006"
+          ],
+          "digest": "sha256:1060d5fea7248d280055a2b20000acbcd81b47df5d5aa1cdb41ac77e2a164bc5",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.database.risks@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every persistence declaration in the subject repository at the audited revision: the mapper schema, the database and cache configuration, and every source path that constructs or issues a store operation. No database was connected to and no statement was executed",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

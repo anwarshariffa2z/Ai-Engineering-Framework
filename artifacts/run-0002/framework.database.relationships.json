@@ -1,0 +1,110 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "relationship-0001-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the relation is declared in the mapper schema over a non-nullable reference field; whether the store holds the constraint was not observed",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "cardinality": "one-to-many",
+          "confidence": "Medium",
+          "declaration_level": "mapper-authored schema with a declared reference",
+          "enforcement_location": "store",
+          "evidence_state": "Inferred",
+          "from_entity": "Customer",
+          "optionality": "required",
+          "to_entity": "Order"
+        },
+        "record_id": "relationship-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "relationship-0002-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the relation declares a cascading delete; whether the store holds the action was not observed",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "cardinality": "one-to-many",
+          "confidence": "Medium",
+          "declaration_level": "mapper-authored schema with a declared cascade",
+          "enforcement_location": "store",
+          "evidence_state": "Inferred",
+          "from_entity": "Order",
+          "optionality": "required",
+          "synchronization": "deletion of an order is declared to cascade to its items",
+          "to_entity": "OrderItem"
+        },
+        "record_id": "relationship-0002"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Inferred/Medium": 2
+      },
+      "evidence_state": "Inferred"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.database.relationships",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:c9e23a20e3048b0182818d36670f6cfd94b0be1e50e525537940d074a6fd6f43"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "relationship-0001",
+            "relationship-0002"
+          ],
+          "digest": "sha256:59bbb3569a75559710c24fd203b81b59a4de528babe98d0171c8b312a1d5d70f",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.database.entities@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every persistence declaration in the subject repository at the audited revision: the mapper schema, the database and cache configuration, and every source path that constructs or issues a store operation. No database was connected to and no statement was executed",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

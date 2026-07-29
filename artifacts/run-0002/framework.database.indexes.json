@@ -1,0 +1,189 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "index-0001-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "an index implied by the identifier declaration; implicit indexing differs by engine and was not observed in a catalogue",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "declaration": "implicit",
+          "evidence_state": "Inferred",
+          "index": "Customer identifier",
+          "supported_access_pattern": "lookup of a customer by identifier",
+          "target": "Customer.id"
+        },
+        "record_id": "index-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "index-0002-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "an index implied by the uniqueness declaration",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "declaration": "implicit",
+          "evidence_state": "Inferred",
+          "index": "Customer email uniqueness",
+          "supported_access_pattern": "absent: no path in scope filters on the field",
+          "target": "Customer.email"
+        },
+        "record_id": "index-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "index-0003-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "an index implied by the identifier declaration",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "declaration": "implicit",
+          "evidence_state": "Inferred",
+          "index": "Order identifier",
+          "supported_access_pattern": "lookup of an order by identifier, including the raw statement path",
+          "target": "Order.id"
+        },
+        "record_id": "index-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "index-0004-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the model declares the index explicitly",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "index-0004-e2",
+            "location": "src/data/order-repository.js",
+            "observation": "no query in scope filters on the field",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "declaration": "explicit",
+          "evidence_state": "Observed",
+          "index": "Order customer reference",
+          "redundancy_finding": "none; the index is declared and unused at this revision by any path in scope",
+          "supported_access_pattern": "absent: no path in scope filters orders by customer",
+          "target": "Order.customerId"
+        },
+        "record_id": "index-0004"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "index-0005-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "an index implied by the identifier declaration",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "declaration": "implicit",
+          "evidence_state": "Inferred",
+          "index": "AuditEvent identifier",
+          "supported_access_pattern": "absent: no path in scope reads the entity at all",
+          "target": "AuditEvent.id"
+        },
+        "record_id": "index-0005"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Inferred/Medium": 4,
+        "Observed/Medium": 1
+      },
+      "evidence_state": "Inferred"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.database.indexes",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:3e1f5d9107e7f14977b02f03d78f07d57ce4cdde01a6159c31017efdb14bca65"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "index-0001",
+            "index-0002",
+            "index-0003",
+            "index-0004",
+            "index-0005"
+          ],
+          "digest": "sha256:4e49565b2fe7aac0ba1bc2324d2cda6ed0531a930841a0bae566c536520c0bf6",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.database.schema@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every persistence declaration in the subject repository at the audited revision: the mapper schema, the database and cache configuration, and every source path that constructs or issues a store operation. No database was connected to and no statement was executed",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

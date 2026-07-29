@@ -1,0 +1,18 @@
+# Repository-owned line-ending policy.
+#
+# Generated artifact instances and the deterministic fixture subjects they are
+# produced from are written by tooling with LF endings. Without a rule the
+# worktree representation depends on each contributor's core.autocrlf setting,
+# so a Windows checkout followed by regeneration reports every generated file as
+# modified when nothing about its content changed.
+#
+# This governs repository representation only. The canonical serialization of an
+# artifact is the JSON Canonicalization Scheme (STD-0010 R-46) and the content
+# digest is computed over that serialization (STD-0008 R-55); neither is a
+# property of how a file is stored in a worktree.
+#
+# text=auto rather than text: a file whose content Git detects as binary is left
+# untouched, so a future binary fixture is not corrupted by normalization.
+
+artifacts/** text=auto eol=lf
+fixtures/** text=auto eol=lf

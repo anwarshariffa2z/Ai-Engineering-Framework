@@ -1,7 +1,7 @@
 ---
 id: REF-0010
 title: Documentation Validation Report
-version: 1.8.0
+version: 1.10.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -96,6 +96,12 @@ Validation covered all Markdown documents in the repository except `LICENSE`, in
 | Methodologies declare only their own health dimensions, not the scale or its guards | Pass |
 | Participant and semantic obligations are held by the standards that own them, with none remaining in the artifact standard | Pass |
 | The AUD-0002 reference producer emits conforming instances of every artifact type that methodology declares, and of no other | Pass |
+| The AUD-0003 reference producer emits conforming instances of every artifact type that methodology declares, and of no other | Pass |
+| One run composing both methodologies emits twenty-eight instances with no identity collision | Pass |
+| The database methodology reaches every architecture artifact it consumes by identity through the run resolution declaration, and by no path | Pass |
+| Both cross-methodology lineage edges the type declarations require are present, immutable, and verify against the artifacts they name | Pass |
+| A required input withheld from the consuming producer degrades the artifact that needed it to Unavailable, naming the input | Pass |
+| No artifact in either run records Verified evidence, and no producer connects to a data store | Pass |
 | Every artifact instance verifies against its own content digest under the canonical serialization of RFC 8785 | Pass |
 | Every lineage entry is an immutable reference carrying a bound identity and an upstream digest | Pass |
 | Every identity the reference run produces or consumes carries a resolution or is recorded unresolvable | Pass |
@@ -112,16 +118,22 @@ Eight standards declare the enforceable surface of the framework. Every identifi
 | STD-0001 Document Metadata | 5 | 4 | 1 | 4 | — |
 | STD-0002 Framework Document ID | 8 | 5 | 3 | 5 | — |
 | STD-0007 Evidence and Confidence | 44 | 20 | 24 | 13 | — |
-| STD-0008 Artifact Specification | 32 | 31 | 1 | 21 | 25 |
+| STD-0008 Artifact Specification | 33 | 32 | 1 | 22 | 25 |
 | STD-0010 Metadata Specification | 47 | 47 | 0 | 36 | — |
-| STD-0011 Contract Specification | 52 | 45 | 7 | 4 | — |
+| STD-0011 Contract Specification | 52 | 45 | 7 | 8 | — |
 | STD-0012 Validation Specification | 45 | 45 | 0 | 12 | — |
-| STD-0013 Artifact Type Declaration | 36 | 29 | 7 | 26 | — |
-| **Total** | **269** | **226** | **43** | **121** | **25** |
+| STD-0013 Artifact Type Declaration | 37 | 29 | 8 | 26 | — |
+| **Total** | **271** | **227** | **44** | **126** | **25** |
 
 STD-0007, STD-0008, and STD-0011 carried no bound checks for as long as their subjects — artifact instances, producers, consumers, and conclusions — were absent from the corpus. The AUD-0002 reference producer supplied the first of those subjects: fourteen conforming instances of the fourteen artifact types that methodology declares, with a run-scoped resolution declaration beside them. Fifty-three checks bound as a result, taking the total from sixty-eight to one hundred and twenty-one, and every one of them binds to a requirement that already existed. None was written to raise a count.
 
-What remains not-evaluated is not evenly distributed and the reasons differ. Forty-three requirements are judgment-classified and routed to human review. Forty-six range over producers, consumers, and orchestrators that are not registered as corpus objects, which no artifact can supply. Twenty-nine are validator self-conformance. The remainder state conditions that do not arise in the reference run — no environment-derived observation, no transformer, no cross-run lineage edge — and each reports that rather than repeating a reason that has expired.
+The AUD-0003 reference producer supplied the second such subject, and with it a subject the corpus had never held: a producer that is also a consumer. Fourteen further conforming instances were emitted into a run composing both methodologies, and four consumer duties bound as a result — STD-0011 R-11, R-12, R-14, and R-40 — taking bound checks from one hundred and twenty-one to one hundred and twenty-five. Each binds to a requirement that already existed, and each has a real subject: a lineage entry is a consumption that was performed and recorded, so the entry can be compared against the artifact it names.
+
+Reconciling the second producer's findings against the standards added two requirements and one bound check. [STD-0008](02-methodology/artifact-specification.md) R-58 fixes the boundary between the framework's own record members and the field values a type declaration supplies; it is mechanical, it binds, and it is what allows the STD-0013 R-35 check to read a record's declared fields without a standing exception list for the framework's members. [STD-0013](02-methodology/artifact-type-declaration-standard.md) R-37 states the one qualification R-33 receives, for a record whose evidence state is `Unknown`. It is judgment-checkable and deliberately unbound: whether a field was omitted honestly or a value fabricated to satisfy a list cannot be seen in an artifact, and a check that treated every omission as licensed would assume R-37 rather than evaluate it. Both requirements were already being relied on before they were stated — the validator was applying one and exempting under the other on its own authority, which [STD-0012](02-methodology/validation-specification.md) R-03 forbids. Stating them removed that, and neither changed an artifact or moved a digest.
+
+Three artifact type declarations were corrected in the same pass. `framework.database.risks` and `framework.architecture.classification` each recorded lineage in the runs to upstream types their declarations did not list, and `framework.architecture.risks` listed five of the seven it drew on. The instance lineage was right in every case and the declarations were incomplete, so the declarations were corrected to match the derivation that actually occurred: `derives_from` entries were added, none was removed, the graph over all ninety-three types remains acyclic under STD-0013 R-21, and every entry names a declared type under its R-22. No `type_version` moved. A `derives_from` entry supplies an operand to R-21 and R-22, which range over the corpus graph, and to no requirement that ranges over an instance — not R-33, R-34, or R-35 — so no artifact's conformance and no consumer's compatibility determination changed, and every AUD-0002 digest is byte-for-byte what it was. That no requirement in STD-0013 classifies a change to `derives_from`, where its R-15 classifies a vocabulary change and its R-24 a consumption-profile change, is recorded here as a gap rather than closed by inference.
+
+What remains not-evaluated is not evenly distributed and the reasons differ. Forty-three requirements are judgment-classified and routed to human review. Forty-two range over producers, consumers, and orchestrators that are not registered as corpus objects, which no artifact can supply. Twenty-nine are validator self-conformance. The remainder state conditions that do not arise in either reference run — no environment-derived observation, no transformer, no rejection event, no cross-revision reuse — and each reports that rather than repeating a reason that has expired. In particular STD-0011 R-27, R-43, and R-44 remain unbound because a rejection, a stale pair presented as concurrently valid, and a cross-revision consumption are conditions neither run produces.
 
 Twenty-five requirements were added in carrying [ADR-0006](ADR/ADR-0006-artifact-instance-identity.md) into the standards: six to STD-0008, five to STD-0010, eight to STD-0011, and six to STD-0012. All twenty-five are mechanical and blocking, and all twenty-five are dormant for the same reason as the requirements around them: their subjects are artifact instances, references, runs, and resolutions, none of which exist in the corpus. Bound checks are therefore unchanged at sixty-eight, and not-evaluated rises from 174 to 199. No identifier was reused and none was retired; R-06, R-10, R-19, R-28, R-29, and R-30 kept their identities because each remained true, and R-10, R-28, R-29, and R-30 were widened in place to admit the integrity group and the upstream digest.
 

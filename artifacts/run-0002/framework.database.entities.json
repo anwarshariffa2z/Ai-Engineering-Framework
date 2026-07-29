@@ -1,0 +1,204 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "entity-0001-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the model declares a generated identifier, a unique email, and a name",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "entity-0001-e2",
+            "location": "src/data/order-repository.js",
+            "observation": "the only path that reads or writes the model",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "access_paths": "src/data/order-repository.js",
+          "classification": "candidate personal data: an email and a full name. The signal is the field naming and is therefore weak; a steward must confirm it",
+          "confidence": "Medium",
+          "entity": "Customer",
+          "evidence_state": "Observed",
+          "growth_class": "transactional",
+          "identity_strategy": "surrogate-key",
+          "owning_module": "src/data",
+          "storage_objects": "Customer"
+        },
+        "record_id": "entity-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "entity-0002-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the model declares a generated identifier, a customer reference, and a status",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "entity-0002-e2",
+            "location": "src/data/order-repository.js",
+            "observation": "four paths read or write the model",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "access_paths": "src/data/order-repository.js",
+          "confidence": "Medium",
+          "entity": "Order",
+          "evidence_state": "Observed",
+          "growth_class": "transactional",
+          "identity_strategy": "surrogate-key",
+          "owning_module": "src/data",
+          "storage_objects": "Order"
+        },
+        "record_id": "entity-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "entity-0003-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the model declares a composite identifier over the order reference and a line number",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "entity": "OrderItem",
+          "evidence_state": "Observed",
+          "growth_class": "transactional",
+          "identity_strategy": "composite-key",
+          "owning_module": "src/data",
+          "storage_objects": "OrderItem"
+        },
+        "record_id": "entity-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "entity-0004-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the model declares an actor, an action, and a free-text payload",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "entity-0004-e2",
+            "location": "src/data/audit-log.js",
+            "observation": "the only path that writes the model, and no path reads it",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "access_paths": "src/data/audit-log.js",
+          "classification": "the payload field is free text and carries unbounded classification risk; its content was not inspected",
+          "confidence": "Medium",
+          "entity": "AuditEvent",
+          "evidence_state": "Observed",
+          "growth_class": "append-only",
+          "identity_strategy": "surrogate-key",
+          "owning_module": "src/data",
+          "storage_objects": "AuditEvent"
+        },
+        "record_id": "entity-0004"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Observed/Medium": 4
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.database.entities",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:59bbb3569a75559710c24fd203b81b59a4de528babe98d0171c8b312a1d5d70f"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "entity-0001",
+            "entity-0002",
+            "entity-0003",
+            "entity-0004"
+          ],
+          "digest": "sha256:4e49565b2fe7aac0ba1bc2324d2cda6ed0531a930841a0bae566c536520c0bf6",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.database.schema@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "entity-0001",
+            "entity-0002",
+            "entity-0003",
+            "entity-0004"
+          ],
+          "digest": "sha256:e96a4e5608c1914947fc386f3ee0bc00185c1b938f1989faa2209c65a36d1b64",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.architecture.modules@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every persistence declaration in the subject repository at the audited revision: the mapper schema, the database and cache configuration, and every source path that constructs or issues a store operation. No database was connected to and no statement was executed",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

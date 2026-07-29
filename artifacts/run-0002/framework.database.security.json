@@ -1,0 +1,118 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "security-0001-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the datasource resolves its credential from one environment reference",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "security-0001-e2",
+            "location": "package.json",
+            "observation": "the start script applies schema and then starts the process, with no second credential declared",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "encryption_at_rest": "unknown",
+          "evidence_state": "Inferred",
+          "principal": "the application credential referenced by DATABASE_URL",
+          "privileges": "includes structural modification: the same reference is used by the running process and by the schema push the start script performs",
+          "store": "postgresql",
+          "workload_separation": false
+        },
+        "record_id": "security-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "security-0002-e1",
+            "location": "config/database.json",
+            "observation": "the cache url is declared by environment reference and no privilege declaration accompanies it",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Low",
+          "encryption_at_rest": "unknown",
+          "evidence_state": "Inferred",
+          "principal": "the cache credential referenced by REDIS_URL",
+          "privileges": "unknown",
+          "store": "redis"
+        },
+        "record_id": "security-0002"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Low",
+      "distribution": {
+        "Inferred/Low": 1,
+        "Inferred/Medium": 1
+      },
+      "evidence_state": "Inferred"
+    },
+    "completeness": {
+      "reason": "declared principals, grants, and privilege scope live in the store catalogue. No authorized read-only catalogue output was supplied to this run and the repository declares none, so only the credential usage evidenced in the repository was examined",
+      "state": "Partial"
+    },
+    "identity": {
+      "artifact_type": "framework.database.security",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:31c694f0f0440e41152bd7802877298bb3287b1a8857449533e746ca2000a4a6"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "security-0001",
+            "security-0002"
+          ],
+          "digest": "sha256:f26216f16c79ff6188a2e130cf3ceb2e959957ea437dc41a49a55efb6253c971",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.database.connections@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every persistence declaration in the subject repository at the audited revision: the mapper schema, the database and cache configuration, and every source path that constructs or issues a store operation. No database was connected to and no statement was executed",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

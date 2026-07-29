@@ -6,7 +6,7 @@
 // the digest. It discharges the consumer duties of STD-0011 R-47 through R-50 and
 // records its own degradation under R-14 rather than proceeding silently.
 
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -19,7 +19,13 @@ const runDirectory = process.argv[3] ?? 'artifacts/run-0001';
 
 export function consume({ root: runRoot, runDirectory: directory }) {
   const declaration = readResolutionDeclaration(runRoot, `${directory}/resolution.json`);
-  const upstream = JSON.parse(readFileSync(join(runRoot, 'fixtures/upstream-reference.json'), 'utf8'));
+  // A run that declares no unresolvable identity has no cross-run reference to
+  // evaluate. The fixture reference belongs to the run that declares it, not to
+  // this consumer, which is why it is looked for in the declaration first.
+  const upstreamPath = join(runRoot, 'fixtures/upstream-reference.json');
+  const upstream = declaration.unresolvable.length && existsSync(upstreamPath)
+    ? JSON.parse(readFileSync(upstreamPath, 'utf8'))
+    : null;
   const consumingRunId = declaration.run_id;
   const report = { resolved: [], degraded: [], lineage: [] };
 
@@ -58,6 +64,7 @@ export function consume({ root: runRoot, runDirectory: directory }) {
   }
 
   // A reference that leaves its producing run, carrying a summary and no locator.
+  if (!upstream) return report;
   const cross = resolveIdentity({ root: runRoot, declaration, reference: upstream, consumingRunId });
   report.crossRun = {
     identity: cross.identity,
@@ -89,9 +96,11 @@ if (process.argv[1]?.endsWith('consume.mjs')) {
     console.log(`  ${item.completeness.padEnd(14)} ${item.identity.split('/').pop()}  ${item.interpretation}`);
   }
   console.log(`lineage edges followed ${report.lineage.length}, stale ${report.lineage.filter((l) => l.stale).length}`);
-  console.log(`cross-run reference ${report.crossRun.outcome}: ${report.crossRun.reason}`);
-  console.log(`  recorded completeness ${report.crossRun.completeness}`);
-  console.log(`  absence interpretation: ${report.crossRun.absence_interpretation}`);
+  if (report.crossRun) {
+    console.log(`cross-run reference ${report.crossRun.outcome}: ${report.crossRun.reason}`);
+    console.log(`  recorded completeness ${report.crossRun.completeness}`);
+    console.log(`  absence interpretation: ${report.crossRun.absence_interpretation}`);
+  }
   if (report.degraded.length) {
     console.log(`degraded inputs ${report.degraded.length}`);
     for (const item of report.degraded) console.log(`  ${item.outcome} ${item.identity}`);

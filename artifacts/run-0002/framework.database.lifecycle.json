@@ -1,0 +1,146 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "lifecycle-0001-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the model declares no soft-delete marker, expiry, or timestamp supporting expiry",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "deletion_path": "unknown",
+          "entity": "Customer",
+          "evidence_state": "Unknown"
+        },
+        "record_id": "lifecycle-0001",
+        "scope_reason": "the repository declares no retention period, scheduled job, expiry, or deletion path for this entity. Absence of a statement is an unknown retention position, not unlimited retention"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "lifecycle-0002-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "no path in scope deletes the entity",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "deletion_path": "unknown",
+          "entity": "Order",
+          "evidence_state": "Unknown"
+        },
+        "record_id": "lifecycle-0002",
+        "scope_reason": "the repository declares no retention period, scheduled job, expiry, or deletion path for this entity"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "lifecycle-0003-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "deletion is declared to cascade from the parent",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "deletion_path": "unknown",
+          "entity": "OrderItem",
+          "evidence_state": "Unknown"
+        },
+        "record_id": "lifecycle-0003",
+        "scope_reason": "the repository declares no retention period for this entity, and its lifetime is bound to its parent by a declared cascade that was not observed in the store"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "lifecycle-0004-e1",
+            "location": "src/data/audit-log.js",
+            "observation": "the only path in scope writes the entity and none reads, prunes, or archives it",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "deletion_path": "none",
+          "entity": "AuditEvent",
+          "evidence_state": "Unknown"
+        },
+        "record_id": "lifecycle-0004",
+        "scope_reason": "the entity is append-only, no path in scope deletes or prunes it, and the repository declares no retention period. Growth is therefore unbounded and the position is unknown rather than unlimited"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Low",
+      "distribution": {
+        "Unknown": 4
+      },
+      "evidence_state": "Unknown"
+    },
+    "completeness": {
+      "reason": "backup configuration, restore records, and any storage lifecycle rule live outside the audited repository. Retention could be examined only as far as the repository declares it",
+      "state": "Partial"
+    },
+    "identity": {
+      "artifact_type": "framework.database.lifecycle",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:8218cb4814cfbae255db73dfe877bbdc4df3e18acdc38851512097ecca236c65"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "lifecycle-0001",
+            "lifecycle-0002",
+            "lifecycle-0003",
+            "lifecycle-0004"
+          ],
+          "digest": "sha256:59bbb3569a75559710c24fd203b81b59a4de528babe98d0171c8b312a1d5d70f",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.database.entities@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every persistence declaration in the subject repository at the audited revision: the mapper schema, the database and cache configuration, and every source path that constructs or issues a store operation. No database was connected to and no statement was executed",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

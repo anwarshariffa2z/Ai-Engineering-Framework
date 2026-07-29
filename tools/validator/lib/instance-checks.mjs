@@ -18,6 +18,9 @@ const DIGEST = /^[a-z0-9]+:[0-9a-f]+$/;
 const EVIDENCE_STATES = ['Verified', 'Observed', 'Inferred', 'Unknown'];
 const CONFIDENCE = ['High', 'Medium', 'Low'];
 const COMPLETENESS = ['Complete', 'Partial', 'NotApplicable', 'Unavailable', 'Failed'];
+// The record members STD-0008 R-58 names. They belong to the framework, not to
+// any type declaration, and everything a declaration supplies sits in `fields`.
+const FRAMEWORK_RECORD_MEMBERS = ['record_id', 'evidence', 'scope_reason', 'load_bearing', 'load_bearing_inputs'];
 const EVIDENCE_ORDER = ['Unknown', 'Inferred', 'Observed', 'Verified'];
 const CONFIDENCE_ORDER = ['Low', 'Medium', 'High'];
 
@@ -122,8 +125,12 @@ export function buildInstanceChecks({ instances, declarations, documents, define
     for (const record of recordsOf(artifact)) {
       const fields = fieldsOf(record);
       const unknown = fields.evidence_state === 'Unknown';
-      // STD-0013 R-33, with the exemption STD-0008 R-13, STD-0007 R-38 and R-42
-      // create for a record that reaches no conclusion.
+      // STD-0013 R-33. The exemption for a record marked Unknown is licensed by
+      // STD-0013 R-37, which is judgment-checkable and is not evaluated here:
+      // whether an omitted field was omitted honestly cannot be seen in the
+      // artifact. What R-37 licenses mechanically is only this — not applying
+      // R-33 to such a record, which STD-0012 R-03 would otherwise forbid the
+      // validator from deciding on its own authority.
       if (!unknown) {
         for (const field of required) {
           if (fields[field] === undefined || fields[field] === '') problems.push(`${record.record_id}: required field ${field} absent`);
@@ -258,11 +265,19 @@ export function buildInstanceChecks({ instances, declarations, documents, define
   declare('STD-0008#R-33', each((artifact) => (artifact.envelope?.provenance?.redaction_state
     ? [] : ['no redaction state is declared'])));
 
+  // R-43 governs optional members: "A producer that declares an optional member
+  // MUST populate it or omit it." A member R-10 requires is not optional, and an
+  // empty value is how a required member states that there is nothing to state —
+  // a run that excluded nothing declares an empty exclusion list. Applying R-43
+  // to a required member would be the validator strengthening the requirement,
+  // which STD-0012 R-03 forbids.
   declare('STD-0008#R-43', each((artifact) => {
     const problems = [];
     for (const [group, members] of Object.entries(GROUP_MEMBERS)) {
       const value = artifact.envelope?.[group] ?? {};
+      const required = REQUIRED_MEMBERS[group] ?? [];
       for (const member of members) {
+        if (required.includes(member)) continue;
         if (!(member in value)) continue;
         const declared = value[member];
         const empty = declared === null || declared === ''
@@ -277,6 +292,28 @@ export function buildInstanceChecks({ instances, declarations, documents, define
   declare('STD-0008#R-44', each((artifact) => recordsOf(artifact)
     .filter((r) => fieldsOf(r).evidence_state === 'Unknown' && !r.scope_reason)
     .map((r) => `${r.record_id}: marked Unknown and carries no scope reason`)));
+
+  // R-58 fixes the boundary between the framework record members, which are the
+  // same for every type, and the type-declared field values, which sit in
+  // `fields`. It is what lets the R-35 arm of the R-02 check above read only
+  // `fields` without a standing exception list for the framework's own members.
+  declare('STD-0008#R-58', each((artifact) => {
+    const problems = [];
+    for (const record of recordsOf(artifact)) {
+      const id = record.record_id ?? '(no identity)';
+      if (record.fields === undefined) {
+        problems.push(`${id}: carries no fields member`);
+      } else if (record.fields === null || typeof record.fields !== 'object' || Array.isArray(record.fields)) {
+        problems.push(`${id}: the fields member is not a group of field values`);
+      }
+      for (const key of Object.keys(record)) {
+        if (key !== 'fields' && !FRAMEWORK_RECORD_MEMBERS.includes(key)) {
+          problems.push(`${id}: ${key} sits beside the framework record members and outside fields`);
+        }
+      }
+    }
+    return problems;
+  }));
 
   declare('STD-0008#R-45', each((artifact) => {
     const state = artifact.envelope?.completeness?.state;
@@ -666,6 +703,72 @@ export function buildInstanceChecks({ instances, declarations, documents, define
     return named[3] === entry.subject_revision
       ? [] : [`lineage entry ${entry.identity} records subject revision ${entry.subject_revision}, which the identity does not name`];
   })));
+
+  // ---- STD-0011: consumer duties -------------------------------------------
+  //
+  // These four were dormant while every artifact in the corpus was produced by a
+  // methodology that consumed nothing. A producer that consumes made each of them
+  // observable in what it emitted: a lineage entry is a consumption a consumer
+  // performed and recorded, so the entry can be compared to the artifact it names.
+  // The remaining consumer duties stay unbound because the conditions they govern —
+  // a rejection, a stale pair presented together, a cross-revision reuse — do not
+  // arise in this corpus, and a check written without a subject would be the
+  // failure STD-0012 R-01 exists to prevent.
+
+  // R-11. Compatibility is verified before consumption. The version recorded in
+  // the reference is the version the consumer verified against; where it disagrees
+  // with the artifact's own declared version, no verification took place.
+  declare('STD-0011#R-11', each((artifact) => (artifact.envelope?.lineage?.derives_from ?? []).flatMap((entry) => {
+    const upstream = byIdentity.get(entry.identity);
+    if (!upstream) return [];
+    return upstream.envelope.type.type_version === entry.type_version
+      ? [] : [`the reference to ${entry.identity} records type version ${entry.type_version} against the artifact's declared ${upstream.envelope.type.type_version}`];
+  })));
+
+  // R-12. Nothing is substituted for the artifact that was named. An entry whose
+  // identity resolves to a different type or a different subject revision is a
+  // substitution, whatever the reason for it.
+  declare('STD-0011#R-12', each((artifact) => (artifact.envelope?.lineage?.derives_from ?? []).flatMap((entry) => {
+    const upstream = byIdentity.get(entry.identity);
+    if (!upstream) return [];
+    const named = IDENTITY.exec(entry.identity);
+    const problems = [];
+    if (named && upstream.envelope.identity.artifact_type !== named[5]) {
+      problems.push(`${entry.identity} resolves to type ${upstream.envelope.identity.artifact_type}`);
+    }
+    if (upstream.envelope.subject.subject_revision !== entry.subject_revision) {
+      problems.push(`${entry.identity} resolves to subject revision ${upstream.envelope.subject.subject_revision} against the referenced ${entry.subject_revision}`);
+    }
+    return problems;
+  })));
+
+  // R-14. Degradation is declared rather than absorbed. An artifact that reports
+  // Unavailable is a consumer or producer stating that an input it needed did not
+  // arrive, and it must say what did not arrive rather than emit an empty result.
+  declare('STD-0011#R-14', each((artifact) => {
+    if (artifact.envelope?.completeness?.state !== 'Unavailable') return [];
+    const reason = artifact.envelope.completeness.reason ?? '';
+    return reason.length > 0 && recordsOf(artifact).length === 0
+      ? [] : ['an Unavailable artifact declares no degradation, or carries records while declaring its input unavailable'];
+  }));
+
+  // R-40. An artifact is addressed by identity. A reference carrying a path, a URL,
+  // or a producer identity in place of an identity is the addressing this
+  // requirement forbids, wherever it appears.
+  declare('STD-0011#R-40', () => {
+    const problems = [];
+    for (const { path, artifact } of artifacts) {
+      for (const entry of artifact.envelope?.lineage?.derives_from ?? []) {
+        if (!IDENTITY.test(entry.identity ?? '')) problems.push(`${path}: lineage addresses ${entry.identity}, which is not an identity`);
+        for (const key of Object.keys(entry)) {
+          if (['locator', 'path', 'file', 'url', 'producer_id'].includes(key)) {
+            problems.push(`${path}: a lineage entry carries ${key}, which addresses by location or producer rather than by identity`);
+          }
+        }
+      }
+    }
+    return problems.length ? [fail('corpus', problems.join('; '))] : [pass('corpus', 'every artifact reference in the corpus is an identity')];
+  });
 
   return bound;
 }

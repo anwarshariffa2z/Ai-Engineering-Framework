@@ -1,0 +1,164 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "configuration-0001-e1",
+            "location": "config/database.json",
+            "observation": "key and default declared in the configuration file",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "consumers": "src/index.js",
+          "default_declared": "8080",
+          "evidence_state": "Observed",
+          "is_secret_reference": false,
+          "key": "port",
+          "source": "file"
+        },
+        "record_id": "configuration-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "configuration-0002-e1",
+            "location": "config/database.json",
+            "observation": "key and default declared in the configuration file",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "default_declared": "info",
+          "evidence_state": "Observed",
+          "is_secret_reference": false,
+          "key": "logLevel",
+          "source": "file"
+        },
+        "record_id": "configuration-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "configuration-0003-e1",
+            "location": "config/database.json",
+            "observation": "key is referenced indirectly; no value was read or recorded",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "consumers": "prisma/schema.prisma",
+          "evidence_state": "Observed",
+          "is_secret_reference": true,
+          "key": "DATABASE_URL",
+          "precedence_rank": 1,
+          "source": "environment"
+        },
+        "record_id": "configuration-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "configuration-0004-e1",
+            "location": "config/database.json",
+            "observation": "key is referenced indirectly; no value was read or recorded",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "is_secret_reference": true,
+          "key": "DATABASE_REPLICA_URL",
+          "precedence_rank": 2,
+          "source": "environment"
+        },
+        "record_id": "configuration-0004"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "configuration-0005-e1",
+            "location": "config/database.json",
+            "observation": "key is referenced indirectly; no value was read or recorded",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "consumers": "src/data/order-repository.js",
+          "evidence_state": "Observed",
+          "is_secret_reference": true,
+          "key": "REDIS_URL",
+          "precedence_rank": 3,
+          "source": "environment"
+        },
+        "record_id": "configuration-0005"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 5
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.configuration",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:718d62fc86c928597e411cbe67722151d31898f9a6e149f2676d20f6d142c653"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

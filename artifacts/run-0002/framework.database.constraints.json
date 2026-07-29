@@ -1,0 +1,238 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "constraint-0001-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the field is declared as the model identifier",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "constraint": "Customer identifier",
+          "constraint_kind": "primary-key",
+          "enforcement_location": "store",
+          "evidence_state": "Inferred",
+          "target": "Customer.id"
+        },
+        "record_id": "constraint-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "constraint-0002-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the field carries a uniqueness declaration",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "constraint": "Customer email uniqueness",
+          "constraint_kind": "unique",
+          "enforcement_location": "store",
+          "evidence_state": "Inferred",
+          "target": "Customer.email"
+        },
+        "record_id": "constraint-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "constraint-0003-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the field is declared as the model identifier",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "constraint": "Order identifier",
+          "constraint_kind": "primary-key",
+          "enforcement_location": "store",
+          "evidence_state": "Inferred",
+          "target": "Order.id"
+        },
+        "record_id": "constraint-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "constraint-0004-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the relation declares no delete or update action, so the action is defaulted rather than declared",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "constraint": "Order to Customer reference",
+          "constraint_kind": "foreign-key",
+          "enforcement_location": "store",
+          "evidence_state": "Inferred",
+          "referential_action": "not declared; the engine default would apply",
+          "target": "Order.customerId"
+        },
+        "record_id": "constraint-0004"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "constraint-0005-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the model declares a composite identifier",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "constraint": "OrderItem composite identifier",
+          "constraint_kind": "primary-key",
+          "enforcement_location": "store",
+          "evidence_state": "Inferred",
+          "target": "OrderItem.orderId,OrderItem.lineNo"
+        },
+        "record_id": "constraint-0005"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "constraint-0006-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the relation declares a cascading delete",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "constraint": "OrderItem to Order reference",
+          "constraint_kind": "foreign-key",
+          "enforcement_location": "store",
+          "evidence_state": "Inferred",
+          "referential_action": "cascade on delete",
+          "target": "OrderItem.orderId"
+        },
+        "record_id": "constraint-0006"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "constraint-0007-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the field is declared as free text with no check declaration",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "constraint-0007-e2",
+            "location": "src/domain/orders.js",
+            "observation": "no path in scope validates the value before it is written",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "constraint": "Order status vocabulary",
+          "constraint_kind": "check",
+          "enforcement_location": "none",
+          "evidence_state": "Observed",
+          "target": "Order.status"
+        },
+        "record_id": "constraint-0007"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Inferred/Medium": 6,
+        "Observed/Medium": 1
+      },
+      "evidence_state": "Inferred"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.database.constraints",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:521db9c8a1bb6927f5f706f5fa63b90a7443d43998c548e616b553469b7e412e"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "constraint-0001",
+            "constraint-0002",
+            "constraint-0003",
+            "constraint-0004",
+            "constraint-0005",
+            "constraint-0006",
+            "constraint-0007"
+          ],
+          "digest": "sha256:4e49565b2fe7aac0ba1bc2324d2cda6ed0531a930841a0bae566c536520c0bf6",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.database.schema@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every persistence declaration in the subject repository at the audited revision: the mapper schema, the database and cache configuration, and every source path that constructs or issues a store operation. No database was connected to and no statement was executed",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

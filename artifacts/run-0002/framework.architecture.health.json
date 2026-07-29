@@ -1,0 +1,277 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "health-0001-e1",
+            "location": "this run",
+            "observation": "derived from the records named in supporting_records",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "three modules with declared interfaces and every store access confined to one of them",
+          "confidence": "High",
+          "dimension": "modularity",
+          "evidence_state": "Observed",
+          "score": 4,
+          "supporting_records": "module-0001,module-0002,module-0003"
+        },
+        "record_id": "health-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "health-0002-e1",
+            "location": "this run",
+            "observation": "derived from the records named in supporting_records",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "no import crossing a layer boundary in the wrong direction was observed",
+          "confidence": "High",
+          "dimension": "boundary-integrity",
+          "evidence_state": "Observed",
+          "score": 4,
+          "supporting_records": "layer-0001,layer-0002,layer-0003"
+        },
+        "record_id": "health-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "health-0003-e1",
+            "location": "this run",
+            "observation": "derived from the records named in supporting_records",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "bound_high": 4,
+          "bound_low": 2,
+          "calculation": "one dependency pinned, two ranged, transitive set unexamined",
+          "confidence": "Medium",
+          "dimension": "dependency-hygiene",
+          "evidence_state": "Inferred",
+          "score": 3,
+          "supporting_records": "dependency-0001,dependency-0002,dependency-0003"
+        },
+        "record_id": "health-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "health-0004-e1",
+            "location": "this run",
+            "observation": "derived from the records named in supporting_records",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "the release stage of the pipeline changes a database as a side effect of starting the process",
+          "confidence": "High",
+          "dimension": "build-reproducibility",
+          "evidence_state": "Observed",
+          "score": 2,
+          "supporting_records": "build-0004"
+        },
+        "record_id": "health-0004"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "health-0005-e1",
+            "location": "this run",
+            "observation": "derived from the records named in supporting_records",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "every key declares a source and every secret is referenced rather than embedded, and one declared connection posture disables peer verification",
+          "confidence": "High",
+          "dimension": "configuration-clarity",
+          "evidence_state": "Observed",
+          "score": 3,
+          "supporting_records": "configuration-0003,configuration-0004,configuration-0005"
+        },
+        "record_id": "health-0005"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "health-0006-e1",
+            "location": "this run",
+            "observation": "derived from the records named in supporting_records",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "two outbound stores are configured, neither declares a contract reference, and one is reached with verification disabled",
+          "confidence": "Medium",
+          "dimension": "integration-governance",
+          "evidence_state": "Observed",
+          "score": 2,
+          "supporting_records": "integration-0001,integration-0002"
+        },
+        "record_id": "health-0006"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "health-0007-e1",
+            "location": "this run",
+            "observation": "no observation supports a score for this dimension",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "not calculated; the load-bearing input for this dimension did not contribute to a score",
+          "dimension": "deployment-clarity",
+          "evidence_state": "Unknown",
+          "supporting_records": "build-0004"
+        },
+        "record_id": "health-0007",
+        "scope_reason": "the subject declares no deployment definition, so no observation in this run supports or refuses a score for this dimension"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Inferred/Medium": 1,
+        "Observed/High": 4,
+        "Observed/Medium": 1,
+        "Unknown": 1
+      },
+      "evidence_state": "Unknown"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.health",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:ebf3afab84e871b660a1cda97fc0acadf7be38b60cdc8e9aa49d4118318bb8a8"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "health-0001"
+          ],
+          "digest": "sha256:e96a4e5608c1914947fc386f3ee0bc00185c1b938f1989faa2209c65a36d1b64",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.architecture.modules@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "health-0002"
+          ],
+          "digest": "sha256:5c4ae7f086461dcf7105adb4250d43bebbffe3c01341b49f21a83787785bd4d2",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.architecture.layers@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "health-0003"
+          ],
+          "digest": "sha256:fd361b014d8e83cd88ea220af9169381134208813c24deb0cfaa6fb3373808f1",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.architecture.dependencies@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "health-0004"
+          ],
+          "digest": "sha256:929f28863d4c0ef97fc6d511c1aaf6e48419c284158fc34ef827101a0ac0f87b",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.architecture.build@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "health-0005"
+          ],
+          "digest": "sha256:718d62fc86c928597e411cbe67722151d31898f9a6e149f2676d20f6d142c653",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.architecture.configuration@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "health-0006"
+          ],
+          "digest": "sha256:1c82d402134e8251af4fc123b5f9fd5dc7057e9894ab20581c3b0aa836d7e9ee",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.architecture.integrations@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "health-0007"
+          ],
+          "digest": "sha256:88cf413b3b4c348810a588c9496fe60fde112954c1dbf70f549a805fb5134c00",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.architecture.runtime@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "technology-0001-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the datasource block declares the postgresql provider",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "technology-0001-e2",
+            "location": "package.json",
+            "observation": "the mapper client is declared as a runtime dependency",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "prisma/schema.prisma",
+          "engine": "postgresql",
+          "engine_role": "system-of-record",
+          "evidence_state": "Observed",
+          "family": "relational",
+          "schema_authority": "prisma/schema.prisma"
+        },
+        "record_id": "technology-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "technology-0002-e1",
+            "location": "package.json",
+            "observation": "a redis client is declared as a runtime dependency",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "technology-0002-e2",
+            "location": "src/data/order-repository.js",
+            "observation": "the client is constructed from the declared cache configuration and used to store and read a serialized customer",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "engine": "redis",
+          "engine_role": "cache",
+          "evidence_state": "Observed",
+          "family": "key-value"
+        },
+        "record_id": "technology-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "technology-0003-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the mapper schema is the only structural declaration in scope, so the mapper is the authoritative schema source",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "technology-0003-e2",
+            "location": "package.json",
+            "observation": "the mapper is declared as a runtime dependency and its tooling as a development dependency",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "engine": "prisma",
+          "engine_role": "unknown",
+          "evidence_state": "Observed",
+          "schema_authority": "prisma/schema.prisma",
+          "version_constraint": "5.9.1"
+        },
+        "record_id": "technology-0003"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 3
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.database.technology",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:e47b247fb296845ac42491d101c44b8d845b1e1e220dddc3e5d3c8beecc4400f"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "technology-0001",
+            "technology-0002",
+            "technology-0003"
+          ],
+          "digest": "sha256:8ac7558167cecccc3db05f1e367418e64c7d116c1a8f63923cc3007638da91fb",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.architecture.technology@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every persistence declaration in the subject repository at the audited revision: the mapper schema, the database and cache configuration, and every source path that constructs or issues a store operation. No database was connected to and no statement was executed",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}
