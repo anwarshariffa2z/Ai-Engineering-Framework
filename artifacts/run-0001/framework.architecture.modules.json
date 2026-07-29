@@ -1,0 +1,121 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-architecture-discovery@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered",
+            "evidence_id": "module-0001-e1",
+            "location": "src/api/",
+            "observation": "directory boundary with a single exported interface",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "boundary_evidence": "namespace",
+          "confidence": "High",
+          "depends_on_modules": "src/domain",
+          "evidence_state": "Observed",
+          "module": "src/api",
+          "public_interface": "createRouter",
+          "responsibility": "translates transport concerns into domain calls"
+        },
+        "record_id": "module-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-architecture-discovery@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered",
+            "evidence_id": "module-0002-e1",
+            "location": "src/domain/",
+            "observation": "directory boundary with a single exported interface",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "boundary_evidence": "namespace",
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "module": "src/domain",
+          "public_interface": "OrderService",
+          "responsibility": "holds the ordering rules"
+        },
+        "record_id": "module-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-architecture-discovery@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered",
+            "evidence_id": "module-0003-e1",
+            "location": "src/data/",
+            "observation": "directory boundary with a single exported interface",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "boundary_evidence": "namespace",
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "module": "src/data",
+          "public_interface": "InMemoryOrderStore",
+          "responsibility": "owns persistence of orders"
+        },
+        "record_id": "module-0003"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 3
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.modules",
+      "run_id": "example/orders-service@rev-0001#run-0001"
+    },
+    "integrity": {
+      "digest": "sha256:b0d73456a2546a33eb4867a79d0ef50dee53b2720b581818e78a96695dcd71ae"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision, excluding restricted/",
+      "environment": "static inspection of subject source; no execution environment was entered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-architecture-discovery",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": [
+        {
+          "path": "restricted/",
+          "reason": "outside the authorization boundary declared for this run"
+        }
+      ]
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

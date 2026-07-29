@@ -9,9 +9,12 @@
     "validation/**",
     "tools/**",
     "tasks/**",
-    "HANDOVER.md"
+    "HANDOVER.md",
+    "artifacts/**",
+    "fixtures/**"
   ],
   "registryDocumentId": "REF-0009",
+  "artifactRoot": "artifacts",
   "coreKeys": [
     "id",
     "title",

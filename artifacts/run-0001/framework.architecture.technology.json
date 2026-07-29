@@ -1,0 +1,146 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-architecture-discovery@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered",
+            "evidence_id": "technology-0001-e1",
+            "location": "package.json",
+            "observation": "package manifest declares an ES module entry point",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "ecosystem": "npm",
+          "evidence_state": "Observed",
+          "role": "runtime",
+          "technology": "node"
+        },
+        "record_id": "technology-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-architecture-discovery@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered",
+            "evidence_id": "technology-0002-e1",
+            "location": "package.json",
+            "observation": "declared as a runtime dependency",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "ecosystem": "npm",
+          "evidence_state": "Observed",
+          "is_transitive": false,
+          "role": "runtime",
+          "technology": "tiny-router",
+          "version_constraint": "1.4.2"
+        },
+        "record_id": "technology-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-architecture-discovery@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered",
+            "evidence_id": "technology-0003-e1",
+            "location": "package.json",
+            "observation": "declared as a development dependency",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "ecosystem": "npm",
+          "evidence_state": "Observed",
+          "is_transitive": false,
+          "role": "build",
+          "technology": "bundler-lite",
+          "version_constraint": "^2.0.0"
+        },
+        "record_id": "technology-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-architecture-discovery@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered",
+            "evidence_id": "technology-0004-e1",
+            "location": "package.json",
+            "observation": "test script invokes the platform test runner",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "evidence_state": "Observed",
+          "role": "test",
+          "technology": "node-test-runner"
+        },
+        "record_id": "technology-0004"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 4
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.technology",
+      "run_id": "example/orders-service@rev-0001#run-0001"
+    },
+    "integrity": {
+      "digest": "sha256:4eed5a76e62f08eec410ba24445229237de1fbb212665f7b99a0f249628bc66b"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision, excluding restricted/",
+      "environment": "static inspection of subject source; no execution environment was entered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-architecture-discovery",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": [
+        {
+          "path": "restricted/",
+          "reason": "outside the authorization boundary declared for this run"
+        }
+      ]
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

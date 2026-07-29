@@ -1,0 +1,280 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-architecture-discovery@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered",
+            "evidence_id": "health-0001-e1",
+            "location": "this run",
+            "observation": "derived from the records named in supporting_records",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "three modules with single exported interfaces and no cross-layer import observed",
+          "confidence": "High",
+          "dimension": "modularity",
+          "evidence_state": "Observed",
+          "score": 4,
+          "supporting_records": "module-0001,module-0002,module-0003"
+        },
+        "record_id": "health-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-architecture-discovery@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered",
+            "evidence_id": "health-0002-e1",
+            "location": "this run",
+            "observation": "derived from the records named in supporting_records",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "no import crossing a layer boundary in the wrong direction was observed",
+          "confidence": "High",
+          "dimension": "boundary-integrity",
+          "evidence_state": "Observed",
+          "score": 4,
+          "supporting_records": "layer-0001,layer-0002,layer-0003"
+        },
+        "record_id": "health-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-architecture-discovery@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered",
+            "evidence_id": "health-0003-e1",
+            "location": "this run",
+            "observation": "derived from the records named in supporting_records",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "bound_high": 4,
+          "bound_low": 2,
+          "calculation": "one dependency pinned, one ranged, transitive set unexamined",
+          "confidence": "Medium",
+          "dimension": "dependency-hygiene",
+          "evidence_state": "Inferred",
+          "score": 3,
+          "supporting_records": "dependency-0001,dependency-0002"
+        },
+        "record_id": "health-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-architecture-discovery@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered",
+            "evidence_id": "health-0004-e1",
+            "location": "this run",
+            "observation": "derived from the records named in supporting_records",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "a declared build command whose script is absent in scope",
+          "confidence": "Medium",
+          "dimension": "build-reproducibility",
+          "evidence_state": "Inferred",
+          "score": 2,
+          "supporting_records": "build-0001"
+        },
+        "record_id": "health-0004"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-architecture-discovery@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered",
+            "evidence_id": "health-0005-e1",
+            "location": "this run",
+            "observation": "derived from the records named in supporting_records",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "every key declares a source and the one secret is referenced rather than embedded",
+          "confidence": "High",
+          "dimension": "configuration-clarity",
+          "evidence_state": "Observed",
+          "score": 4,
+          "supporting_records": "configuration-0001,configuration-0002,configuration-0003"
+        },
+        "record_id": "health-0005"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-architecture-discovery@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered",
+            "evidence_id": "health-0006-e1",
+            "location": "this run",
+            "observation": "no observation supports a score for this dimension",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "not calculated; the load-bearing input for this dimension did not contribute to a score",
+          "dimension": "deployment-clarity",
+          "evidence_state": "Unknown",
+          "supporting_records": "risk-0002"
+        },
+        "record_id": "health-0006",
+        "scope_reason": "the deployment artifact of this run is Unavailable; the definitions exist and were not authorized for reading"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-architecture-discovery@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered",
+            "evidence_id": "health-0007-e1",
+            "location": "this run",
+            "observation": "no observation supports a score for this dimension",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "not calculated; the load-bearing input for this dimension did not contribute to a score",
+          "dimension": "runtime-operability",
+          "evidence_state": "Unknown",
+          "supporting_records": "runtime-0001"
+        },
+        "record_id": "health-0007",
+        "scope_reason": "the runtime artifact of this run is Partial and its unexamined boundary is the orchestration definitions"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Inferred/Medium": 2,
+        "Observed/High": 3,
+        "Unknown": 2
+      },
+      "evidence_state": "Unknown"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.health",
+      "run_id": "example/orders-service@rev-0001#run-0001"
+    },
+    "integrity": {
+      "digest": "sha256:cc84f21d44711d383d11290eadd08db8b754206ec67cacc870907a3cb763f41c"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "health-0001"
+          ],
+          "digest": "sha256:b0d73456a2546a33eb4867a79d0ef50dee53b2720b581818e78a96695dcd71ae",
+          "identity": "example/orders-service@rev-0001#run-0001/framework.architecture.modules@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "health-0002"
+          ],
+          "digest": "sha256:a01f8a3460b2071bd7dcce5287d090cb9dac85524f06d483da8daafef1a0c362",
+          "identity": "example/orders-service@rev-0001#run-0001/framework.architecture.layers@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "health-0003"
+          ],
+          "digest": "sha256:e645456d53b84486ec23976a50ddcd232ff06f2f1e91ed48d7eb101084d727fe",
+          "identity": "example/orders-service@rev-0001#run-0001/framework.architecture.dependencies@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "health-0004"
+          ],
+          "digest": "sha256:824d4470038dc3e82e31df200c0fda5d1a969fe58671ad8d681bd4635bc98910",
+          "identity": "example/orders-service@rev-0001#run-0001/framework.architecture.build@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "health-0005"
+          ],
+          "digest": "sha256:825c49e5ef503d88aff12ec4cd2b58eda7b99bc2f62d940612e011cbf4c19045",
+          "identity": "example/orders-service@rev-0001#run-0001/framework.architecture.configuration@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "health-0006"
+          ],
+          "digest": "sha256:1ab74f647041a723bde1af0259fb2127035220eac5b2d131e95ae6e75f13b7ae",
+          "identity": "example/orders-service@rev-0001#run-0001/framework.architecture.deployment@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "health-0007"
+          ],
+          "digest": "sha256:183c1d6b51dae4dc0b2b0412f9fbcf5bc7969902fbe4a7d49aa828557c18f1a7",
+          "identity": "example/orders-service@rev-0001#run-0001/framework.architecture.runtime@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision, excluding restricted/",
+      "environment": "static inspection of subject source; no execution environment was entered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-architecture-discovery",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": [
+        {
+          "path": "restricted/",
+          "reason": "outside the authorization boundary declared for this run"
+        }
+      ]
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

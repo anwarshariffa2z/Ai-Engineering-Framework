@@ -1,0 +1,76 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-architecture-discovery@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered",
+            "evidence_id": "runtime-0001-e1",
+            "location": "src/index.js",
+            "observation": "entry point starts a listener; no orchestration definition was read",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "component": "orders-service",
+          "component_kind": "service",
+          "confidence": "Medium",
+          "declaration_path": "package.json",
+          "evidence_state": "Observed",
+          "state_ownership": "in-memory order store held by the running process",
+          "trigger": "process start"
+        },
+        "record_id": "runtime-0001"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Observed/Medium": 1
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "reason": "orchestration definitions under restricted/ are outside the authorization boundary, so the runtime component set beyond the declared entry point was not examined",
+      "state": "Partial"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.runtime",
+      "run_id": "example/orders-service@rev-0001#run-0001"
+    },
+    "integrity": {
+      "digest": "sha256:183c1d6b51dae4dc0b2b0412f9fbcf5bc7969902fbe4a7d49aa828557c18f1a7"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision, excluding restricted/",
+      "environment": "static inspection of subject source; no execution environment was entered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-architecture-discovery",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": [
+        {
+          "path": "restricted/",
+          "reason": "outside the authorization boundary declared for this run"
+        }
+      ]
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

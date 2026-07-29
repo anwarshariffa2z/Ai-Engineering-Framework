@@ -1,0 +1,8 @@
+name: orders-service
+steps:
+  - name: install
+    run: npm ci
+  - name: build
+    run: npm run build
+  - name: test
+    run: npm test

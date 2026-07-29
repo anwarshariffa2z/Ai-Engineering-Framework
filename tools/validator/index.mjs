@@ -12,6 +12,7 @@ import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
 
 import { loadCorpus, loadRegistry } from './lib/corpus.mjs';
+import { loadInstances } from './lib/instances.mjs';
 import { buildCatalogue, unboundObligations } from './lib/requirements.mjs';
 import { buildChecks } from './lib/checks.mjs';
 import { validationArtifact, validationReport, registryReport, traceabilityReport, requirementReport, generator } from './lib/reports.mjs';
@@ -43,6 +44,7 @@ const run = {
   registry,
   catalogue,
   unbound,
+  hasInstances: loadInstances(root, config).artifacts.length > 0,
   results: [],
 };
 
@@ -79,7 +81,13 @@ run.notEvaluatedReason = (requirement) => {
   if (requirement.check === 'judgment') return 'judgment-required; routed to human review';
   const scope = requirement.scope ?? '';
   if (['artifact', 'record', 'evidence', 'artifact-type', 'lineage', 'composition', 'run'].includes(scope)) {
-    return 'no artifact instance or type definition exists in the corpus';
+    // Once instances exist, "no subject" stops being true. What remains true of an
+    // unbound instance-scoped requirement is that the condition it states does not
+    // arise in the corpus, and STD-0012 R-33 requires the reason to say so rather
+    // than repeat a reason that has expired.
+    return run.hasInstances
+      ? 'artifact instances exist; no check is bound because the condition this requirement states does not arise in them'
+      : 'no artifact instance or type definition exists in the corpus';
   }
   if (['producer', 'consumer', 'orchestrator', 'contract', 'compatibility', 'evolution', 'substitution', 'precondition', 'postcondition', 'input', 'output', 'failure'].includes(scope)) {
     return 'no producer, consumer, or run is registered in the corpus';
