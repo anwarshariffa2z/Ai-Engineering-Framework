@@ -1,0 +1,81 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "entrypoint-0001-e1",
+            "location": "package.json",
+            "observation": "manifest names src/index.js as main and as the start script",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "entrypoint-0001-e2",
+            "location": "src/index.js",
+            "observation": "module registers middleware and routes and calls listen at import time",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "audience": "production",
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "entry_kind": "service",
+          "entry_point": "src/index.js",
+          "evidence_state": "Observed",
+          "initialization_trace": "index.js builds the application, registers the body parser, then authentication, then tenant scoping, then the order routes, then the admin routes where a configuration flag permits, then the error handler, and listens on the configured port",
+          "owning_module": "src"
+        },
+        "record_id": "entrypoint-0001"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 1
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.entrypoints",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:45e15b15037458478a73e61a996318d6b49bbe2cbf587f3830855b7ab7c80f02"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

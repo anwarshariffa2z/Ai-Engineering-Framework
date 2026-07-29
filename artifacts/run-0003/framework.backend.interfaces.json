@@ -1,0 +1,197 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "interface-0001-e1",
+            "location": "src/routes/orders.js",
+            "observation": "a registration names a method, a path, and an imported handler",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "auth_requirement": "required",
+          "caller_references": "none in scope",
+          "confidence": "Medium",
+          "evidence_state": "Observed",
+          "exposure": "external",
+          "handler_path": "src/handlers/orders.js",
+          "operation": "list orders",
+          "protocol": "http",
+          "registration_path": "src/routes/orders.js",
+          "service": "orders-api"
+        },
+        "record_id": "interface-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "interface-0002-e1",
+            "location": "src/routes/orders.js",
+            "observation": "a registration names a method, a path, a validator, and an imported handler",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "auth_requirement": "required",
+          "caller_references": "none in scope",
+          "confidence": "Medium",
+          "evidence_state": "Observed",
+          "exposure": "external",
+          "handler_path": "src/handlers/orders.js",
+          "operation": "place order",
+          "protocol": "http",
+          "registration_path": "src/routes/orders.js",
+          "service": "orders-api"
+        },
+        "record_id": "interface-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "interface-0003-e1",
+            "location": "src/routes/orders.js",
+            "observation": "a registration names a method, a path, and an imported handler",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "auth_requirement": "required",
+          "caller_references": "none in scope",
+          "confidence": "Medium",
+          "evidence_state": "Observed",
+          "exposure": "external",
+          "handler_path": "src/handlers/orders.js",
+          "operation": "cancel order",
+          "protocol": "http",
+          "registration_path": "src/routes/orders.js",
+          "service": "orders-api"
+        },
+        "record_id": "interface-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "interface-0004-e1",
+            "location": "src/routes/admin.js",
+            "observation": "a loop registers each table entry against a handler selected by name from a namespace import; the module is named in the import and the export is selected at run time",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "auth_requirement": "required",
+          "caller_references": "none in scope",
+          "confidence": "Medium",
+          "evidence_state": "Observed",
+          "exposure": "internal",
+          "handler_path": "src/handlers/index.js",
+          "operation": "admin reindex",
+          "protocol": "http",
+          "registration_path": "src/routes/admin.js",
+          "service": "orders-api"
+        },
+        "record_id": "interface-0004"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "interface-0005-e1",
+            "location": "src/routes/admin.js",
+            "observation": "a loop registers each table entry against a handler selected by name from a namespace import; the module is named in the import and the export is selected at run time",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "auth_requirement": "required",
+          "caller_references": "none in scope",
+          "confidence": "Medium",
+          "evidence_state": "Observed",
+          "exposure": "internal",
+          "handler_path": "src/handlers/index.js",
+          "operation": "admin purge",
+          "protocol": "http",
+          "registration_path": "src/routes/admin.js",
+          "service": "orders-api"
+        },
+        "record_id": "interface-0005"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Observed/Medium": 5
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.backend.interfaces",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:28e282c33707adb41ce09e82ac2b1f0b9497615db63ab99bacac598f5c82ed31"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "interface-0001",
+            "interface-0002",
+            "interface-0003",
+            "interface-0004",
+            "interface-0005"
+          ],
+          "digest": "sha256:f556c3a9a8a7b9ab391fa8e632d1c976b1057b643a175b3791ea74c0cda789a5",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.backend.services@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that registers, serves, guards, or bounds a server-side operation",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

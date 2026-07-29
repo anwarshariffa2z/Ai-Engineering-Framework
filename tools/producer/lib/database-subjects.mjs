@@ -11,6 +11,160 @@
 // record is Inferred and says so.
 
 export const SUBJECTS = {
+  // The third subject, examined by the same methodology. Persistence here is a
+  // dependency of an HTTP service rather than the subject's whole reason to exist,
+  // which is what makes it a useful second reading of the same rules.
+  'orders-api': {
+    declaredScope: 'every path in the subject repository at the audited revision that declares, configures, or reaches persistent state',
+    exclusions: [],
+    technology: {
+      completeness: 'Complete',
+      lineage: [['framework.architecture.technology', ['technology-0001', 'technology-0002']]],
+      records: [
+        {
+          fields: { engine: 'postgresql', engine_role: 'system-of-record', declaration_path: 'prisma/schema.prisma', family: 'relational', schema_authority: 'prisma/schema.prisma', evidence_state: 'Observed', confidence: 'High' },
+          evidence: [['prisma/schema.prisma', 'the datasource block names the provider and the schema declares every model in scope']],
+        },
+        {
+          fields: { engine: '@prisma/client', engine_role: 'unknown', declaration_path: 'package.json', version_constraint: '5.14.0', evidence_state: 'Observed', confidence: 'High' },
+          evidence: [['package.json', 'a mapper is declared as a runtime dependency; it is not itself a store and no role in the closed vocabulary describes it']],
+        },
+      ],
+    },
+    connections: {
+      completeness: 'Complete',
+      records: [
+        {
+          fields: { component: 'orders-api', engine: 'postgresql', environment: 'undeclared', credential_source: 'environment', pooling: 'maximum 20 connections, idle timeout 30000ms', encryption_in_transit: 'declared with peer verification required', replica_role: 'primary', evidence_state: 'Observed', confidence: 'High' },
+          evidence: [['config/database.json', 'the connection is configured by an indirect reference to an environment key; no value was read or recorded']],
+        },
+      ],
+    },
+    schema: {
+      completeness: 'Complete',
+      records: [
+        { fields: { object: 'Customer', object_type: 'table', store: 'postgresql', authority_path: 'prisma/schema.prisma', enforcement_location: 'store', evidence_state: 'Inferred', confidence: 'Medium' }, evidence: [['prisma/schema.prisma', 'a model is declared; whether the store carries it was not observed']] },
+        { fields: { object: 'Order', object_type: 'table', store: 'postgresql', authority_path: 'prisma/schema.prisma', enforcement_location: 'store', evidence_state: 'Inferred', confidence: 'Medium' }, evidence: [['prisma/schema.prisma', 'a model is declared; whether the store carries it was not observed']] },
+        { fields: { object: 'OrderItem', object_type: 'table', store: 'postgresql', authority_path: 'prisma/schema.prisma', enforcement_location: 'store', evidence_state: 'Inferred', confidence: 'Medium' }, evidence: [['prisma/schema.prisma', 'a model is declared with a composite identifier']] },
+        { fields: { object: 'Order status', object_type: 'type', store: 'postgresql', authority_path: 'prisma/schema.prisma', enforcement_location: 'none', evidence_state: 'Observed', confidence: 'High' }, evidence: [['prisma/schema.prisma', 'the field is declared as free text; no enumeration constrains it in the schema and no check is declared']] },
+      ],
+    },
+    entities: {
+      completeness: 'Complete',
+      lineage: [['framework.database.schema', ['entity-0001', 'entity-0002', 'entity-0003']], ['framework.architecture.modules', ['entity-0001', 'entity-0002', 'entity-0003']]],
+      records: [
+        {
+          fields: { entity: 'Customer', storage_objects: 'Customer', identity_strategy: 'surrogate-key', owning_module: 'src/data', growth_class: 'transactional', classification: 'candidate personal data: an email and a full name. The signal is the field naming and is therefore weak; a steward must confirm it', access_paths: 'src/data/order-repository.js', evidence_state: 'Observed', confidence: 'Medium' },
+          evidence: [['src/data/order-repository.js', 'the entity is reached only through the repository in the data module']],
+        },
+        {
+          fields: { entity: 'Order', storage_objects: 'Order', identity_strategy: 'surrogate-key', owning_module: 'src/data', growth_class: 'transactional', access_paths: 'src/data/order-repository.js', evidence_state: 'Observed', confidence: 'Medium' },
+          evidence: [['src/data/order-repository.js', 'five methods on one repository reach the entity, and no other module in scope does']],
+        },
+        {
+          fields: { entity: 'OrderItem', storage_objects: 'OrderItem', identity_strategy: 'composite-key', owning_module: 'src/data', growth_class: 'transactional', access_paths: 'src/data/order-repository.js', evidence_state: 'Observed', confidence: 'Medium' },
+          evidence: [['src/data/order-repository.js', 'the entity is written in a bulk create beside the order it belongs to']],
+        },
+      ],
+    },
+    relationships: {
+      completeness: 'Complete',
+      lineage: [['framework.database.entities', ['relationship-0001', 'relationship-0002']]],
+      records: [
+        { fields: { from_entity: 'Customer', to_entity: 'Order', cardinality: 'one-to-many', enforcement_location: 'store', optionality: 'required', declaration_level: 'mapper-authored schema with a declared cascade', synchronization: 'deletion of a customer is declared to cascade to their orders', evidence_state: 'Inferred', confidence: 'Medium' }, evidence: [['prisma/schema.prisma', 'a relation with a declared referential action']] },
+        { fields: { from_entity: 'Order', to_entity: 'OrderItem', cardinality: 'one-to-many', enforcement_location: 'store', optionality: 'required', declaration_level: 'mapper-authored schema with a declared cascade', synchronization: 'deletion of an order is declared to cascade to its items', evidence_state: 'Inferred', confidence: 'Medium' }, evidence: [['prisma/schema.prisma', 'a relation with a declared referential action']] },
+      ],
+    },
+    constraints: {
+      completeness: 'Complete',
+      lineage: [['framework.database.schema', ['constraint-0001', 'constraint-0002', 'constraint-0003', 'constraint-0004', 'constraint-0005']]],
+      records: [
+        { fields: { constraint: 'Customer identifier', constraint_kind: 'primary-key', target: 'Customer.id', enforcement_location: 'store', evidence_state: 'Inferred', confidence: 'Medium' }, evidence: [['prisma/schema.prisma', 'an identifier attribute is declared on the model']] },
+        { fields: { constraint: 'Customer email uniqueness', constraint_kind: 'unique', target: 'Customer.email', enforcement_location: 'store', evidence_state: 'Inferred', confidence: 'Medium' }, evidence: [['prisma/schema.prisma', 'a uniqueness attribute is declared on the field']] },
+        { fields: { constraint: 'Order identifier', constraint_kind: 'primary-key', target: 'Order.id', enforcement_location: 'store', evidence_state: 'Inferred', confidence: 'Medium' }, evidence: [['prisma/schema.prisma', 'an identifier attribute is declared on the model']] },
+        { fields: { constraint: 'OrderItem composite identifier', constraint_kind: 'primary-key', target: 'OrderItem.orderId, OrderItem.sku', enforcement_location: 'store', evidence_state: 'Inferred', confidence: 'Medium' }, evidence: [['prisma/schema.prisma', 'a composite identifier attribute is declared on the model']] },
+        { fields: { constraint: 'Order status vocabulary', constraint_kind: 'check', target: 'Order.status', enforcement_location: 'none', evidence_state: 'Observed', confidence: 'Medium' }, evidence: [['prisma/schema.prisma', 'the field is free text and no declaration constrains its values anywhere in scope']] },
+      ],
+    },
+    indexes: {
+      completeness: 'Complete',
+      lineage: [['framework.database.schema', ['index-0001', 'index-0002', 'index-0003']]],
+      records: [
+        { fields: { index: 'Customer identifier', target: 'Customer.id', declaration: 'implicit', supported_access_pattern: 'lookup of a customer by identifier', evidence_state: 'Inferred', confidence: 'Medium' }, evidence: [['prisma/schema.prisma', 'implied by the declared identifier']] },
+        { fields: { index: 'Order customer and placement time', target: 'Order.customerId, Order.placedAt', declaration: 'explicit', supported_access_pattern: 'listing a customer\u2019s orders in placement order', evidence_state: 'Observed', confidence: 'Medium' }, evidence: [['prisma/schema.prisma', 'a composite index is declared on the model']] },
+        { fields: { index: 'Order status', target: 'Order.status', declaration: 'unknown', supported_access_pattern: 'absent: a maintenance path filters on the field and no index is declared over it', evidence_state: 'Observed', confidence: 'Medium' }, evidence: [['src/data/order-repository.js', 'a delete filters on status and on placement time; only the second is indexed']] },
+      ],
+    },
+    migration: {
+      completeness: 'Complete',
+      records: [
+        { fields: { migration: 'mapper-managed schema change', mechanism: 'the mapper toolchain declared as a development dependency', ordering: 'unknown', reversibility: 'unknown', evidence_state: 'Inferred', confidence: 'Low' }, evidence: [['package.json', 'the mapper toolchain is declared as a development dependency, which is the only evidence in scope that a migration mechanism exists. No migration file is present at this revision, so neither ordering nor reversibility could be established']] },
+      ],
+    },
+    security: {
+      completeness: 'Partial',
+      completenessReason: 'privilege grants, role definitions, and at-rest configuration live in the store rather than the repository, and this run contacted no store',
+      records: [
+        { fields: { store: 'postgresql', principal: 'the application credential referenced by DATABASE_URL', privileges: 'unknown: no grant is declared in scope', encryption_at_rest: 'unknown', workload_separation: false, evidence_state: 'Inferred', confidence: 'Medium' }, evidence: [['config/database.json', 'one credential reference serves every path in scope, and transport verification is declared required']] },
+      ],
+    },
+    performance: {
+      completeness: 'Complete',
+      lineage: [['framework.database.entities', ['performance-0001', 'performance-0002', 'performance-0003']]],
+      records: [
+        { fields: { access_pattern: 'list a customer\u2019s orders with their items', entity: 'Order', supporting_index: 'Order.customerId, Order.placedAt', evidence_state: 'Observed', confidence: 'Medium' }, evidence: [['src/data/order-repository.js', 'the read filters on the customer and includes the related items in one call']] },
+        { fields: { access_pattern: 'create an order and then its items', entity: 'OrderItem', is_unbounded: false, supporting_index: 'absent: the write is a bulk insert and needs none', evidence_state: 'Observed', confidence: 'Medium' }, evidence: [['src/data/order-repository.js', 'two writes are issued in sequence with no transaction around them']] },
+        { fields: { access_pattern: 'update every order', entity: 'Order', is_unbounded: true, supporting_index: 'absent: the write is unfiltered', evidence_state: 'Observed', confidence: 'Medium' }, evidence: [['src/data/order-repository.js', 'a maintenance path issues an update with no filter']] },
+      ],
+    },
+    lifecycle: {
+      completeness: 'Partial',
+      completenessReason: 'retention periods, archival, and backup configuration are declared outside the audited repository and none was supplied to this run',
+      lineage: [['framework.database.entities', ['lifecycle-0001', 'lifecycle-0002', 'lifecycle-0003']]],
+      records: [
+        { unknown: 'no retention period, archival rule, or backup declaration for this entity exists in scope, and none was supplied to this run', fields: { entity: 'Customer', deletion_path: 'cascade from the customer record; no independent deletion path is declared' }, evidence: [['prisma/schema.prisma', 'a cascade is declared; no retention rule is declared anywhere in scope']] },
+        { unknown: 'no retention period, archival rule, or backup declaration for this entity exists in scope, and none was supplied to this run', fields: { entity: 'Order', deletion_path: 'a maintenance path deletes cancelled orders older than a supplied instant' }, evidence: [['src/data/order-repository.js', 'a delete is declared; the instant it compares against is supplied by the caller and no policy governs it in scope']] },
+        { unknown: 'no retention period, archival rule, or backup declaration for this entity exists in scope, and none was supplied to this run', fields: { entity: 'OrderItem', deletion_path: 'cascade from the order record' }, evidence: [['prisma/schema.prisma', 'a cascade is declared; no retention rule is declared anywhere in scope']] },
+      ],
+    },
+    health: {
+      completeness: 'Complete',
+      lineage: [['framework.database.constraints', ['health-0001']], ['framework.database.indexes', ['health-0002']], ['framework.database.performance', ['health-0003']], ['framework.database.lifecycle', ['health-0004']]],
+      records: [
+        { fields: { dimension: 'constraint coverage', score: 3, calculation: 'four of five recorded constraints are enforced by the store; the status vocabulary is enforced nowhere', supporting_records: 'constraint-0001,constraint-0002,constraint-0003,constraint-0004,constraint-0005', evidence_state: 'Inferred', confidence: 'Medium' }, evidence: [['this run', 'derived from the records named in supporting_records']] },
+        { fields: { dimension: 'index alignment', score: 3, calculation: 'the read path on the order listing is supported by a declared index; one maintenance filter is not', supporting_records: 'index-0001,index-0002,index-0003', evidence_state: 'Observed', confidence: 'Medium' }, evidence: [['this run', 'derived from the records named in supporting_records']] },
+        { fields: { dimension: 'write path integrity', score: 1, calculation: 'the order creation path issues two dependent writes with no transaction around them, so a partial order is reachable', supporting_records: 'performance-0002', evidence_state: 'Observed', confidence: 'Medium' }, evidence: [['this run', 'derived from the records named in supporting_records']] },
+        { unknown: 'every lifecycle record of this run is itself Unknown, so no observation supports a score. STD-0007 R-28 makes a conclusion drawn from an Unknown input Unknown', fields: { dimension: 'retention and lifecycle control', calculation: 'not calculated; every lifecycle record of this run is itself Unknown', supporting_records: 'lifecycle-0001,lifecycle-0002,lifecycle-0003' }, evidence: [['prisma/schema.prisma', 'no retention declaration exists in scope']] },
+      ],
+    },
+    risks: {
+      completeness: 'Complete',
+      lineage: [['framework.database.performance', ['risk-0001', 'risk-0003']], ['framework.database.constraints', ['risk-0002']]],
+      records: [
+        {
+          fields: { risk: 'an order and its items are written without a transaction', cause: 'the creation path issues the order write and the item write as two independent calls', impact: 'a failure between the two leaves an order with no items, and nothing in scope repairs it', affected_entities: 'Order, OrderItem', supporting_records: 'performance-0002', likelihood_rationale: 'the sequence runs on every order placement', reversibility: 'reversible', owner_candidate: 'the team that owns the data module', evidence_state: 'Observed', confidence: 'Medium' },
+          evidence: [['src/data/order-repository.js', 'two awaited writes with no surrounding transaction']],
+        },
+        {
+          fields: { risk: 'the order status vocabulary is enforced nowhere', cause: 'the field is declared as free text and no check, enumeration, or application guard constrains it in scope', impact: 'a value outside the intended set can be written and will be read back as valid', affected_entities: 'Order', supporting_records: 'constraint-0005', likelihood_rationale: 'two paths in scope write the field with literals and neither is checked', reversibility: 'reversible', evidence_state: 'Observed', confidence: 'Medium' },
+          evidence: [['prisma/schema.prisma', 'the field is free text and no constraint is declared over it']],
+        },
+        {
+          fields: { risk: 'a maintenance path updates every order unfiltered', cause: 'the reindex path issues an update with no filter', impact: 'the whole table is rewritten, and any concurrent read observes the rewrite', affected_entities: 'Order', supporting_records: 'performance-0003', likelihood_rationale: 'the path is reachable whenever the admin surface is registered', reversibility: 'irreversible', evidence_state: 'Observed', confidence: 'Medium' },
+          evidence: [['src/data/order-repository.js', 'an update with no where clause']],
+        },
+      ],
+    },
+    recommendations: {
+      completeness: 'Complete',
+      lineage: [['framework.database.risks', ['recommendation-0001', 'recommendation-0002', 'recommendation-0003']]],
+      records: [
+        { fields: { action: 'wrap the order creation writes in one transaction', source_records: 'risk-0001', problem: 'a failure between two dependent writes leaves an order with no items', verification: 'a test that fails the item write and observes no order remaining', priority: 'high', evidence_state: 'Observed', confidence: 'Medium' }, evidence: [['src/data/order-repository.js', 'the two writes are already adjacent in one method']] },
+        { fields: { action: 'constrain the order status vocabulary in the schema', source_records: 'risk-0002', problem: 'a value outside the intended set can be written and read back as valid', verification: 'a write of an unintended value is rejected by the store', priority: 'medium', evidence_state: 'Observed', confidence: 'Medium' }, evidence: [['prisma/schema.prisma', 'the field is declared as free text']] },
+        { fields: { action: 'bound the maintenance update', source_records: 'risk-0003', problem: 'an unfiltered update rewrites every row', verification: 'the path rejects an invocation with no bound', priority: 'medium', evidence_state: 'Observed', confidence: 'Medium' }, evidence: [['src/data/order-repository.js', 'the update carries no filter']] },
+      ],
+    },
+  },
   'orders-db': {
     declaredScope: 'every persistence declaration in the subject repository at the audited revision: the mapper schema, the database and cache configuration, and every source path that constructs or issues a store operation. No database was connected to and no statement was executed',
     exclusions: [],

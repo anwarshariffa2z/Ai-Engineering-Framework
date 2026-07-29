@@ -1,0 +1,153 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "resilience-0001-e1",
+            "location": "config/clients.json",
+            "observation": "a timeout is declared for the dependency",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "resilience-0001-e2",
+            "location": "src/clients/payments.js",
+            "observation": "the call site reads the declared timeout rather than constructing its own",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_site": "config/clients.json",
+          "dependency": "payment service",
+          "evidence_state": "Observed",
+          "override_sites": "none in scope: the single call site takes the declared value",
+          "policy_kind": "timeout",
+          "timeout": "2000ms"
+        },
+        "record_id": "resilience-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "resilience-0002-e1",
+            "location": "config/clients.json",
+            "observation": "a retry count is declared with no backoff and no idempotency guard beside it",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "backoff": "absent: no backoff is declared beside the retry count",
+          "confidence": "Medium",
+          "declaration_site": "config/clients.json",
+          "dependency": "payment service",
+          "evidence_state": "Observed",
+          "policy_kind": "retry",
+          "retry_count": 3
+        },
+        "record_id": "resilience-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "resilience-0003-e1",
+            "location": "config/clients.json",
+            "observation": "the dependency is configured with a base address and no policy",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "resilience-0003-e2",
+            "location": "src/clients/notifications.js",
+            "observation": "the call site issues the request with no timeout signal",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_site": "absent: no timeout is declared for this dependency anywhere in scope",
+          "dependency": "notification service",
+          "evidence_state": "Observed",
+          "fallback_path": "absent: a failure propagates to the caller",
+          "policy_kind": "timeout"
+        },
+        "record_id": "resilience-0003"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Observed/High": 2,
+        "Observed/Medium": 1
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "reason": "circuit-breaking, rate-limiting, and pool-level bulkheading are configured outside the audited repository and none of that configuration was supplied to this run. What is recorded is what the repository declares",
+      "state": "Partial"
+    },
+    "identity": {
+      "artifact_type": "framework.backend.resilience",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:ca813c385c80a7f538c96c75a17e639e50c10b6c566c1ec80c3d3cde1bde6a10"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "consumption_profile": "backend-discovery",
+          "dependent_records": [
+            "resilience-0001",
+            "resilience-0002"
+          ],
+          "digest": "sha256:77e27070165c8b9b2f7080c0cb62fe6f8c3095c44463c8f57cdea21dbf5dbd77",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.architecture.integrations@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that registers, serves, guards, or bounds a server-side operation",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

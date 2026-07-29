@@ -1,0 +1,121 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "integration-0001-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the datasource names a provider and takes its url from the environment",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "activity": "configured",
+          "adapter_path": "src/data/order-repository.js",
+          "auth_boundary": "credential referenced by environment variable",
+          "confidence": "High",
+          "direction": "outbound",
+          "evidence_state": "Observed",
+          "integration": "primary relational store",
+          "protocol": "postgresql"
+        },
+        "record_id": "integration-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "integration-0002-e1",
+            "location": "src/clients/payments.js",
+            "observation": "the module issues a request to a configured base address on the order placement path",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "activity": "configured",
+          "adapter_path": "src/clients/payments.js",
+          "auth_boundary": "base address referenced by environment variable",
+          "confidence": "High",
+          "direction": "outbound",
+          "evidence_state": "Observed",
+          "integration": "payment service",
+          "protocol": "https"
+        },
+        "record_id": "integration-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "integration-0003-e1",
+            "location": "src/clients/notifications.js",
+            "observation": "the module issues a request to a configured base address on the order placement path",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "activity": "configured",
+          "adapter_path": "src/clients/notifications.js",
+          "auth_boundary": "base address referenced by environment variable",
+          "confidence": "High",
+          "direction": "outbound",
+          "evidence_state": "Observed",
+          "integration": "notification service",
+          "protocol": "https"
+        },
+        "record_id": "integration-0003"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 3
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.integrations",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:77e27070165c8b9b2f7080c0cb62fe6f8c3095c44463c8f57cdea21dbf5dbd77"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "module-0001-e1",
+            "location": "src/routes/",
+            "observation": "directory boundary with a single exported interface",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "boundary_evidence": "namespace",
+          "confidence": "High",
+          "depends_on_modules": "src/handlers",
+          "evidence_state": "Observed",
+          "module": "src/routes",
+          "public_interface": "registerOrderRoutes, registerAdminRoutes",
+          "responsibility": "registers each exposed operation against the application"
+        },
+        "record_id": "module-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "module-0002-e1",
+            "location": "src/handlers/",
+            "observation": "directory boundary with a single exported interface",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "boundary_evidence": "namespace",
+          "confidence": "High",
+          "depends_on_modules": "src/data",
+          "evidence_state": "Observed",
+          "module": "src/handlers",
+          "public_interface": "listOrders, placeOrder, cancelOrder, reindex, purge",
+          "responsibility": "serves a registered operation and sequences the work it requires"
+        },
+        "record_id": "module-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "module-0003-e1",
+            "location": "src/middleware/",
+            "observation": "directory boundary with a single exported interface",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "boundary_evidence": "namespace",
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "module": "src/middleware",
+          "public_interface": "authenticate, requireTenantScope, validate",
+          "responsibility": "performs the checks a request passes before a handler runs"
+        },
+        "record_id": "module-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "module-0004-e1",
+            "location": "src/data/",
+            "observation": "directory boundary with a single exported interface",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "boundary_evidence": "namespace",
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "module": "src/data",
+          "public_interface": "OrderRepository",
+          "responsibility": "owns every path that reaches a data store"
+        },
+        "record_id": "module-0004"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "module-0005-e1",
+            "location": "src/clients/",
+            "observation": "directory boundary with a single exported interface",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "boundary_evidence": "namespace",
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "module": "src/clients",
+          "public_interface": "charge, notify",
+          "responsibility": "owns every path that leaves the process for another service"
+        },
+        "record_id": "module-0005"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "module-0006-e1",
+            "location": "src/errors/",
+            "observation": "directory boundary with a single exported interface",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "boundary_evidence": "namespace",
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "module": "src/errors",
+          "public_interface": "errorHandler",
+          "responsibility": "maps a failure onto the shape a caller sees"
+        },
+        "record_id": "module-0006"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 6
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.modules",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:f3c5045b4ca1e055f530c02168f7c4b87b2f7e114eed038e447859d471c532ce"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

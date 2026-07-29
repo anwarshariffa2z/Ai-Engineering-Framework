@@ -1,0 +1,332 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "backendhealth-0001-e1",
+            "location": "this run",
+            "observation": "derived from the records named in supporting_records",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "one service with one deployment unit and one entry point, and no library reported as a service",
+          "confidence": "Medium",
+          "dimension": "service-boundary-clarity",
+          "evidence_state": "Observed",
+          "score": 4,
+          "supporting_records": "service-0001"
+        },
+        "record_id": "backendhealth-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "backendhealth-0002-e1",
+            "location": "this run",
+            "observation": "derived from the records named in supporting_records",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "three of five operations name both a registration and a handler; two name a registration whose handler could not be established",
+          "confidence": "Medium",
+          "dimension": "interface-discipline",
+          "evidence_state": "Observed",
+          "score": 2,
+          "supporting_records": "interface-0001,interface-0002,interface-0003,interface-0004,interface-0005"
+        },
+        "record_id": "backendhealth-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "backendhealth-0003-e1",
+            "location": "this run",
+            "observation": "derived from the records named in supporting_records",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "one of four operations is validated, one published operation has no registration, and the one validated operation diverges from its published shape",
+          "confidence": "Medium",
+          "dimension": "contract-integrity",
+          "escalation_flag": true,
+          "evidence_state": "Observed",
+          "score": 1,
+          "supporting_records": "contract-0001,contract-0002,contract-0003,contract-0004"
+        },
+        "record_id": "backendhealth-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "backendhealth-0004-e1",
+            "location": "this run",
+            "observation": "derived from the records named in supporting_records",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "every access path in scope is issued from one module, and no shared write was observed",
+          "confidence": "Medium",
+          "dimension": "data-access-ownership",
+          "evidence_state": "Observed",
+          "score": 4,
+          "supporting_records": "dataaccess-0001,dataaccess-0002,dataaccess-0003,dataaccess-0004,dataaccess-0005"
+        },
+        "record_id": "backendhealth-0004"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "backendhealth-0005-e1",
+            "location": "this run",
+            "observation": "derived from the records named in supporting_records",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "one of five access paths declares a transaction, and the one path with two dependent writes declares none",
+          "confidence": "Medium",
+          "dimension": "transaction-discipline",
+          "escalation_flag": true,
+          "evidence_state": "Observed",
+          "score": 1,
+          "supporting_records": "dataaccess-0002,dataaccess-0003"
+        },
+        "record_id": "backendhealth-0005"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "backendhealth-0006-e1",
+            "location": "this run",
+            "observation": "derived from the records named in supporting_records",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "one of two outbound dependencies declares a timeout; the retry declared beside it carries no backoff, and the second dependency declares no policy at all",
+          "confidence": "Medium",
+          "dimension": "resilience-posture",
+          "evidence_state": "Observed",
+          "score": 2,
+          "supporting_records": "resilience-0001,resilience-0002,resilience-0003"
+        },
+        "record_id": "backendhealth-0006"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "backendhealth-0007-e1",
+            "location": "this run",
+            "observation": "derived from the records named in supporting_records",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "the terminal handler maps one failure and reports every other as success",
+          "confidence": "High",
+          "dimension": "error-handling-quality",
+          "escalation_flag": true,
+          "evidence_state": "Observed",
+          "score": 0,
+          "supporting_records": "error-0001,error-0002"
+        },
+        "record_id": "backendhealth-0007"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "backendhealth-0008-e1",
+            "location": "this run",
+            "observation": "no observation supports a score for this dimension",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "not calculated; the artifact this dimension would score is NotApplicable for this subject",
+          "dimension": "boundary-enforcement-coverage",
+          "evidence_state": "Unknown",
+          "supporting_records": "boundary-0001,boundary-0002,boundary-0003,boundary-0004"
+        },
+        "record_id": "backendhealth-0008",
+        "scope_reason": "one of the four boundary records this dimension scores reached no determination, because whether the authorization check enforces anything depends on a value supplied by the environment. STD-0007 R-28 makes a score drawn from an Unknown input Unknown, and R-31 admits a score only as an assessment supported by findings"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "backendhealth-0009-e1",
+            "location": "this run",
+            "observation": "no observation supports a score for this dimension",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "not calculated; the artifact this dimension would score is NotApplicable for this subject",
+          "dimension": "execution-model-clarity",
+          "evidence_state": "Unknown",
+          "supporting_records": "none"
+        },
+        "record_id": "backendhealth-0009",
+        "scope_reason": "the subject declares no asynchronous, scheduled, or event-driven execution path, so the artifact this dimension would score is NotApplicable. STD-0011 R-13 forbids a NotApplicable input lowering a score, so none is recorded for this dimension"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Observed/High": 1,
+        "Observed/Medium": 6,
+        "Unknown": 2
+      },
+      "evidence_state": "Unknown"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.backend.health",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:8faf166d865c1ccbf84a6206c59023fb273499cc54fc76bd1659eabe6d712ae6"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "backendhealth-0001"
+          ],
+          "digest": "sha256:f556c3a9a8a7b9ab391fa8e632d1c976b1057b643a175b3791ea74c0cda789a5",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.backend.services@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "backendhealth-0002"
+          ],
+          "digest": "sha256:28e282c33707adb41ce09e82ac2b1f0b9497615db63ab99bacac598f5c82ed31",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.backend.interfaces@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "backendhealth-0003"
+          ],
+          "digest": "sha256:aaa4aa4a794bb7495d87e91e69915d4cbdb34e7dfb31e81116a49411e14d75a2",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.backend.contracts@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "backendhealth-0004",
+            "backendhealth-0005"
+          ],
+          "digest": "sha256:082be15417aacd97e3e249a7d8283dea0dd6b192b5d9fa02ac5db187279b7937",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.backend.dataaccess@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "backendhealth-0006"
+          ],
+          "digest": "sha256:ca813c385c80a7f538c96c75a17e639e50c10b6c566c1ec80c3d3cde1bde6a10",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.backend.resilience@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "backendhealth-0007"
+          ],
+          "digest": "sha256:643c89c67e210a55bfc43568732219d44c6907c899bea625247b506453471a9a",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.backend.errors@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "backendhealth-0008"
+          ],
+          "digest": "sha256:756008aa01f1f567cd089cf57dd2a6c65fe7a54b9a5679448386e72fff064b98",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.backend.boundaries@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "backendhealth-0009"
+          ],
+          "digest": "sha256:39f8f12b1002a68e639513f1eeb6ef7c639fd06313c827ce1251138f6b742e4c",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.backend.execution@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that registers, serves, guards, or bounds a server-side operation",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

@@ -1,0 +1,187 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "configuration-0001-e1",
+            "location": "config/default.json",
+            "observation": "key and default declared in the configuration file",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "consumers": "src/index.js",
+          "evidence_state": "Observed",
+          "is_secret_reference": false,
+          "key": "port",
+          "source": "environment"
+        },
+        "record_id": "configuration-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "configuration-0002-e1",
+            "location": "config/default.json",
+            "observation": "key and default declared in the configuration file",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "consumers": "src/index.js",
+          "evidence_state": "Observed",
+          "is_secret_reference": false,
+          "key": "adminRoutesEnabled",
+          "source": "environment"
+        },
+        "record_id": "configuration-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "configuration-0003-e1",
+            "location": "config/default.json",
+            "observation": "key and default declared in the configuration file",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "consumers": "src/middleware/authorize.js",
+          "evidence_state": "Observed",
+          "is_secret_reference": false,
+          "key": "requireTenantScope",
+          "source": "environment"
+        },
+        "record_id": "configuration-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "configuration-0004-e1",
+            "location": "config/database.json",
+            "observation": "key is referenced indirectly; no value was read or recorded",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "consumers": "prisma/schema.prisma",
+          "evidence_state": "Observed",
+          "is_secret_reference": true,
+          "key": "DATABASE_URL",
+          "precedence_rank": 1,
+          "source": "environment"
+        },
+        "record_id": "configuration-0004"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "configuration-0005-e1",
+            "location": "config/clients.json",
+            "observation": "key is referenced indirectly; no value was read or recorded",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "consumers": "src/clients/payments.js",
+          "evidence_state": "Observed",
+          "is_secret_reference": true,
+          "key": "PAYMENTS_BASE_URL",
+          "precedence_rank": 2,
+          "source": "environment"
+        },
+        "record_id": "configuration-0005"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "configuration-0006-e1",
+            "location": "config/clients.json",
+            "observation": "key is referenced indirectly; no value was read or recorded",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "consumers": "src/clients/notifications.js",
+          "evidence_state": "Observed",
+          "is_secret_reference": true,
+          "key": "NOTIFICATIONS_BASE_URL",
+          "precedence_rank": 3,
+          "source": "environment"
+        },
+        "record_id": "configuration-0006"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 6
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.configuration",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:0139087105f8e343e58699647c9df39615ae77df70e0602b2e5d1c4ffbc1958c"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

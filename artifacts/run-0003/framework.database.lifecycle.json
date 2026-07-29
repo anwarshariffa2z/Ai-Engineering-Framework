@@ -1,0 +1,124 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "lifecycle-0001-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "a cascade is declared; no retention rule is declared anywhere in scope",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "deletion_path": "cascade from the customer record; no independent deletion path is declared",
+          "entity": "Customer",
+          "evidence_state": "Unknown"
+        },
+        "record_id": "lifecycle-0001",
+        "scope_reason": "no retention period, archival rule, or backup declaration for this entity exists in scope, and none was supplied to this run"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "lifecycle-0002-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "a delete is declared; the instant it compares against is supplied by the caller and no policy governs it in scope",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "deletion_path": "a maintenance path deletes cancelled orders older than a supplied instant",
+          "entity": "Order",
+          "evidence_state": "Unknown"
+        },
+        "record_id": "lifecycle-0002",
+        "scope_reason": "no retention period, archival rule, or backup declaration for this entity exists in scope, and none was supplied to this run"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "lifecycle-0003-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "a cascade is declared; no retention rule is declared anywhere in scope",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "deletion_path": "cascade from the order record",
+          "entity": "OrderItem",
+          "evidence_state": "Unknown"
+        },
+        "record_id": "lifecycle-0003",
+        "scope_reason": "no retention period, archival rule, or backup declaration for this entity exists in scope, and none was supplied to this run"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Low",
+      "distribution": {
+        "Unknown": 3
+      },
+      "evidence_state": "Unknown"
+    },
+    "completeness": {
+      "reason": "retention periods, archival, and backup configuration are declared outside the audited repository and none was supplied to this run",
+      "state": "Partial"
+    },
+    "identity": {
+      "artifact_type": "framework.database.lifecycle",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:bce5e3d8fc7c9c0f4707c6c98edea20ab1b69c8b566ca6cd7118efc4a0472bbd"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "lifecycle-0001",
+            "lifecycle-0002",
+            "lifecycle-0003"
+          ],
+          "digest": "sha256:55fb3466d80a68715a8294beea6ec4cc926a8b660bcd02ab985aa4347b8bc367",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.database.entities@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that declares, configures, or reaches persistent state",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

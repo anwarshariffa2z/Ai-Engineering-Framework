@@ -1,0 +1,69 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "migration-0001-e1",
+            "location": "package.json",
+            "observation": "the mapper toolchain is declared as a development dependency, which is the only evidence in scope that a migration mechanism exists. No migration file is present at this revision, so neither ordering nor reversibility could be established",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Low",
+          "evidence_state": "Inferred",
+          "mechanism": "the mapper toolchain declared as a development dependency",
+          "migration": "mapper-managed schema change",
+          "ordering": "unknown",
+          "reversibility": "unknown"
+        },
+        "record_id": "migration-0001"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Low",
+      "distribution": {
+        "Inferred/Low": 1
+      },
+      "evidence_state": "Inferred"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.database.migration",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:69256d4f63cda5ffa9b925486213cb4c3914be1e27f865933a47b641967b80ae"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that declares, configures, or reaches persistent state",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

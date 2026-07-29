@@ -1,0 +1,130 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "index-0001-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "implied by the declared identifier",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "declaration": "implicit",
+          "evidence_state": "Inferred",
+          "index": "Customer identifier",
+          "supported_access_pattern": "lookup of a customer by identifier",
+          "target": "Customer.id"
+        },
+        "record_id": "index-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "index-0002-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "a composite index is declared on the model",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "declaration": "explicit",
+          "evidence_state": "Observed",
+          "index": "Order customer and placement time",
+          "supported_access_pattern": "listing a customer’s orders in placement order",
+          "target": "Order.customerId, Order.placedAt"
+        },
+        "record_id": "index-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "index-0003-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "a delete filters on status and on placement time; only the second is indexed",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "declaration": "unknown",
+          "evidence_state": "Observed",
+          "index": "Order status",
+          "supported_access_pattern": "absent: a maintenance path filters on the field and no index is declared over it",
+          "target": "Order.status"
+        },
+        "record_id": "index-0003"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Inferred/Medium": 1,
+        "Observed/Medium": 2
+      },
+      "evidence_state": "Inferred"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.database.indexes",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:0b37f7df60b28c43a09740a50914f91a5443dd70cba1cfe853d63809aa959e58"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "index-0001",
+            "index-0002",
+            "index-0003"
+          ],
+          "digest": "sha256:4e5cf34633d43f0bf18ddb7823390aecb62855bb68ea078183b5c9ba856797f4",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.database.schema@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that declares, configures, or reaches persistent state",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

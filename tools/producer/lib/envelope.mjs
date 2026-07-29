@@ -161,7 +161,13 @@ export function envelopeSummary(artifact) {
 // envelope summary is attached only where the reference leaves its producing run,
 // which is the condition R-57 states; a within-run entry carries exactly the
 // members R-30 names and nothing further.
-export function lineageReference(artifact, dependentRecords, { crossRun = false } = {}) {
+//
+// consumptionProfile is the condition STD-0008 R-59 states, and only that
+// condition: the profile the consumer evaluated compatibility against. A
+// derivation drawn from an artifact this run produced, or from one consumed
+// whole because its type declares no profile for this consumer, records
+// nothing — an absent member is the honest report of a whole-type read.
+export function lineageReference(artifact, dependentRecords, { crossRun = false, consumptionProfile = null } = {}) {
   const reference = {
     identity: identityOf(artifact),
     type_version: artifact.envelope.type.type_version,
@@ -169,6 +175,7 @@ export function lineageReference(artifact, dependentRecords, { crossRun = false 
     digest: artifact.envelope.integrity.digest,
     dependent_records: dependentRecords,
   };
+  if (consumptionProfile) reference.consumption_profile = consumptionProfile;
   if (crossRun) reference.summary = envelopeSummary(artifact);
   return reference;
 }
