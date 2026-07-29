@@ -106,3 +106,69 @@ The changelog was written per release with four to six lines each, not per miles
 CAP-0001 read "This **is** the framework's last **open** architectural question." Accurate when written, contradictory the moment ADR-0006 was promoted to Accepted. Nothing detects that class of defect: the link resolves, the metadata agrees, the validator passes.
 
 Found only by re-reading the documents that assert repository state — CAP-0001, the READMEs, the validation report — against the claim the release makes. Worth doing once per release, and only for documents that describe status rather than rules.
+
+## Lesson — 2026-07-29 (AUD-0005 and the consolidation gate)
+
+### A declared derivation set is unverifiable until something derives
+
+Three of the ten declaration documents have now had incomplete `derives_from`
+corrected, and every one was found by an implementation rather than by review or
+by the validator. No requirement compares a declared derivation set against the
+lineage a producer actually emits, because until a producer exercises the type
+the comparison has no subject. Expect the same defect in every declaration
+document that has not yet had a producer written against it.
+
+### A record-scoped requirement enforced over artifact-level lineage is stricter than itself
+
+STD-0007 R-26 caps a conclusion at the minimum among *its* load-bearing inputs
+and R-28 fires on *an* Unknown load-bearing input. Both range over one
+conclusion's own inputs. Artifact-level lineage can only express artifact to
+artifact, so the validator substitutes the upstream artifact's aggregate — the
+minimum over *all* its records, never higher than the minimum over the subset
+used. R-26's effect stays conservative and true. R-28's does not: an early draft
+had two Unknown records making a whole artifact Unknown, which would have
+destroyed ten downstream findings that depended on none of them. Nineteen records
+were lowered High→Medium to converge.
+
+### Enforce a contract by projection, not by assertion
+
+Consumption profiles are enforced by returning each consumed record restricted to
+the fields its profile names. A field the profile does not grant is *absent*, so
+an accidental dependency is a `TypeError` rather than a review finding. Asserting
+the same property in a test would only catch it after it was written.
+
+### Enforcing a duty is not the same as witnessing it
+
+The producer discharged STD-0011 R-30 perfectly and left no trace of having done
+so. A lineage reference carried identity, version, revision, digest and dependent
+records, and nothing naming the profile evaluated against; nor was it derivable,
+because one producer identity spanned three consumer roles. STD-0008 R-59 now
+records it. Before adding a member, check whether an existing one already carries
+the fact — STD-0010 R-27 looked like it did and does not, because it declares
+what a consumer reads, never which profile a given consumption used.
+
+### Placing an obligation on the wrong object breaks the corpus
+
+Required-input mapping looked like an artifact-type property. Declaring it on the
+type would have asserted of every producer what is true of one, and — because it
+can make a conforming `Complete` instance non-conforming — would have forced a
+MAJOR bump on four types, changing `type_version` in the envelope and breaking
+byte-identity across all three committed runs. Locating it on the producer's
+`produces` entry removes the consequence entirely. Ask which object the fact is
+*about* before asking where it is convenient to put it.
+
+### The infimum of the empty set is the top, not the bottom
+
+STD-0007 R-29/R-30 define an aggregate as the minimum over the conclusions
+aggregated. Applied literally to an empty set over a bounded lattice that yields
+`Verified`/`High` — the maximally overstating answer, reached by correct
+reasoning from the current text. Three producers independently chose the bottom.
+A silence that a careful reader resolves the wrong way is worth a rule.
+
+### Validate each commit at the state in which it lands, not in the working tree
+
+`git worktree add --detach <hash>` into a temp directory, run the suite there,
+remove it. The working tree contains later commits' files and will pass for the
+wrong reason. Splitting `DOCUMENT_INDEX.md` across three commits needs the same
+discipline: restore the HEAD version, apply only that commit's rows, commit, then
+restore the final file forward.
