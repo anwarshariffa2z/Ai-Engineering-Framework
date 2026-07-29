@@ -1,7 +1,7 @@
 ---
 id: STD-0010
 title: Metadata Specification Standard
-version: 1.4.0
+version: 1.5.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -526,7 +526,9 @@ This section specifies how the artifact envelope required by STD-0008 section 6 
 
 The `run_id` member is an artifact instance identity's run component and the `digest` member is a content digest, written per R-41 and R-42 respectively.
 
-**R-30.** Each entry in `derives_from` MUST carry the upstream artifact instance identity, its type version, its subject revision, its content digest, and the identities of the records that depend on it.
+**R-30.** Each entry in `derives_from` MUST carry the upstream artifact instance identity, its type version, its subject revision, its content digest, and the identities of the records that depend on it, and where [STD-0008](artifact-specification.md) R-59 requires the consumption profile to be recorded it MUST appear as a `consumption_profile` member whose value is the profile's `consumer` name.
+
+The member carries the profile's identity and not its content. A consumer of the artifact resolves the name against the consumed type's declaration, where [STD-0013](artifact-type-declaration-standard.md) R-23 makes it unique; copying the profile's `reads` into the reference would duplicate a declaration that is already addressable and would let the two disagree.
 
 **R-44.** An envelope summary carried by a reference MUST be represented as a mapping with the members `identity`, `type_version`, `subject_revision`, `completeness_state`, `redaction_state`, `evidence_state`, and `confidence`, corresponding one-to-one with the members [STD-0008](artifact-specification.md) R-57 requires.
 
