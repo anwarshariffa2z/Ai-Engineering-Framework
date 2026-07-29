@@ -58,7 +58,7 @@ This is the canonical registry for every framework document. A document is not c
 | REF-0007 | Security Policy | Reference | Approved | Framework Maintainers | [document](../SECURITY.md) | 1.0.1 | 2026-07-26 |
 | REF-0008 | Reference Library | Reference | Approved | Framework Maintainers | [document](05-reference/README.md) | 1.0.0 | 2026-07-25 |
 | REF-0009 | Framework Document Registry | Reference | Approved | Framework Maintainers | [document](DOCUMENT_INDEX.md) | 1.6.0 | 2026-07-29 |
-| REF-0010 | Documentation Validation Report | Reference | Approved | Framework Maintainers | [document](validation-report.md) | 1.10.0 | 2026-07-29 |
+| REF-0010 | Documentation Validation Report | Reference | Approved | Framework Maintainers | [document](validation-report.md) | 1.12.0 | 2026-07-29 |
 | REF-0011 | Framework Architecture Review | Roadmap | Draft | Framework Maintainers | [document](07-roadmap/framework-architecture-review.md) | 1.0.0 | 2026-07-25 |
 | REF-0012 | Artifact Type Inventory | Reference | Approved | Framework Maintainers | [document](07-roadmap/artifact-type-inventory.md) | 1.1.0 | 2026-07-26 |
 | REF-0013 | Architecture Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/architecture-types.md) | 1.1.0 | 2026-07-29 |
@@ -71,7 +71,7 @@ This is the canonical registry for every framework document. A document is not c
 | REF-0020 | Operations Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/operations-types.md) | 1.0.0 | 2026-07-26 |
 | REF-0021 | Gap Analysis Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/gap-types.md) | 1.0.0 | 2026-07-26 |
 | REF-0022 | Runtime Verification Artifact Type Declarations | Reference | Approved | Framework Maintainers | [document](10-artifact-types/runtime-types.md) | 1.0.0 | 2026-07-26 |
-| REF-0023 | Framework Operationalization Roadmap | Roadmap | Draft | Framework Maintainers | [document](07-roadmap/framework-operationalization-roadmap.md) | 1.4.0 | 2026-07-29 |
+| REF-0023 | Framework Operationalization Roadmap | Roadmap | Draft | Framework Maintainers | [document](07-roadmap/framework-operationalization-roadmap.md) | 1.5.0 | 2026-07-29 |
 | STD-0001 | Document Metadata Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/document-metadata-standard.md) | 1.1.1 | 2026-07-26 |
 | STD-0002 | Framework Document ID Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/document-id-standard.md) | 1.1.0 | 2026-07-26 |
 | STD-0003 | Data Governance Standard | Development | Approved | Framework Maintainers | [document](04-development/data-governance-standard.md) | 1.0.0 | 2026-07-25 |

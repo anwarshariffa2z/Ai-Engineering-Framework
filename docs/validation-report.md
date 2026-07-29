@@ -1,7 +1,7 @@
 ---
 id: REF-0010
 title: Documentation Validation Report
-version: 1.10.0
+version: 1.12.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -118,16 +118,24 @@ Eight standards declare the enforceable surface of the framework. Every identifi
 | STD-0001 Document Metadata | 5 | 4 | 1 | 4 | — |
 | STD-0002 Framework Document ID | 8 | 5 | 3 | 5 | — |
 | STD-0007 Evidence and Confidence | 44 | 20 | 24 | 13 | — |
-| STD-0008 Artifact Specification | 33 | 32 | 1 | 22 | 25 |
+| STD-0008 Artifact Specification | 34 | 33 | 1 | 23 | 25 |
 | STD-0010 Metadata Specification | 47 | 47 | 0 | 36 | — |
-| STD-0011 Contract Specification | 52 | 45 | 7 | 8 | — |
+| STD-0011 Contract Specification | 52 | 45 | 7 | 10 | — |
 | STD-0012 Validation Specification | 45 | 45 | 0 | 12 | — |
 | STD-0013 Artifact Type Declaration | 37 | 29 | 8 | 26 | — |
-| **Total** | **271** | **227** | **44** | **126** | **25** |
+| **Total** | **272** | **228** | **44** | **129** | **25** |
 
 STD-0007, STD-0008, and STD-0011 carried no bound checks for as long as their subjects — artifact instances, producers, consumers, and conclusions — were absent from the corpus. The AUD-0002 reference producer supplied the first of those subjects: fourteen conforming instances of the fourteen artifact types that methodology declares, with a run-scoped resolution declaration beside them. Fifty-three checks bound as a result, taking the total from sixty-eight to one hundred and twenty-one, and every one of them binds to a requirement that already existed. None was written to raise a count.
 
 The AUD-0003 reference producer supplied the second such subject, and with it a subject the corpus had never held: a producer that is also a consumer. Fourteen further conforming instances were emitted into a run composing both methodologies, and four consumer duties bound as a result — STD-0011 R-11, R-12, R-14, and R-40 — taking bound checks from one hundred and twenty-one to one hundred and twenty-five. Each binds to a requirement that already existed, and each has a real subject: a lineage entry is a consumption that was performed and recorded, so the entry can be compared against the artifact it names.
+
+The AUD-0005 reference producer supplied the third subject, and the first that consumes from two methodologies. A run composing architecture, database, and backend discovery over one subject emits thirty-eight instances and forty-four lineage edges, seven of which cross a methodology boundary. One further consumer duty bound as a result — [STD-0011](02-methodology/contract-specification.md) R-23, the per-declared-type guarantee — taking bound checks from one hundred and twenty-six to one hundred and twenty-seven. It was dormant for a reason a third producer removed: with one methodology per run there was nothing to distinguish the types a producer declares from the types a run emitted, and a run executing three separates them. The operand is `producer_kind`, which every declaration already carried.
+
+R-30 bound, but only after the artifact model was given somewhere to record what the producer was already doing. R-30 requires compatibility to be evaluated against a declared consumption profile rather than against the whole type, and the reference producer does exactly that — it projects each consumed artifact onto the fields its profile names, so a field the profile does not grant is absent rather than merely unread. None of that was visible in what the run emitted. A lineage entry recorded identity, type version, subject revision, digest, and dependent records, and nothing naming the profile the consumer evaluated against, so the duty was discharged where it was discharged and witnessed nowhere. [STD-0008](02-methodology/artifact-specification.md) R-59 now obliges a reference to record the profile a derivation was drawn through, [STD-0010](02-methodology/metadata-specification.md) R-30 names the member that carries it, and [STD-0013](02-methodology/artifact-type-declaration-standard.md) R-23 makes `consumer` the profile's identity within its type so that the recorded name resolves to exactly one profile. Two checks follow: R-59, that a named profile is one the consumed type declares, and R-30, that every field the named profile reads is a field the type still declares — and not that the type's other fields are satisfied, which would be evaluating the whole type and is the behaviour R-30 forbids. Bound checks move from one hundred and twenty-six to one hundred and twenty-nine.
+
+What that does not close is recorded rather than obscured. Five of the seven profiled consumptions this run performed are witnessed, because a profile is recorded on a lineage reference and two of the seven produced no derivation to attach one to. A reference carrying no profile does not distinguish a whole-type read from a profile ignored, since a consumer that ignores its profile records no consumer identity either. A consumer that wrongly rejected a profile-compatible artifact emits nothing at all, and an absence cannot be audited. Whether a consumer read only the fields its profile names is a property of its execution and not of its output, and no representation closes it. STD-0008 section 20 states the bound; the checks are written to the part that is witnessed and claim nothing about the rest.
+
+A third declaration correction followed the same pattern as the second milestone's. `framework.backend.interfaces` and `framework.backend.resilience` declared no derivation while every record of each named an upstream artifact, and `framework.backend.health` scored a dimension from an artifact its declaration did not list. All three were corrected, none was removed, the graph over ninety-three types remains acyclic, and no `type_version` moved for the reason recorded above. That the same defect has now appeared in three of the ten declaration documents, and only ever where an implementation exercised the type, is itself the finding: a declared derivation set is not verifiable until something derives.
 
 Reconciling the second producer's findings against the standards added two requirements and one bound check. [STD-0008](02-methodology/artifact-specification.md) R-58 fixes the boundary between the framework's own record members and the field values a type declaration supplies; it is mechanical, it binds, and it is what allows the STD-0013 R-35 check to read a record's declared fields without a standing exception list for the framework's members. [STD-0013](02-methodology/artifact-type-declaration-standard.md) R-37 states the one qualification R-33 receives, for a record whose evidence state is `Unknown`. It is judgment-checkable and deliberately unbound: whether a field was omitted honestly or a value fabricated to satisfy a list cannot be seen in an artifact, and a check that treated every omission as licensed would assume R-37 rather than evaluate it. Both requirements were already being relied on before they were stated — the validator was applying one and exempting under the other on its own authority, which [STD-0012](02-methodology/validation-specification.md) R-03 forbids. Stating them removed that, and neither changed an artifact or moved a digest.
 

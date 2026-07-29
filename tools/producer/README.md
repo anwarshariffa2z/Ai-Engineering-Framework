@@ -1,4 +1,4 @@
-# Reference Producers — AUD-0002 Architecture Discovery and AUD-0003 Database Discovery
+# Reference Producers — AUD-0002 Architecture, AUD-0003 Database, AUD-0005 Backend
 
 The first executable implementation of a framework methodology. It exists to prove
 that the standards in force can produce, resolve, consume, integrity-check, and
@@ -93,8 +93,9 @@ this audit did not look at the deployment. Both carry zero records.
 | `cross-run.mjs` | Framework-generic — the cross-run reference scenario | New |
 | `lib/architecture-discovery.mjs` | AUD-0002-specific — how the methodology shapes a record | Subject judgements moved out; logic unchanged |
 | `lib/database-discovery.mjs` | AUD-0003-specific — the same, plus the consumption of upstream types | New |
-| `lib/architecture-subjects.mjs`, `lib/database-subjects.mjs` | Subject-specific — the judgements each methodology reached about one subject | New |
-| `fixtures/subject-repo/`, `fixtures/subject-repo-db/` | Subject-specific | One new |
+| `lib/backend-discovery.mjs` | AUD-0005-specific — the same, plus consumption through declared profiles | New |
+| `lib/*-subjects.mjs` | Subject-specific — the judgements each methodology reached about each subject | Three files, three subjects |
+| `fixtures/subject-repo{,-db,-backend}/` | Subject-specific | One new |
 
 ### What the second producer showed
 
@@ -119,6 +120,43 @@ the sequencing, and sequencing is the part a third producer would test. Two prod
 show the duplication is real. They do not yet show the two orchestrations mean the
 same thing.
 
+## What the third producer showed
+
+AUD-0005 Backend Discovery is the first producer that consumes from two methodologies. One run executes architecture, then database, then backend over `fixtures/subject-repo-backend`, emitting thirty-eight artifacts with forty-four lineage edges, seven of which cross a methodology boundary.
+
+**Consumption through a declared profile, enforced rather than asserted.** Seven of the eight types this producer consumes declare a `backend-discovery` consumption profile. STD-0011 R-30 requires compatibility to be evaluated against the profile rather than against the whole type, and this producer goes further: `projectThroughProfile` returns each consumed record restricted to the fields its profile names, so a field the profile does not grant is *absent* rather than merely unread. An accidental dependency on an undeclared field is a `TypeError`, not a review finding. Enforcing it, however, is not the same as showing it: the projection happens inside the producer and left no trace in what the producer wrote. STD-0008 R-59 now obliges a lineage reference to record the profile a derivation was drawn through, and five of this run's lineage edges carry one. The other two profiled consumptions are unwitnessed, because a profile is recorded on a derivation and those two types are consumed without any backend type deriving from them — the profile-and-derivation asymmetry below, showing up a second time as a limit on what can be audited. The eighth type, `framework.architecture.scope`, declares no profile and is consumed for its envelope alone; that asymmetry is recorded below rather than papered over.
+
+**Ordering is now derived, not written.** `executeThreeStageRun` orders its stages by what each methodology declares it consumes: architecture consumes nothing, database consumes architecture types, backend consumes both. Each stage is written and declared before the next resolves anything. The duplication between it and `executeComposedRun` is left in place deliberately — see the extraction verdict below.
+
+**A three-hop conclusion.** `framework.backend.dataaccess` names entities this run never observed: it read them from `framework.database.entities`, which derived them from `framework.architecture.modules`. Every hop resolves and its digest verifies.
+
+### The lineage granularity question, measured
+
+The producer computes two numbers for each edge it produces: the cap the upstream artifact's *aggregate* imposes under STD-0007 R-26, and the strongest load-bearing record in that same artifact. Where they differ, a conclusion drawn only from the strong records is nonetheless held to the weak ones.
+
+Two of twenty edges lose headroom in the committed output. That number understates what happened during implementation, and the implementation account is the more useful evidence: **nineteen records across six artifacts had to be lowered from `High` to `Medium` before the run validated**, none because its own evidence weakened. One `Medium` record in `framework.backend.services` — a service whose deployment unit is inferred from a start script, there being no deployment manifest — propagated a `Medium` ceiling through `interfaces`, `contracts`, `boundaries`, `risks`, and `health`, five hops out. The two numbers converge afterwards precisely because everything was lowered to meet the floor.
+
+Two further observations, both concrete:
+
+- **The standard is record-scoped and the model is artifact-scoped.** STD-0007 R-26 caps a conclusion at "the minimum confidence among *its* load-bearing inputs" and R-28 makes a conclusion with "an `Unknown` load-bearing input" Unknown. Both range over a conclusion's own inputs. Artifact-level lineage cannot express those, so the validator substitutes the upstream artifact's aggregate — which is the minimum over *all* its records and therefore never higher than the minimum over the subset actually used. The substitution is strictly stricter than the requirement.
+- **R-28 is the sharp edge, not R-26.** A lowered confidence is conservative and still true. An `Unknown` forced onto a conclusion the audit genuinely reached is *false*: it asserts that no determination could be made when one was. An early draft of this producer recorded two operations as Unknown because their handler pairing is resolved at run time; that made the whole `interfaces` artifact aggregate to Unknown, which under R-28 would have made every conclusion in `contracts`, `errors`, and `boundaries` Unknown too — ten findings destroyed by two records that none of them depended on. The records were corrected because the operations *are* observable (the handler module is named in the import; only the export is selected by name), so the situation did not arise in the committed output. It remains one honest record away.
+
+Recorded, not resolved. Closing it means a record-to-record reference, which is a new identity form and a change to ADR-0006, and one milestone's evidence is not a mandate to reopen an accepted decision.
+
+### Generic producer runtime: still not yet, and now for a stated reason
+
+Three producers now occupy the three positions the question needs — non-consuming, single-upstream consuming, multi-upstream consuming. Against the five conditions set for extraction:
+
+| Condition | Holds? |
+| --- | --- |
+| The same gate-and-write lifecycle | **Yes.** `gate` and `writeAll` are shared verbatim by all three |
+| The same input-resolution semantics where inputs exist | **Yes.** Both consumers resolve by identity against the run declaration and verify the digest through the same `resolver.mjs` |
+| The same failure-propagation semantics | **No.** AUD-0002 has no input and cannot fail closed at all; AUD-0003 maps a missing input to `Unavailable` on two output types; AUD-0005 maps it on two of ten and must also handle a profile that no longer matches its type, a condition the second producer has no analogue for |
+| Ordering derivable from declared dependencies | **Yes**, and now demonstrated over three stages rather than argued over two |
+| No methodology-specific condition hidden inside the abstraction | **No.** `REQUIRED_INPUTS` differs per methodology and is not derivable from any declaration: nothing in a type declaration states which of a producer's outputs cannot be produced without which input |
+
+Three of five hold. **Do not extract.** The two that fail are the same one seen from two sides: the framework can say what a producer consumes but not what each of its outputs *requires*, so any shared runtime would carry a per-methodology table and the abstraction would hide exactly the thing that differs. The extraction proposal that follows from this is to make required-input mapping declarable first, and to revisit extraction after that — not to extract around it.
+
 ## Standards ambiguities found
 
 1. **Canonical serialization of an artifact was undefined. Closed.** STD-0008 R-55
@@ -128,13 +166,16 @@ same thing.
    and R-47 requires every member to participate. This implementation's output
    already satisfied both: no artifact changed and no digest moved.
 
-2. **The aggregate of an empty record set is undefined. Confirmed by a second
-   producer; still deferred.** AUD-0003 produces one `NotApplicable` artifact with no
-   records, and the same reading applies — the bottom of each lattice, `Unknown` and
-   `Low`, as the only value that cannot overstate. Two independent producers reaching
-   the same reading is evidence the reading is natural, not evidence that the standard
-   states it. A clarification would still be worth making, and it is not urgent:
-   nothing observed depends on which way it is settled.
+2. **The aggregate of an empty record set is undefined. Three independent readings
+   now agree; still deferred.** AUD-0003 produces one `NotApplicable` artifact with no
+   records and AUD-0005 produces another, for a different reason: the subject declares
+   no asynchronous, scheduled, or event-driven work at all, so `framework.backend.execution`
+   counts nothing. All three producers reach the bottom of each lattice, `Unknown` and
+   `Low`, as the only value that cannot overstate, and all three reach it through the
+   same generic aggregation rather than by agreement. Three independent implementations
+   converging is the strongest evidence available short of a standards decision, and it
+   is still not the same as the standard stating it. This is the recommendation to take
+   to the decision gate.
 
 3. **Required fields versus Unknown records. Closed by STD-0013 R-37.** AUD-0003
    produces eight Unknown records across `lifecycle` and `health` — every lifecycle
@@ -179,7 +220,7 @@ same thing.
    identity form and a change to ADR-0006, and one consumer is not enough evidence
    to justify either. Revisit when a second consuming producer exists.
 
-## Declaration corrections this milestone made
+## Declaration corrections, and why they keep appearing
 
 Three type declarations recorded a `derives_from` set narrower than the lineage the
 runs actually produced: `framework.database.risks` drew on `schema` and `entities`,
@@ -193,6 +234,24 @@ and R-22, which range over the corpus graph, and to no requirement that ranges o
 an instance, so no artifact's conformance changed and every AUD-0002 digest is what
 it was. Nothing in STD-0013 classifies a change to `derives_from` the way R-15
 classifies a vocabulary change; that gap is recorded, not closed by inference.
+
+The third producer found the same defect a third time. `framework.backend.interfaces`
+and `framework.backend.resilience` declared no derivation while every record of each
+named an upstream artifact, and `framework.backend.health` scored a dimension from an
+artifact its declaration did not list. Three of the ten declaration documents have now
+been corrected, and in every case the correction was found by an implementation and by
+nothing else. The pattern is worth naming: **a declared derivation set is unverifiable
+until something derives.** No requirement compares `derives_from` against the lineage a
+producer actually emits, because until this milestone there was no corpus in which the
+comparison had a subject. There is now.
+
+A separate asymmetry appeared alongside it, and is reported rather than corrected. Four
+of the eight types AUD-0005 consumes — `architecture.scope`, `architecture.technology`,
+`architecture.modules`, `architecture.integrations` — are consumed, and three of them
+declare a `backend-discovery` consumption profile, yet no backend type declares
+`derives_from` any of them. `consumption_profiles` and `derives_from` are two
+independent statements about the same relationship and nothing requires them to agree.
+Whether they should is a standards question this milestone does not answer.
 
 No architectural contradiction was found. No accepted decision needed reopening, no
 object type was added, and no resolver contract, service, or interface was created.
