@@ -1,0 +1,207 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "performance-0001-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "the read declares no limit, offset, or filter over an entity whose growth is transactional",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "access_pattern": "list every order",
+          "confidence": "Medium",
+          "entity": "Order",
+          "evidence_state": "Observed",
+          "is_unbounded": true,
+          "supporting_index": "absent: the read is unfiltered"
+        },
+        "record_id": "performance-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "performance-0002-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "the predicate names a field carrying no index declaration",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "performance-0002-e2",
+            "location": "prisma/schema.prisma",
+            "observation": "the only declared index over the model covers the customer reference",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "access_pattern": "filter orders by status",
+          "confidence": "Medium",
+          "entity": "Order",
+          "evidence_state": "Observed",
+          "supporting_index": "absent: no index is declared over the field"
+        },
+        "record_id": "performance-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "performance-0003-e1",
+            "location": "src/domain/orders.js",
+            "observation": "the lookup is issued inside a loop over the list result",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "performance-0003-e2",
+            "location": "src/data/order-repository.js",
+            "observation": "the cache write declares no expiry",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "access_pattern": "resolve the customer of each listed order",
+          "amplification_finding": "one lookup is issued per order inside a loop over the unbounded order list",
+          "caching": "the result is written to the cache with no expiry declared",
+          "confidence": "Medium",
+          "entity": "Customer",
+          "evidence_state": "Observed",
+          "supporting_index": "the identifier index"
+        },
+        "record_id": "performance-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "performance-0004-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "an external value is interpolated into a statement string rather than parameterized. The location is recorded as an input to security discovery; no exploitability is asserted here",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "access_pattern": "look up an order by identifier through a raw statement",
+          "confidence": "Medium",
+          "entity": "Order",
+          "evidence_state": "Observed",
+          "supporting_index": "the identifier index"
+        },
+        "record_id": "performance-0004"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "performance-0005-e1",
+            "location": "src/domain/orders.js",
+            "observation": "the order write and the audit write are sequential awaits with no transaction boundary between them",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "access_pattern": "place an order and record an audit event",
+          "amplification_finding": "two writes to two objects are issued as separate statements with no enclosing transaction",
+          "confidence": "Medium",
+          "entity": "Order",
+          "evidence_state": "Observed",
+          "supporting_index": "the identifier index"
+        },
+        "record_id": "performance-0005"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Observed/Medium": 5
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.database.performance",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:f8e456178c4e0d88321d759ccb8cbf865f4cd4cb558cd9499d6a43360cfdcffd"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "performance-0001",
+            "performance-0002",
+            "performance-0003"
+          ],
+          "digest": "sha256:3e1f5d9107e7f14977b02f03d78f07d57ce4cdde01a6159c31017efdb14bca65",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.database.indexes@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "performance-0001",
+            "performance-0002",
+            "performance-0003",
+            "performance-0004",
+            "performance-0005"
+          ],
+          "digest": "sha256:59bbb3569a75559710c24fd203b81b59a4de528babe98d0171c8b312a1d5d70f",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.database.entities@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every persistence declaration in the subject repository at the audited revision: the mapper schema, the database and cache configuration, and every source path that constructs or issues a store operation. No database was connected to and no statement was executed",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

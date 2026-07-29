@@ -1,0 +1,145 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "connection-0001-e1",
+            "location": "config/database.json",
+            "observation": "a connection target is declared by environment reference, with pool sizing and a transport setting that does not require peer verification. No value was read",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "component": "orders-db",
+          "confidence": "High",
+          "credential_source": "environment",
+          "encryption_in_transit": "declared with peer verification disabled",
+          "engine": "postgresql",
+          "environment": "undeclared",
+          "evidence_state": "Observed",
+          "pooling": "maximum 10 connections, idle timeout 30000ms",
+          "replica_role": "primary"
+        },
+        "record_id": "connection-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "connection-0002-e1",
+            "location": "config/database.json",
+            "observation": "a replica target is declared by environment reference; no source path in scope reads from it",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "component": "orders-db",
+          "confidence": "Medium",
+          "credential_source": "environment",
+          "engine": "postgresql",
+          "environment": "undeclared",
+          "evidence_state": "Observed",
+          "replica_role": "replica"
+        },
+        "record_id": "connection-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "connection-0003-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "the cache client is constructed from the declared cache url",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "connection-0003-e2",
+            "location": "config/database.json",
+            "observation": "the cache url is declared by environment reference",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "component": "orders-db",
+          "confidence": "High",
+          "credential_source": "environment",
+          "engine": "redis",
+          "environment": "undeclared",
+          "evidence_state": "Observed",
+          "replica_role": "unknown"
+        },
+        "record_id": "connection-0003"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Observed/High": 2,
+        "Observed/Medium": 1
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.database.connections",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:f26216f16c79ff6188a2e130cf3ceb2e959957ea437dc41a49a55efb6253c971"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "connection-0001",
+            "connection-0002",
+            "connection-0003"
+          ],
+          "digest": "sha256:e47b247fb296845ac42491d101c44b8d845b1e1e220dddc3e5d3c8beecc4400f",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.database.technology@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every persistence declaration in the subject repository at the audited revision: the mapper schema, the database and cache configuration, and every source path that constructs or issues a store operation. No database was connected to and no statement was executed",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

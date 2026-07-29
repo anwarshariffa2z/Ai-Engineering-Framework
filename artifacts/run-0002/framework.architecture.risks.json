@@ -1,0 +1,135 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "risk-0001-e1",
+            "location": ".ci/pipeline.yml",
+            "observation": "the release stage invokes the start script",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "risk-0001-e2",
+            "location": "package.json",
+            "observation": "the start script applies schema before starting the process",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "cause": "the start script runs a schema push before starting the process, and the pipeline release stage runs the start script",
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "impact": "a deploy and a schema change cannot be separated, and a rollback of the process does not roll back the schema",
+          "likelihood_rationale": "the coupling is declared in both the manifest and the pipeline",
+          "next_verification": "confirm with the owning team which environments the release stage targets",
+          "reversibility": "irreversible",
+          "risk": "the release stage applies schema change to a database",
+          "supporting_records": "build-0004"
+        },
+        "load_bearing_inputs": [
+          "framework.architecture.build"
+        ],
+        "record_id": "risk-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "risk-0002-e1",
+            "location": "config/database.json",
+            "observation": "the declared connection posture disables peer verification",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "cause": "the database configuration declares that certificate verification is not required",
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "impact": "a connection to the primary store can be established with an unverified peer",
+          "likelihood_rationale": "the setting is declared in the configuration the data module loads",
+          "next_verification": "confirm the setting for each deployed environment",
+          "reversibility": "reversible",
+          "risk": "transport verification is disabled for the primary store",
+          "supporting_records": "configuration-0003"
+        },
+        "load_bearing_inputs": [
+          "framework.architecture.configuration"
+        ],
+        "record_id": "risk-0002"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 2
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.risks",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:c22bc600ce644fb879f97113350c909b0606d2584af5d8fa4ccd71f43f6c5cfc"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "risk-0001"
+          ],
+          "digest": "sha256:929f28863d4c0ef97fc6d511c1aaf6e48419c284158fc34ef827101a0ac0f87b",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.architecture.build@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "risk-0002"
+          ],
+          "digest": "sha256:718d62fc86c928597e411cbe67722151d31898f9a6e149f2676d20f6d142c653",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.architecture.configuration@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

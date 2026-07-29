@@ -1,0 +1,377 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "health-0001-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "derived from the schema records of this run",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "one authoritative structural source, four models, and a consistent naming convention across them",
+          "confidence": "Medium",
+          "dimension": "schema clarity",
+          "evidence_state": "Observed",
+          "score": 4,
+          "supporting_records": "schema-0001,schema-0002,schema-0003,schema-0004"
+        },
+        "record_id": "health-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "health-0002-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "derived from the entity and relationship records of this run",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "four entities, each with a declared identity strategy, and two declared relationships with stated cardinality",
+          "confidence": "High",
+          "dimension": "entity and relationship modelling",
+          "evidence_state": "Observed",
+          "score": 4,
+          "supporting_records": "entity-0001,entity-0002,entity-0003,entity-0004"
+        },
+        "record_id": "health-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "health-0003-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "derived from the constraint records of this run",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "bound_high": 3,
+          "bound_low": 1,
+          "calculation": "six of seven invariants are declared in the mapper schema and inferred to reach the store, one referential action is defaulted rather than declared, and one invariant is enforced nowhere",
+          "confidence": "Medium",
+          "dimension": "integrity enforcement",
+          "evidence_state": "Inferred",
+          "score": 2,
+          "supporting_records": "constraint-0004,constraint-0007"
+        },
+        "record_id": "health-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "health-0004-e1",
+            "location": "package.json",
+            "observation": "the mechanism that applies schema change is recorded in the schema artifact of this run",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "not calculated; the input for this dimension is a finding about the subject, which must not lower a score",
+          "dimension": "migration discipline",
+          "evidence_state": "Unknown",
+          "supporting_records": "schema-0005"
+        },
+        "record_id": "health-0004",
+        "scope_reason": "schema change in this subject is not managed by a migration mechanism, and the migration artifact of this run is NotApplicable. STD-0011 R-13 forbids a NotApplicable input lowering a score, so no score is recorded for this dimension; the coupling of schema change to process start is carried as a risk instead"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "health-0005-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "derived from the index and performance records of this run",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "two of five evidenced access patterns have no supporting index, and the one explicitly declared index supports no path in scope",
+          "confidence": "Medium",
+          "dimension": "index and access-pattern fit",
+          "evidence_state": "Observed",
+          "score": 2,
+          "supporting_records": "index-0004,performance-0001,performance-0002"
+        },
+        "record_id": "health-0005"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "health-0006-e1",
+            "location": "src/domain/orders.js",
+            "observation": "derived from the performance records of this run",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "the one multi-object write path in scope issues its writes as separate statements with no transaction boundary, and no transaction management appears anywhere in scope",
+          "confidence": "High",
+          "dimension": "transaction correctness",
+          "escalation_flag": true,
+          "evidence_state": "Observed",
+          "score": 1,
+          "supporting_records": "performance-0005"
+        },
+        "record_id": "health-0006"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "health-0007-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "derived from the performance records of this run",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "every access is confined to one module, and one of six paths interpolates an external value into a statement string rather than parameterizing it",
+          "confidence": "High",
+          "dimension": "query construction consistency",
+          "evidence_state": "Observed",
+          "score": 2,
+          "supporting_records": "performance-0004"
+        },
+        "record_id": "health-0007"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "health-0008-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "derived from the entity records of this run",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "no classification register exists; two entities carry candidate personal or unbounded free-text data identified only by field naming, which is a weak signal",
+          "confidence": "High",
+          "dimension": "classification coverage",
+          "escalation_flag": true,
+          "evidence_state": "Observed",
+          "score": 1,
+          "supporting_records": "entity-0001,entity-0004"
+        },
+        "record_id": "health-0008"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "health-0009-e1",
+            "location": "package.json",
+            "observation": "derived from the security records of this run",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "bound_high": 3,
+          "bound_low": 1,
+          "calculation": "one credential reference serves both the application workload and the schema push, and no second principal is declared",
+          "confidence": "Low",
+          "dimension": "access-control separation",
+          "evidence_state": "Inferred",
+          "score": 2,
+          "supporting_records": "security-0001"
+        },
+        "record_id": "health-0009"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "health-0010-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "no retention declaration exists in scope",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "not calculated; every lifecycle record of this run is itself Unknown",
+          "dimension": "retention and lifecycle control",
+          "evidence_state": "Unknown",
+          "supporting_records": "lifecycle-0001,lifecycle-0002,lifecycle-0003,lifecycle-0004"
+        },
+        "record_id": "health-0010",
+        "scope_reason": "no entity in scope carries a retention period, an enforcing mechanism, or a deletion path, so there is no observation from which a score could be calculated"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "health-0011-e1",
+            "location": "config/database.json",
+            "observation": "the repository declares no backup mechanism",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "not calculated; no backup or restore evidence was available to this run",
+          "dimension": "recoverability",
+          "evidence_state": "Unknown",
+          "supporting_records": "lifecycle-0004"
+        },
+        "record_id": "health-0011",
+        "scope_reason": "backup configuration and restore records live outside the audited repository and none was supplied to this run. Recovery capability is unknown, which is not the same as absent"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "health-0012-e1",
+            "location": "README.txt",
+            "observation": "the only prose documentation in scope",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "the repository documents the persistence approach in prose but declares no data classification, retention, or recovery documentation",
+          "confidence": "Medium",
+          "dimension": "documentation traceability",
+          "evidence_state": "Observed",
+          "score": 2,
+          "supporting_records": "schema-0005"
+        },
+        "record_id": "health-0012"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Low",
+      "distribution": {
+        "Inferred/Low": 1,
+        "Inferred/Medium": 1,
+        "Observed/High": 4,
+        "Observed/Medium": 3,
+        "Unknown": 3
+      },
+      "evidence_state": "Unknown"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.database.health",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:90245efb75eda999e2d6d20aeea0cf6da9cd8d5319b82c774ca851eb4f405737"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "health-0001"
+          ],
+          "digest": "sha256:4e49565b2fe7aac0ba1bc2324d2cda6ed0531a930841a0bae566c536520c0bf6",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.database.schema@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "health-0003"
+          ],
+          "digest": "sha256:521db9c8a1bb6927f5f706f5fa63b90a7443d43998c548e616b553469b7e412e",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.database.constraints@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "health-0005"
+          ],
+          "digest": "sha256:3e1f5d9107e7f14977b02f03d78f07d57ce4cdde01a6159c31017efdb14bca65",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.database.indexes@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "health-0009"
+          ],
+          "digest": "sha256:31c694f0f0440e41152bd7802877298bb3287b1a8857449533e746ca2000a4a6",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.database.security@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "health-0010"
+          ],
+          "digest": "sha256:8218cb4814cfbae255db73dfe877bbdc4df3e18acdc38851512097ecca236c65",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.database.lifecycle@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every persistence declaration in the subject repository at the audited revision: the mapper schema, the database and cache configuration, and every source path that constructs or issues a store operation. No database was connected to and no statement was executed",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

@@ -1,0 +1,313 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "risk-0001-e1",
+            "location": "package.json",
+            "observation": "the start script applies schema with data loss accepted before starting the process",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "affected_entities": "Customer, Order, OrderItem, AuditEvent",
+          "cause": "the start script pushes the mapper schema with data loss accepted, and the pipeline release stage invokes the start script",
+          "confidence": "Medium",
+          "evidence_state": "Observed",
+          "impact": "a schema change cannot be reviewed, ordered, or reversed independently of a deploy, and a structural change that drops a column would be applied without a preserving step",
+          "likelihood_rationale": "the coupling is declared in both the manifest and the pipeline, and applies on every release",
+          "owner_candidate": "the team that owns the release pipeline",
+          "reversibility": "irreversible",
+          "risk": "starting the process changes the database schema and accepts data loss",
+          "supporting_records": "schema-0005"
+        },
+        "record_id": "risk-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "risk-0002-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the field carries no check declaration",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "risk-0002-e2",
+            "location": "src/domain/orders.js",
+            "observation": "the write path performs no validation",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "affected_entities": "Order",
+          "cause": "the status field is declared as free text with no check constraint and no validation in any path in scope",
+          "confidence": "Medium",
+          "evidence_state": "Observed",
+          "impact": "an unexpected status value can be written and no store or application rule would reject it",
+          "likelihood_rationale": "the write path passes the request through to the store without validating the field",
+          "reversibility": "reversible",
+          "risk": "order status admits any value",
+          "supporting_records": "constraint-0007"
+        },
+        "record_id": "risk-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "risk-0003-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "one datasource reference is declared",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "risk-0003-e2",
+            "location": "package.json",
+            "observation": "the same process applies schema and serves requests",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "affected_entities": "Customer, Order, OrderItem, AuditEvent",
+          "cause": "the same environment reference resolves the credential for the running process and for the schema push",
+          "confidence": "Low",
+          "evidence_state": "Inferred",
+          "impact": "the credential the application runs under is sufficient to alter structure, so a compromise of the application reaches the schema",
+          "likelihood_rationale": "no second principal or reference is declared anywhere in scope",
+          "owner_candidate": "the team that owns the database credentials",
+          "reversibility": "reversible",
+          "risk": "one credential serves the application and structural change",
+          "supporting_records": "security-0001"
+        },
+        "record_id": "risk-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "risk-0004-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "the read declares no limit",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "risk-0004-e2",
+            "location": "src/domain/orders.js",
+            "observation": "the lookup is issued inside the loop",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "affected_entities": "Order, Customer",
+          "cause": "the list path reads every order with no limit and the domain then issues one customer lookup per row",
+          "confidence": "Medium",
+          "evidence_state": "Observed",
+          "impact": "response time and memory grow with the entity, and the amplification multiplies the effect",
+          "likelihood_rationale": "the entity growth class is transactional, so the set grows with use",
+          "reversibility": "reversible",
+          "risk": "an unbounded read grows with the order table",
+          "supporting_records": "performance-0001,performance-0003"
+        },
+        "record_id": "risk-0004"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "risk-0005-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "the value is interpolated into the statement string",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "affected_entities": "Order",
+          "cause": "one repository path builds a statement string by interpolation rather than passing a parameter",
+          "confidence": "Medium",
+          "evidence_state": "Observed",
+          "impact": "the statement is constructed from a value the caller supplies, which is the condition under which injection becomes possible",
+          "likelihood_rationale": "the path is reachable from the repository interface, and the value is not validated in any path in scope",
+          "owner_candidate": "the team that owns the data module",
+          "reversibility": "reversible",
+          "risk": "an external value is interpolated into a statement",
+          "supporting_records": "performance-0004"
+        },
+        "record_id": "risk-0005"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "risk-0006-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "the cache write declares no expiry",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "affected_entities": "Customer",
+          "cause": "the customer record, which carries an email and a name, is serialized into the cache and the write declares no expiry",
+          "confidence": "Medium",
+          "evidence_state": "Observed",
+          "impact": "a copy of candidate personal data persists in a second store with weaker declared controls and no evidenced deletion path",
+          "likelihood_rationale": "the cache write is on the path taken for every listed order",
+          "owner_candidate": "the team that owns the data module",
+          "reversibility": "reversible",
+          "risk": "candidate personal data is cached with no expiry",
+          "supporting_records": "performance-0003"
+        },
+        "record_id": "risk-0006"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "risk-0007-e1",
+            "location": "src/data/audit-log.js",
+            "observation": "the only path that touches the entity writes to it",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "affected_entities": "AuditEvent",
+          "cause": "audit events are written by one path, read by none, pruned by none, and no retention period is declared",
+          "confidence": "Medium",
+          "evidence_state": "Observed",
+          "impact": "the entity grows without bound while holding free-text payloads of unknown classification",
+          "likelihood_rationale": "the write is on the order placement path and no counterbalancing path exists",
+          "reversibility": "reversible",
+          "risk": "an append-only entity has no retention position and no reader",
+          "supporting_records": "entity-0004"
+        },
+        "record_id": "risk-0007"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Low",
+      "distribution": {
+        "Inferred/Low": 1,
+        "Observed/Medium": 6
+      },
+      "evidence_state": "Inferred"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.database.risks",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:1060d5fea7248d280055a2b20000acbcd81b47df5d5aa1cdb41ac77e2a164bc5"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "risk-0001"
+          ],
+          "digest": "sha256:4e49565b2fe7aac0ba1bc2324d2cda6ed0531a930841a0bae566c536520c0bf6",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.database.schema@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "risk-0002"
+          ],
+          "digest": "sha256:521db9c8a1bb6927f5f706f5fa63b90a7443d43998c548e616b553469b7e412e",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.database.constraints@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "risk-0003"
+          ],
+          "digest": "sha256:31c694f0f0440e41152bd7802877298bb3287b1a8857449533e746ca2000a4a6",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.database.security@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "risk-0004",
+            "risk-0005",
+            "risk-0006"
+          ],
+          "digest": "sha256:f8e456178c4e0d88321d759ccb8cbf865f4cd4cb558cd9499d6a43360cfdcffd",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.database.performance@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "risk-0007"
+          ],
+          "digest": "sha256:59bbb3569a75559710c24fd203b81b59a4de528babe98d0171c8b312a1d5d70f",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.database.entities@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every persistence declaration in the subject repository at the audited revision: the mapper schema, the database and cache configuration, and every source path that constructs or issues a store operation. No database was connected to and no statement was executed",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

@@ -1,0 +1,288 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "scope-0001-e1",
+            "location": ".ci/pipeline.yml",
+            "observation": "path present at the audited revision",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "inclusion": "included",
+          "kind": "automation",
+          "path": ".ci/pipeline.yml"
+        },
+        "record_id": "scope-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "scope-0002-e1",
+            "location": "README.txt",
+            "observation": "path present at the audited revision",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "inclusion": "included",
+          "kind": "documentation",
+          "path": "README.txt"
+        },
+        "record_id": "scope-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "scope-0003-e1",
+            "location": "config/database.json",
+            "observation": "path present at the audited revision",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "inclusion": "included",
+          "kind": "infrastructure",
+          "path": "config/database.json"
+        },
+        "record_id": "scope-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "scope-0004-e1",
+            "location": "config/default.json",
+            "observation": "path present at the audited revision",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "inclusion": "included",
+          "kind": "infrastructure",
+          "path": "config/default.json"
+        },
+        "record_id": "scope-0004"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "scope-0005-e1",
+            "location": "package.json",
+            "observation": "path present at the audited revision",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "inclusion": "included",
+          "kind": "source",
+          "path": "package.json"
+        },
+        "record_id": "scope-0005"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "scope-0006-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "path present at the audited revision",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "inclusion": "included",
+          "kind": "infrastructure",
+          "path": "prisma/schema.prisma"
+        },
+        "record_id": "scope-0006"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "scope-0007-e1",
+            "location": "src/api/routes.js",
+            "observation": "path present at the audited revision",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "inclusion": "included",
+          "kind": "source",
+          "path": "src/api/routes.js"
+        },
+        "record_id": "scope-0007"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "scope-0008-e1",
+            "location": "src/data/audit-log.js",
+            "observation": "path present at the audited revision",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "inclusion": "included",
+          "kind": "source",
+          "path": "src/data/audit-log.js"
+        },
+        "record_id": "scope-0008"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "scope-0009-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "path present at the audited revision",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "inclusion": "included",
+          "kind": "source",
+          "path": "src/data/order-repository.js"
+        },
+        "record_id": "scope-0009"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "scope-0010-e1",
+            "location": "src/domain/orders.js",
+            "observation": "path present at the audited revision",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "inclusion": "included",
+          "kind": "source",
+          "path": "src/domain/orders.js"
+        },
+        "record_id": "scope-0010"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "scope-0011-e1",
+            "location": "src/index.js",
+            "observation": "path present at the audited revision",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "inclusion": "included",
+          "kind": "source",
+          "path": "src/index.js"
+        },
+        "record_id": "scope-0011"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 11
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.scope",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:ae3f828f8f49c7581fbcfaea697b2faf1fbb8af2b2398e48d4fbeea148d49627"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

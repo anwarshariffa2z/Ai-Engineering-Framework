@@ -1,0 +1,140 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "build-0001-e1",
+            "location": ".ci/pipeline.yml",
+            "observation": "command declared, not executed by this audit",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "ci_reference": ".ci/pipeline.yml#install",
+          "command": "npm ci",
+          "confidence": "High",
+          "controller": "ci-pipeline",
+          "definition_path": ".ci/pipeline.yml",
+          "evidence_state": "Observed"
+        },
+        "record_id": "build-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "build-0002-e1",
+            "location": ".ci/pipeline.yml",
+            "observation": "command declared, not executed by this audit",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "ci_reference": ".ci/pipeline.yml#generate",
+          "command": "npx prisma generate",
+          "confidence": "High",
+          "controller": "ci-pipeline",
+          "definition_path": ".ci/pipeline.yml",
+          "evidence_state": "Observed",
+          "outputs": "a generated client, not present in scope at this revision"
+        },
+        "record_id": "build-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "build-0003-e1",
+            "location": ".ci/pipeline.yml",
+            "observation": "command declared, not executed by this audit",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "ci_reference": ".ci/pipeline.yml#test",
+          "command": "npm test",
+          "confidence": "High",
+          "controller": "ci-pipeline",
+          "definition_path": ".ci/pipeline.yml",
+          "evidence_state": "Observed"
+        },
+        "record_id": "build-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "build-0004-e1",
+            "location": ".ci/pipeline.yml",
+            "observation": "command declared, not executed by this audit",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "ci_reference": ".ci/pipeline.yml#release",
+          "command": "npm start",
+          "confidence": "High",
+          "controller": "ci-pipeline",
+          "definition_path": ".ci/pipeline.yml",
+          "evidence_state": "Observed",
+          "reproducibility_note": "the start script applies schema before starting the process, so the release stage changes the database"
+        },
+        "record_id": "build-0004"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 4
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.build",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:929f28863d4c0ef97fc6d511c1aaf6e48419c284158fc34ef827101a0ac0f87b"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

@@ -15,8 +15,12 @@ import { loadDeclarations, checkRecordAgainstDeclaration } from '../lib/declarat
 import { identityOf } from '../lib/envelope.mjs';
 import { readResolutionDeclaration } from '../lib/store.mjs';
 import { resolve as resolveIdentity, OUTCOME, isStale } from '../lib/resolver.mjs';
-import { executeRun, RUN_CONTEXT } from '../index.mjs';
+import { readFileSync, readdirSync } from 'node:fs';
+
+import { executeRun, executeComposedRun, RUN_CONTEXT, COMPOSED_RUN_CONTEXT } from '../index.mjs';
 import { consume } from '../consume.mjs';
+import { runDatabaseDiscovery, CONSUMED_TYPES } from '../lib/database-discovery.mjs';
+import { crossRunScenario } from '../cross-run.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(join(here, '..', '..', '..'));
@@ -306,6 +310,165 @@ test('STD-0010#R-45', 'the resolution declaration is run-scoped data outside eve
   }
   for (const [, artifact] of first.artifacts) {
     assert(!artifact.envelope.resolution && !artifact.envelope.locator, 'an envelope carries resolution information');
+  }
+});
+
+// ---- AUD-0003: the second producer, and the first consuming one -------------
+
+const composed = executeComposedRun({ root });
+const composedAgain = executeComposedRun({ root });
+const databaseTypes = [...composed.database.artifacts.keys()];
+const composedResolution = readResolutionDeclaration(root, 'artifacts/run-0002/resolution.json');
+const scenario = crossRunScenario({ root });
+
+test('STD-0011#R-23', 'every declared database artifact type is emitted', () => {
+  assert(databaseTypes.length === 14, `${databaseTypes.length} database artifacts emitted`);
+  for (const type of databaseTypes) assert(declarations.has(type), `${type} is not declared in the corpus`);
+});
+
+test('STD-0013#R-31', 'no undeclared artifact type is emitted', () => {
+  for (const [type] of composed.artifacts) {
+    assert(declarations.has(type), `${type} is emitted and not declared`);
+    assert(type.startsWith('framework.architecture.') || type.startsWith('framework.database.'), `${type} belongs to no methodology in this run`);
+  }
+  assert(composed.artifacts.size === 28, `${composed.artifacts.size} artifacts in a run composing two methodologies`);
+});
+
+test('STD-0011#R-40', 'the database half consumes the architecture half by identity', () => {
+  for (const item of composed.database.consumption) assert(item.obtained, `${item.type} was not obtained`);
+  for (const type of CONSUMED_TYPES) {
+    const identity = artifactIdentity(composed.run.runId, type, declarations.get(type).type_version);
+    assert(composedResolution.resolution.some((e) => e.identity === identity), `${type} is not resolvable by identity`);
+  }
+});
+
+test('STD-0011#R-40', 'no artifact reference anywhere in the run is a path', () => {
+  for (const [, artifact] of composed.artifacts) {
+    for (const entry of artifact.envelope.lineage.derives_from ?? []) {
+      assert(isWellFormedIdentity(entry.identity), `${entry.identity} is not an identity`);
+      assert(!('locator' in entry) && !('path' in entry), 'a lineage entry carries a location');
+    }
+  }
+});
+
+test('STD-0008#R-56', 'cross-methodology lineage resolves and verifies', () => {
+  const edges = [];
+  for (const [type, artifact] of composed.artifacts) {
+    for (const entry of artifact.envelope.lineage.derives_from ?? []) {
+      const upstream = entry.identity.split('/').pop().split('@')[0];
+      if (type.split('.')[1] !== upstream.split('.')[1]) edges.push([type, upstream, entry]);
+    }
+  }
+  assert(edges.length === 2, `${edges.length} cross-methodology edges`);
+  for (const [, , entry] of edges) {
+    const outcome = resolveIdentity({ root, declaration: composedResolution, reference: entry, consumingRunId: composed.run.runId });
+    assert(outcome.outcome === OUTCOME.RESOLVED, `a cross-methodology edge did not resolve: ${outcome.reason}`);
+    assert(outcome.digest === entry.digest, 'a cross-methodology edge resolved to different content than it bound');
+  }
+});
+
+test('STD-0011#R-47', 'a tampered upstream artifact fails verification', () => {
+  const upstream = JSON.parse(JSON.stringify(composed.artifacts.get('framework.architecture.modules')));
+  upstream.body.records[0].fields.responsibility = 'something the audit never observed';
+  assert(!verifyDigest(upstream).ok, 'a tampered artifact verified against its own digest');
+});
+
+test('STD-0011#R-27', 'a missing required input degrades the artifact that needed it', () => {
+  const withoutModules = {
+    ...composedResolution,
+    resolution: composedResolution.resolution.filter((e) => !e.identity.includes('framework.architecture.modules')),
+  };
+  const degraded = runDatabaseDiscovery({
+    run: { ...COMPOSED_RUN_CONTEXT, runId: composed.run.runId },
+    subjectRoot: join(root, COMPOSED_RUN_CONTEXT.subjectRef),
+    declarations,
+    root,
+    resolution: withoutModules,
+  });
+  const entities = degraded.artifacts.get('framework.database.entities');
+  assert(entities.envelope.completeness.state === 'Unavailable', `entities reported ${entities.envelope.completeness.state}`);
+  assert(entities.envelope.completeness.reason.includes('framework.architecture.modules'), 'the degradation does not name the input');
+  assert(entities.body.records.length === 0, 'an artifact that lost its input still carries records');
+});
+
+test('STD-0011#R-49', 'a regenerated upstream makes a bound reference stale', () => {
+  assert(scenario.regenerated.outcome === OUTCOME.DIGEST_MISMATCH, `${scenario.regenerated.outcome}`);
+  assert(scenario.staleByComparison, 'the digest comparison did not report staleness');
+  assert(scenario.current.outcome === OUTCOME.RESOLVED, 'the current reference did not resolve');
+});
+
+test('STD-0011#R-50', 'a cross-run reference without a summary is refused', () => {
+  assert(scenario.noSummary.outcome === OUTCOME.REJECTED, `${scenario.noSummary.outcome}`);
+  assert(scenario.unresolvable.completeness === 'Unavailable', 'an unresolvable cross-run identity was not Unavailable');
+  assert(scenario.unresolvable.absence_interpretation.startsWith('none'), 'absence was interpreted as a finding');
+});
+
+test('STD-0011#R-13', 'NotApplicable and Unavailable are different statements', () => {
+  const migration = composed.artifacts.get('framework.database.migration');
+  const deployment = first.artifacts.get('framework.architecture.deployment');
+  assert(migration.envelope.completeness.state === 'NotApplicable', migration.envelope.completeness.state);
+  assert(deployment.envelope.completeness.state === 'Unavailable', deployment.envelope.completeness.state);
+  assert(migration.body.records.length === 0 && deployment.body.records.length === 0, 'one of the two carries records');
+  assert(migration.envelope.completeness.reason.includes('finding about the subject'), 'NotApplicable does not say what it means');
+  const report = consume({ root, runDirectory: 'artifacts/run-0002' });
+  const interpretations = new Set(report.resolved.map((r) => r.interpretation));
+  assert(interpretations.size > 1, 'a consumer read every completeness state the same way');
+});
+
+test('STD-0007#R-38', 'Unknown evidence is a bounded unknown, never an absence', () => {
+  const lifecycle = composed.artifacts.get('framework.database.lifecycle');
+  const unknowns = lifecycle.body.records.filter((r) => r.fields.evidence_state === 'Unknown');
+  assert(unknowns.length === 4, `${unknowns.length} Unknown records`);
+  for (const record of unknowns) {
+    assert(record.scope_reason && record.scope_reason.length > 20, 'an Unknown record carries no scope reason');
+    assert(record.fields.confidence === undefined, 'an Unknown record carries a confidence level');
+    assert(record.fields.score === undefined, 'an Unknown record carries a score');
+  }
+});
+
+test('STD-0007#R-04', 'no Verified evidence is manufactured', () => {
+  for (const [type, artifact] of composed.artifacts) {
+    for (const record of artifact.body.records) {
+      assert(record.fields.evidence_state !== 'Verified', `${type} ${record.record_id} claims Verified with no authorized verification source`);
+    }
+    assert(artifact.envelope.assessment.evidence_state !== 'Verified', `${type} aggregates to Verified`);
+  }
+});
+
+test('STD-0008#R-11', 'no secret, credential, endpoint, or record value is emitted', () => {
+  const forbidden = [/postgres(ql)?:\/\//i, /redis:\/\//i, /password/i, /PRIVATE KEY/];
+  for (const file of readdirSync(join(root, 'artifacts/run-0002'))) {
+    const text = readFileSync(join(root, 'artifacts/run-0002', file), 'utf8');
+    for (const pattern of forbidden) {
+      assert(!pattern.test(text), `${file} matches ${pattern}`);
+    }
+  }
+});
+
+test('AUD-0003#2', 'the producer opens no connection of any kind', () => {
+  const modules = ['lib/database-discovery.mjs', 'lib/database-subjects.mjs', 'index.mjs', 'cross-run.mjs', 'consume.mjs'];
+  const forbidden = ['node:net', 'node:http', 'node:https', 'node:dgram', 'node:child_process', '@prisma/client', 'ioredis', 'pg'];
+  for (const module of modules) {
+    const text = readFileSync(join(root, 'tools/producer', module), 'utf8');
+    for (const specifier of forbidden) {
+      assert(!text.includes(`from '${specifier}'`), `${module} imports ${specifier}`);
+    }
+  }
+});
+
+test('STD-0008#R-54', 'consecutive composed runs are byte-identical', () => {
+  for (const [type, artifact] of composed.artifacts) {
+    const again = composedAgain.artifacts.get(type);
+    assert(canonicalize(artifact) === canonicalize(again), `${type} differs between two runs`);
+    assert(artifact.envelope.integrity.digest === again.envelope.integrity.digest, `${type} digest differs between two runs`);
+  }
+});
+
+test('STD-0010#R-46', 'every emitted artifact satisfies the canonical serialization', () => {
+  for (const [type, artifact] of composed.artifacts) {
+    const serialized = canonicalize(artifact);
+    assert(serialized === canonicalize(JSON.parse(serialized)), `${type} is not stable under a canonical round trip`);
+    assert(computeDigest(artifact) === artifact.envelope.integrity.digest, `${type} carries a digest it does not compute to`);
   }
 });
 

@@ -1,0 +1,43 @@
+{
+  "body": {
+    "records": []
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Low",
+      "evidence_state": "Unknown"
+    },
+    "completeness": {
+      "reason": "schema change in this subject is not managed by a migration mechanism: no migration directory, tooling configuration, ordering, or history exists at the audited revision, and the schema is pushed from the mapper instead. This is a finding about the subject, not an input this run was unable to obtain; the mechanism that does apply schema change is recorded in framework.database.schema",
+      "state": "NotApplicable"
+    },
+    "identity": {
+      "artifact_type": "framework.database.migration",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:f57779ee949c0342d6041af6190d08fa8878f30d24f459bd68aea29a7765bf1a"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every persistence declaration in the subject repository at the audited revision: the mapper schema, the database and cache configuration, and every source path that constructs or issues a store operation. No database was connected to and no statement was executed",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

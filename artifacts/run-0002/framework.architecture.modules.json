@@ -1,0 +1,116 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "module-0001-e1",
+            "location": "src/api/",
+            "observation": "directory boundary with a single exported interface",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "boundary_evidence": "namespace",
+          "confidence": "High",
+          "depends_on_modules": "src/domain",
+          "evidence_state": "Observed",
+          "module": "src/api",
+          "public_interface": "createRouter",
+          "responsibility": "translates transport concerns into domain calls"
+        },
+        "record_id": "module-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "module-0002-e1",
+            "location": "src/domain/",
+            "observation": "directory boundary with a single exported interface",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "boundary_evidence": "namespace",
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "module": "src/domain",
+          "public_interface": "OrderService",
+          "responsibility": "holds the ordering rules and sequences the writes an order requires"
+        },
+        "record_id": "module-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "module-0003-e1",
+            "location": "src/data/",
+            "observation": "directory boundary with a single exported interface",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "boundary_evidence": "namespace",
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "module": "src/data",
+          "public_interface": "OrderRepository, AuditLog",
+          "responsibility": "owns every path that reaches a data store"
+        },
+        "record_id": "module-0003"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 3
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.modules",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:e96a4e5608c1914947fc386f3ee0bc00185c1b938f1989faa2209c65a36d1b64"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

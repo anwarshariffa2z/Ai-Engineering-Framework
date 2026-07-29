@@ -1,0 +1,217 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "schema-0001-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "a model is declared with an identifier, a unique field, and a relation; the model is a declaration of intent and the deployed structure was not observed",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "authority_path": "prisma/schema.prisma",
+          "confidence": "Medium",
+          "enforcement_location": "store",
+          "evidence_state": "Inferred",
+          "object": "Customer",
+          "object_type": "table",
+          "store": "postgresql"
+        },
+        "record_id": "schema-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "schema-0002-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "a model is declared with an identifier, a relation to Customer, and a declared index",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "authority_path": "prisma/schema.prisma",
+          "confidence": "Medium",
+          "enforcement_location": "store",
+          "evidence_state": "Inferred",
+          "object": "Order",
+          "object_type": "table",
+          "store": "postgresql"
+        },
+        "record_id": "schema-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "schema-0003-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "a model is declared with a composite identifier and a cascading relation to Order",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "authority_path": "prisma/schema.prisma",
+          "confidence": "Medium",
+          "enforcement_location": "store",
+          "evidence_state": "Inferred",
+          "object": "OrderItem",
+          "object_type": "table",
+          "store": "postgresql"
+        },
+        "record_id": "schema-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "schema-0004-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "a model is declared with an identifier and a free-text payload field",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "authority_path": "prisma/schema.prisma",
+          "confidence": "Medium",
+          "enforcement_location": "store",
+          "evidence_state": "Inferred",
+          "object": "AuditEvent",
+          "object_type": "table",
+          "store": "postgresql"
+        },
+        "record_id": "schema-0004"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "schema-0005-e1",
+            "location": "package.json",
+            "observation": "the start script pushes the mapper schema with data loss accepted before the process starts",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "schema-0005-e2",
+            "location": ".ci/pipeline.yml",
+            "observation": "the release stage invokes the start script",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "authority_path": "package.json",
+          "confidence": "High",
+          "enforcement_location": "mapper",
+          "evidence_state": "Observed",
+          "object": "schema synchronization",
+          "object_type": "mechanism",
+          "store": "postgresql"
+        },
+        "record_id": "schema-0005"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+            "evidence_id": "schema-0006-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "keys are constructed in one module with a customer prefix; the store declares no structure of its own",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "authority_path": "src/data/order-repository.js",
+          "confidence": "High",
+          "enforcement_location": "application",
+          "evidence_state": "Observed",
+          "object": "cache key namespace",
+          "object_type": "mechanism",
+          "store": "redis"
+        },
+        "record_id": "schema-0006"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Inferred/Medium": 4,
+        "Observed/High": 2
+      },
+      "evidence_state": "Inferred"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.database.schema",
+      "run_id": "example/orders-db@rev-0001#run-0002"
+    },
+    "integrity": {
+      "digest": "sha256:4e49565b2fe7aac0ba1bc2324d2cda6ed0531a930841a0bae566c536520c0bf6"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "schema-0001",
+            "schema-0002",
+            "schema-0003",
+            "schema-0004",
+            "schema-0005"
+          ],
+          "digest": "sha256:e47b247fb296845ac42491d101c44b8d845b1e1e220dddc3e5d3c8beecc4400f",
+          "identity": "example/orders-db@rev-0001#run-0002/framework.database.technology@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made",
+      "environment": "static inspection of subject source; no execution environment was entered and no data store was contacted",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every persistence declaration in the subject repository at the audited revision: the mapper schema, the database and cache configuration, and every source path that constructs or issues a store operation. No database was connected to and no statement was executed",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-db",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}
