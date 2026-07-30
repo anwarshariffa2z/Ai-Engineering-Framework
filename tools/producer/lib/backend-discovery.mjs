@@ -26,6 +26,7 @@ import { buildArtifact, lineageReference } from './envelope.mjs';
 import { artifactIdentity } from './identity.mjs';
 import { resolve as resolveIdentity, OUTCOME } from './resolver.mjs';
 import { evaluateRequiredInputs, consumedTypes } from './required-inputs.mjs';
+import { profileFor as resolveProfile, projectThroughProfile as project, profileFieldsDeclared } from './profiles.mjs';
 import { SUBJECTS } from './backend-subjects.mjs';
 
 // The artifact types this producer emits, in the order AUD-0005 section 6 lists
@@ -83,41 +84,11 @@ const lowest = (values, order, bottom) => values.reduce(
  * requires every entry in `reads` to be a declared field of the type. Both are
  * already validated against the corpus, so this reads the declaration as data.
  */
-export function profileFor(declaration) {
-  const profiles = Array.isArray(declaration?.consumption_profiles) ? declaration.consumption_profiles : [];
-  const entry = profiles.find((p) => p && p.consumer === PROFILE_CONSUMER);
-  if (!entry) return null;
-  const reads = Array.isArray(entry.reads) ? entry.reads : String(entry.reads ?? '').split(',').map((f) => f.trim()).filter(Boolean);
-  return { consumer: entry.consumer, reads };
-}
-
-/**
- * Project an artifact's records onto the fields its profile declares.
- *
- * This is the enforcement, not a check of it. What comes back carries the profile
- * fields and nothing else, so a consumer that reached for an undeclared field
- * would find `undefined` rather than a value it was never promised. STD-0011 R-30
- * makes the profile the unit of compatibility; making it the unit of access is how
- * this producer keeps that honest.
- */
-export function projectThroughProfile(artifact, profile) {
-  return artifact.body.records.map((record) => {
-    const visible = {};
-    for (const field of profile.reads) {
-      if (record.fields?.[field] !== undefined) visible[field] = record.fields[field];
-    }
-    return {
-      record_id: record.record_id,
-      fields: visible,
-      // Evidence state and confidence are framework properties of a record rather
-      // than fields a profile grants, and propagation under STD-0007 R-26 needs
-      // them. They are carried, and the type's own fields are not.
-      evidence_state: record.fields?.evidence_state,
-      confidence: record.fields?.confidence,
-      load_bearing: record.load_bearing !== false,
-    };
-  });
-}
+// The consumer identity this producer answers to, bound onto the shared
+// primitive. The behaviour lives in profiles.mjs and is the same for every
+// consumer; only the name differs.
+export const profileFor = (declaration) => resolveProfile(declaration, PROFILE_CONSUMER);
+export const projectThroughProfile = project;
 
 /**
  * Resolve every consumed type by identity, verify it, and where the type declares
@@ -164,11 +135,7 @@ export function consumeInputs({ root, run, declarations, resolution }) {
     // classifies as breaking, and it is detectable here without reading a record.
     let compatibility = 'whole-type: the type declares no profile for this consumer, and the major version is understood';
     if (profile) {
-      const declared = new Set([
-        ...(Array.isArray(declaration.required_fields) ? declaration.required_fields : []),
-        ...(Array.isArray(declaration.optional_fields) ? declaration.optional_fields : []),
-      ]);
-      const missing = profile.reads.filter((field) => !declared.has(field));
+      const missing = profileFieldsDeclared(declaration, profile);
       if (missing.length) {
         degradation.push({ type, identity, outcome: 'profile-incompatible', completeness: 'Unavailable', reason: `the profile declared for ${PROFILE_CONSUMER} reads ${missing.join(', ')}, which the type no longer declares` });
         continue;
