@@ -19,29 +19,47 @@ import { join, relative, sep } from 'node:path';
 import { buildArtifact, lineageReference } from './envelope.mjs';
 import { artifactIdentity } from './identity.mjs';
 import { resolve as resolveIdentity, OUTCOME } from './resolver.mjs';
+import { evaluateRequiredInputs, consumedTypes } from './required-inputs.mjs';
 import { SUBJECTS } from './database-subjects.mjs';
 
-// AUD-0003 section 4. The dependency is on these types, never on the methodology
-// that produced them, so they are named as types and addressed as identities.
-export const CONSUMED_TYPES = [
-  'framework.architecture.scope',
-  'framework.architecture.technology',
-  'framework.architecture.modules',
-  'framework.architecture.integrations',
+// The artifact types this producer emits, in the order AUD-0003 section 6 lists
+// them. STD-0010 R-48 requires every required_for entry below to name one of these.
+export const PRODUCED_TYPES = [
+  'framework.database.technology',
+  'framework.database.connections',
+  'framework.database.schema',
+  'framework.database.entities',
+  'framework.database.relationships',
+  'framework.database.constraints',
+  'framework.database.indexes',
+  'framework.database.migration',
+  'framework.database.security',
+  'framework.database.performance',
+  'framework.database.lifecycle',
+  'framework.database.health',
+  'framework.database.risks',
+  'framework.database.recommendations',
 ];
+
+// AUD-0003 section 4, written in the shape STD-0010 R-48 fixes. The dependency is
+// on these types, never on the methodology that produced them, so they are named
+// as types and addressed as identities. `requirement` states whether an output
+// depends on the input at all, and `required_for` states which outputs do, per
+// STD-0011 R-53. An optional input is used where present and degrades nothing
+// where absent.
+export const CONSUMES = [
+  { type: 'framework.architecture.scope', requirement: 'optional' },
+  { type: 'framework.architecture.technology', requirement: 'required', required_for: ['framework.database.technology'] },
+  { type: 'framework.architecture.modules', requirement: 'required', required_for: ['framework.database.entities'] },
+  { type: 'framework.architecture.integrations', requirement: 'optional' },
+];
+
+export const CONSUMED_TYPES = consumedTypes(CONSUMES);
 
 // The major version of each consumed type this producer declares it understands.
 // STD-0011 R-11 makes compatibility the consumer's duty to verify rather than the
 // producer's to promise.
 const UNDERSTOOD_MAJOR = 1;
-
-// Which output types cannot be produced at all if a consumed input is missing.
-// STD-0011 R-27: a consumer that cannot obtain a declared input fails closed and
-// records the degradation, rather than emitting a conclusion it cannot support.
-const REQUIRED_INPUTS = {
-  'framework.database.technology': ['framework.architecture.technology'],
-  'framework.database.entities': ['framework.architecture.modules'],
-};
 
 function evidence(id, location, run, note) {
   return {
@@ -144,6 +162,15 @@ export function runDatabaseDiscovery({ run, subjectRoot, declarations, root, res
   const { inputs, degradation } = consumeArchitectureInputs({ root, run, declarations, resolution });
   const consumption = [];
 
+  // STD-0011 R-53 through the shared primitive: the outputs a missing required
+  // input withdraws, and the outputs that carry on without it.
+  const { degraded: gated } = evaluateRequiredInputs({
+    consumes: CONSUMES,
+    produces: PRODUCED_TYPES,
+    available: [...inputs.keys()],
+    unavailable: degradation,
+  });
+
   // The consumed artifacts are used, not merely fetched. Each use below is a fact
   // this run takes from an upstream artifact rather than re-deriving from the
   // subject, which is what makes the dependency real.
@@ -172,15 +199,11 @@ export function runDatabaseDiscovery({ run, subjectRoot, declarations, root, res
 
     // Fail closed. A declared input that could not be obtained makes the artifact
     // that needed it Unavailable, with the reason stated, rather than Complete
-    // with fewer records.
-    const missing = (REQUIRED_INPUTS[type] ?? []).filter((input) => !inputs.has(input));
-    const degraded = missing.length
-      ? {
-        completeness: 'Unavailable',
-        completenessReason: `this artifact requires ${missing.join(', ')}, which this run could not obtain: ${degradation.filter((d) => missing.includes(d.type)).map((d) => d.reason).join('; ')}`,
-        records: [],
-        lineage: undefined,
-      }
+    // with fewer records. Which artifacts those are is decided by the shared
+    // primitive from the declaration above, not here.
+    const gate = gated.get(type);
+    const degraded = gate
+      ? { completeness: gate.completeness, completenessReason: gate.reason, records: [], lineage: undefined }
       : null;
     const effective = degraded ?? spec;
 
