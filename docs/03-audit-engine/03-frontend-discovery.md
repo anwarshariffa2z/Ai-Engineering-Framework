@@ -1,7 +1,7 @@
 ---
 id: AUD-0004
 title: Frontend Discovery Methodology
-version: 1.1.0
+version: 1.2.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -16,6 +16,37 @@ depends_on: [../02-methodology/evidence-and-confidence.md, ../02-methodology/art
 references: [01-architecture-discovery.md, 04-backend-discovery.md, 05-business-workflow-discovery.md, ../09-capabilities/CAP-0001-repository-audit.md, ../02-methodology/glossary.md]
 meta_model_version: 1.0.0
 producer_kinds: [frontend-discovery]
+consumes:
+  - type: framework.architecture.scope
+    major: 1
+    minimum_minor: 0
+    requirement: optional
+    profile: frontend-discovery
+  - type: framework.architecture.technology
+    major: 1
+    minimum_minor: 0
+    requirement: optional
+  - type: framework.architecture.entrypoints
+    major: 1
+    minimum_minor: 0
+    requirement: required
+    required_for: [framework.frontend.surface]
+    profile: frontend-discovery
+  - type: framework.architecture.modules
+    major: 1
+    minimum_minor: 0
+    requirement: optional
+  - type: framework.architecture.configuration
+    major: 1
+    minimum_minor: 0
+    requirement: optional
+    profile: frontend-discovery
+  - type: framework.architecture.integrations
+    major: 1
+    minimum_minor: 0
+    requirement: required
+    required_for: [framework.frontend.dataflow]
+    profile: frontend-discovery
 normativity:
   "1": informative
   "2": normative
