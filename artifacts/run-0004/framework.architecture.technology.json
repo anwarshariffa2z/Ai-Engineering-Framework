@@ -1,0 +1,115 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "technology-0001-e1",
+            "location": "index.html",
+            "observation": "a document loads the entry module directly, with no server-side rendering declared",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "index.html",
+          "evidence_state": "Observed",
+          "role": "runtime",
+          "technology": "browser"
+        },
+        "record_id": "technology-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "technology-0002-e1",
+            "location": "package.json",
+            "observation": "declared as the single runtime dependency and used by the route table",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "ecosystem": "npm",
+          "evidence_state": "Observed",
+          "is_transitive": false,
+          "role": "runtime",
+          "technology": "@storefront/router",
+          "version_constraint": "2.1.0"
+        },
+        "record_id": "technology-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "technology-0003-e1",
+            "location": "package.json",
+            "observation": "the manifest declares a module type and no bundler is configured in scope",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "evidence_state": "Observed",
+          "role": "runtime",
+          "technology": "es-modules"
+        },
+        "record_id": "technology-0003"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 3
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.technology",
+      "run_id": "example/storefront-client@rev-0001#run-0004"
+    },
+    "integrity": {
+      "digest": "sha256:0a3c435e67af39ba7b26f9c7c165d219712cfb3f765d66beee07bda36fe95b6b"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No browser, bundler, or client execution of any kind was authorized, attempted, or performed",
+      "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-frontend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

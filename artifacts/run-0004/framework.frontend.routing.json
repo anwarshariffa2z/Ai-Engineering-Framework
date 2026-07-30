@@ -1,0 +1,175 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "routing-0001-e1",
+            "location": "src/routes/routes.js",
+            "observation": "the route is registered explicitly in the router table",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "routing-0001-e2",
+            "location": "index.html",
+            "observation": "a navigation anchor targets this path",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "client": "storefront-client",
+          "confidence": "High",
+          "declaration_path": "src/routes/routes.js",
+          "entry_component": "CatalogueView",
+          "evidence_state": "Observed",
+          "reachability": "referenced",
+          "route": "/"
+        },
+        "record_id": "routing-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "routing-0002-e1",
+            "location": "src/routes/routes.js",
+            "observation": "the route is registered explicitly and declares a guard",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "routing-0002-e2",
+            "location": "src/components/product-card.js",
+            "observation": "an anchor constructs this path from an item identifier",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "client": "storefront-client",
+          "confidence": "High",
+          "declaration_path": "src/routes/routes.js",
+          "entry_component": "OrderView",
+          "evidence_state": "Observed",
+          "guard": "requiresSignedIn",
+          "reachability": "referenced",
+          "route": "/orders/:orderId"
+        },
+        "record_id": "routing-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "routing-0003-e1",
+            "location": "src/routes/routes.js",
+            "observation": "the route is registered explicitly",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "routing-0003-e2",
+            "location": "src",
+            "observation": "no navigation reference to this path was found within the declared scope",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "client": "storefront-client",
+          "confidence": "High",
+          "declaration_path": "src/routes/routes.js",
+          "entry_component": "AdminView",
+          "evidence_state": "Observed",
+          "guard": "requiresStaff",
+          "reachability": "unreferenced",
+          "route": "/admin/settings"
+        },
+        "record_id": "routing-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "routing-0004-e1",
+            "location": "src/routes/routes.js",
+            "observation": "a function returns a path built from a caller-supplied facet",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "client": "storefront-client",
+          "declaration_path": "src/routes/routes.js",
+          "evidence_state": "Unknown",
+          "reachability": "constructed",
+          "route": "constructed at src/routes/routes.js facetRoute"
+        },
+        "record_id": "routing-0004",
+        "scope_reason": "the resulting paths depend on facet values supplied at run time, and the methodology does not execute the client"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 3,
+        "Unknown": 1
+      },
+      "evidence_state": "Unknown"
+    },
+    "completeness": {
+      "reason": "one route is constructed at call time from a catalogue facet; the construction site is recorded and the resulting paths are not enumerated, per AUD-0004 section 8 principle 1",
+      "state": "Partial"
+    },
+    "identity": {
+      "artifact_type": "framework.frontend.routing",
+      "run_id": "example/storefront-client@rev-0001#run-0004"
+    },
+    "integrity": {
+      "digest": "sha256:6dff8b89d13c09cbd986cbeeeaa84d015285fa1be0368a592b14145000cf84b0"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No browser, bundler, or client execution of any kind was authorized, attempted, or performed",
+      "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that declares, renders, routes, or configures the delivered client",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-frontend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

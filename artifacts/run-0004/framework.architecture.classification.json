@@ -1,0 +1,90 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "classification-0001-e1",
+            "location": "package.json",
+            "observation": "one manifest, one entry, one dependency",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "candidate": "single-client browser application",
+          "confidence": "Medium",
+          "evidence_state": "Inferred",
+          "is_dominant": true,
+          "rationale": "one module tree, one entry point, one delivery target, and no server-side component declared in scope",
+          "supporting_evidence": "module-0001, layer-0001, layer-0002"
+        },
+        "record_id": "classification-0001"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Inferred/Medium": 1
+      },
+      "evidence_state": "Inferred"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.classification",
+      "run_id": "example/storefront-client@rev-0001#run-0004"
+    },
+    "integrity": {
+      "digest": "sha256:e89a21be6d80d77ea5c5821decdd9dccbb15f4027f7765f2f4e484c2471a50c4"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "classification-0001"
+          ],
+          "digest": "sha256:1ee8bbc9db99ee3ae2160f03f954a692b9bd5b1c04774223d08938f977e0355a",
+          "identity": "example/storefront-client@rev-0001#run-0004/framework.architecture.modules@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "classification-0001"
+          ],
+          "digest": "sha256:fe3dfb02bba8fbf5c0210abc6864cb796668727301e9c1a0ce0070e6397cf230",
+          "identity": "example/storefront-client@rev-0001#run-0004/framework.architecture.layers@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No browser, bundler, or client execution of any kind was authorized, attempted, or performed",
+      "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-frontend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

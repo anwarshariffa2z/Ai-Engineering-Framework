@@ -1,0 +1,94 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "surface-0001-e1",
+            "location": "package.json",
+            "observation": "one package declaring a module type and one main entry, and no second deliverable in scope",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "surface-0001-e2",
+            "location": "index.html",
+            "observation": "a single document loading one module entry point",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "build_unit": "the package itself; the browser loads the ES modules as authored",
+          "client": "storefront-client",
+          "confidence": "Medium",
+          "delivery_target": "a static file host serving the repository root",
+          "evidence_state": "Observed",
+          "owning_module": "src",
+          "platform": "browser",
+          "support_matrix": "unknown"
+        },
+        "record_id": "surface-0001"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Observed/Medium": 1
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.frontend.surface",
+      "run_id": "example/storefront-client@rev-0001#run-0004"
+    },
+    "integrity": {
+      "digest": "sha256:db22a10694d8dcbeae262b3140840f40ca4527f073ce8e965016f43559ac654a"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "consumption_profile": "frontend-discovery",
+          "dependent_records": [
+            "surface-0001"
+          ],
+          "digest": "sha256:791cf8a722b182314f310621a2825bbb03c1dae92b0494305cd87dc9d0cd738a",
+          "identity": "example/storefront-client@rev-0001#run-0004/framework.architecture.entrypoints@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No browser, bundler, or client execution of any kind was authorized, attempted, or performed",
+      "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that declares, renders, routes, or configures the delivered client",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-frontend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

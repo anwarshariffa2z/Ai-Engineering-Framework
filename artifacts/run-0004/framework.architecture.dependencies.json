@@ -1,0 +1,72 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "dependency-0001-e1",
+            "location": "package.json",
+            "observation": "dependency declared in the package manifest",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "directness": "direct",
+          "evidence_state": "Observed",
+          "from_component": "storefront-client",
+          "is_pinned": true,
+          "to_dependency": "@storefront/router",
+          "version_constraint": "2.1.0"
+        },
+        "record_id": "dependency-0001"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 1
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "reason": "no lockfile is present in scope, so the transitive dependency set could not be examined",
+      "state": "Partial"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.dependencies",
+      "run_id": "example/storefront-client@rev-0001#run-0004"
+    },
+    "integrity": {
+      "digest": "sha256:909cb61e290fee104d54c284e1c9d654e55d0466c22f2a3cfd68ee7bf57a5e8b"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No browser, bundler, or client execution of any kind was authorized, attempted, or performed",
+      "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-frontend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

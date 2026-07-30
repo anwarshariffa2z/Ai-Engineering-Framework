@@ -31,6 +31,7 @@ import { buildResolutionDeclaration, writeArtifact, writeResolutionDeclaration, 
 import { runArchitectureDiscovery } from './lib/architecture-discovery.mjs';
 import { runDatabaseDiscovery } from './lib/database-discovery.mjs';
 import { runBackendDiscovery } from './lib/backend-discovery.mjs';
+import { runFrontendDiscovery } from './lib/frontend-discovery.mjs';
 import { verifyDigest } from './lib/canonical.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -65,6 +66,25 @@ export const COMPOSED_RUN_CONTEXT = {
   authorization: 'read-only inspection of the subject at the audited revision. No database connection of any kind was authorized, attempted, or made',
   redactionState: 'none',
   environment: 'static inspection of subject source; no execution environment was entered and no data store was contacted',
+};
+
+// A run over the frontend subject. Two stages: architecture supplies the entry
+// declarations and integrations AUD-0004 requires, and frontend consumes them by
+// identity. It is a separate run rather than a fourth stage on run-0003 because
+// run-0003 is released evidence and its bytes are frozen.
+export const FRONTEND_RUN_CONTEXT = {
+  subjectAuthority: 'example',
+  subjectName: 'storefront-client',
+  subjectRevision: 'rev-0001',
+  runDiscriminator: 'run-0004',
+  subjectRef: 'fixtures/subject-repo-frontend',
+  producerId: 'reference-repository-audit',
+  producerVersion: '1.0.0',
+  executorClass: 'tool',
+  generatedAt: '2026-07-29T00:00:00Z',
+  authorization: 'read-only inspection of the subject at the audited revision. No browser, bundler, or client execution of any kind was authorized, attempted, or performed',
+  redactionState: 'none',
+  environment: 'static inspection of subject source; no execution environment was entered and no client was rendered',
 };
 
 // STD-0013 R-33 through R-35, applied by the producer to its own output before it
@@ -216,6 +236,40 @@ export function executeThreeStageRun({ root: runRoot, context = THREE_STAGE_RUN_
   return { run, artifacts, architecture, database, backend, declaration, outputDirectory };
 }
 
+/**
+ * Architecture, then frontend, over the frontend subject.
+ *
+ * The frontend stage resolves what it consumes against the declaration written
+ * after the architecture stage, and against nothing else. Its required inputs are
+ * declared by AUD-0004 rather than by this function, so the sequencing here is
+ * the same shape as every other composed run.
+ */
+export function executeFrontendRun({ root: runRoot, context = FRONTEND_RUN_CONTEXT, outputDirectory = 'artifacts/run-0004' }) {
+  const declarations = loadDeclarations(join(runRoot, 'docs'));
+  const run = { ...context, runId: runIdentity(context) };
+  const subjectRoot = join(runRoot, context.subjectRef);
+  const entries = [];
+
+  const declareSoFar = () => {
+    const declaration = buildResolutionDeclaration({ runId: run.runId, entries });
+    writeResolutionDeclaration(runRoot, `${outputDirectory}/resolution.json`, declaration);
+    return declaration;
+  };
+
+  const architecture = runArchitectureDiscovery({ run, subjectRoot, declarations });
+  gate(architecture, declarations);
+  entries.push(...writeAll(runRoot, architecture, outputDirectory));
+  const afterArchitecture = declareSoFar();
+
+  const frontend = runFrontendDiscovery({ run, declarations, root: runRoot, resolution: afterArchitecture });
+  gate(frontend.artifacts, declarations);
+  entries.push(...writeAll(runRoot, frontend.artifacts, outputDirectory));
+  const declaration = declareSoFar();
+
+  const artifacts = new Map([...architecture, ...frontend.artifacts]);
+  return { run, artifacts, architecture, frontend, declaration, outputDirectory };
+}
+
 function summarize(result) {
   const lines = [];
   lines.push(`run ${result.run.runId}`);
@@ -232,8 +286,9 @@ if (process.argv[1]?.endsWith('index.mjs')) {
   const architectureOnly = executeRun({ root });
   const composed = executeComposedRun({ root });
   const threeStage = executeThreeStageRun({ root });
+  const frontend = executeFrontendRun({ root });
 
-  for (const result of [architectureOnly, composed, threeStage]) {
+  for (const result of [architectureOnly, composed, threeStage, frontend]) {
     const text = summarize(result);
     console.log(text);
     writeFileSync(join(root, result.outputDirectory, 'run-summary.txt'), `${text}\n`, 'utf8');

@@ -1,0 +1,43 @@
+{
+  "body": {
+    "records": []
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Low",
+      "evidence_state": "Unknown"
+    },
+    "completeness": {
+      "reason": "the subject declares no deployment definition; the only script serves the repository as static files",
+      "state": "NotApplicable"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.deployment",
+      "run_id": "example/storefront-client@rev-0001#run-0004"
+    },
+    "integrity": {
+      "digest": "sha256:32fc1277d85d655b8ff9894f056dbfaf9051c1ce84d8edcf5033b0164f123ae2"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No browser, bundler, or client execution of any kind was authorized, attempted, or performed",
+      "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-frontend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

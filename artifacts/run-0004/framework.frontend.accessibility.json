@@ -1,0 +1,117 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "accessibility-0001-e1",
+            "location": "src/components/catalogue-view.js",
+            "observation": "a main element carrying a role and an accessible label",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "evidence_state": "Observed",
+          "location": "src/components/catalogue-view.js",
+          "method": "inspected",
+          "observation": "the catalogue surface declares a main landmark and an accessible name",
+          "standard": "WCAG 2.1"
+        },
+        "record_id": "accessibility-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "accessibility-0002-e1",
+            "location": "src/components/admin-view.js",
+            "observation": "a div declaring a click handler and no role, tabindex, or key handler",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "location": "src/components/admin-view.js",
+          "method": "inspected",
+          "observation": "a control in the staff surface is a non-semantic element carrying a click handler, with no role and no keyboard handler",
+          "standard": "WCAG 2.1"
+        },
+        "record_id": "accessibility-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "accessibility-0003-e1",
+            "location": "src/components/product-card.js",
+            "observation": "an image element whose attributes are built from a supplied item",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "evidence_state": "Unknown",
+          "location": "src/components/product-card.js",
+          "method": "inspected",
+          "observation": "whether the product image carries a text alternative could not be established",
+          "standard": "WCAG 2.1"
+        },
+        "record_id": "accessibility-0003",
+        "scope_reason": "the image attributes are supplied by the item record at run time and no alternative-text attribute is declared in source"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Observed/High": 1,
+        "Observed/Medium": 1,
+        "Unknown": 1
+      },
+      "evidence_state": "Unknown"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.frontend.accessibility",
+      "run_id": "example/storefront-client@rev-0001#run-0004"
+    },
+    "integrity": {
+      "digest": "sha256:55936374a77b22f91fcdfa9ee9b9ec4fd50d7f835f86099a2870bd2e37662754"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No browser, bundler, or client execution of any kind was authorized, attempted, or performed",
+      "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that declares, renders, routes, or configures the delivered client",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-frontend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

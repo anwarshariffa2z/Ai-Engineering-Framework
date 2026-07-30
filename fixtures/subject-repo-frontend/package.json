@@ -1,0 +1,14 @@
+{
+  "name": "storefront-client",
+  "version": "0.4.0",
+  "private": true,
+  "type": "module",
+  "description": "Deterministic frontend subject. No build step: the browser loads the ES modules directly.",
+  "main": "src/main.js",
+  "dependencies": {
+    "@storefront/router": "2.1.0"
+  },
+  "scripts": {
+    "serve": "static-file-server ."
+  }
+}

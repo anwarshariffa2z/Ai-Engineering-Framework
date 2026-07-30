@@ -1,0 +1,70 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "runtime-0001-e1",
+            "location": "index.html",
+            "observation": "a module script tag and no declared engine constraint",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "component": "storefront-client",
+          "component_kind": "browser-delivered client",
+          "confidence": "Medium",
+          "declaration_path": "index.html",
+          "evidence_state": "Observed",
+          "state_ownership": "none held between loads; the client declares no store and no persistence"
+        },
+        "record_id": "runtime-0001"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Observed/Medium": 1
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "reason": "the transport is supplied by the host page at run time and is not declared in scope, so the runtime the client executes in was not fully examined",
+      "state": "Partial"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.runtime",
+      "run_id": "example/storefront-client@rev-0001#run-0004"
+    },
+    "integrity": {
+      "digest": "sha256:e051779408e0704be7a2079ef7165ba4c383fb07ddfc36df00b11335e18a3e57"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No browser, bundler, or client execution of any kind was authorized, attempted, or performed",
+      "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-frontend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

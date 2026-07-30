@@ -344,6 +344,181 @@ export const SUBJECTS = {
     },
   },
 
+  // The frontend subject, examined by AUD-0002 so that AUD-0004 has upstream
+  // artifacts to consume. A client with no build step: what is authored is what
+  // is delivered, which is why its configuration is an exposure question rather
+  // than a build one.
+  'storefront-client': {
+    declaredScope: 'every path in the subject repository at the audited revision, excluding version control internals',
+    exclusions: [],
+    inaccessibleDirectories: [],
+    technology: {
+      completeness: 'Complete',
+      records: [
+        { technology: 'browser', role: 'runtime', declaration_path: 'index.html', note: 'a document loads the entry module directly, with no server-side rendering declared' },
+        { technology: '@storefront/router', role: 'runtime', declaration_path: 'package.json', version_constraint: '2.1.0', ecosystem: 'npm', is_transitive: false, note: 'declared as the single runtime dependency and used by the route table' },
+        { technology: 'es-modules', role: 'runtime', declaration_path: 'package.json', note: 'the manifest declares a module type and no bundler is configured in scope' },
+      ],
+    },
+    build: {
+      completeness: 'Complete',
+      records: [
+        { command: 'npm run serve', definition_path: 'package.json', controller: 'developer', reproducibility_note: 'the script serves the repository as static files; it compiles, bundles, and transforms nothing, so what is authored is what is delivered', state: 'Observed', confidence: 'High' },
+      ],
+    },
+    entrypoints: {
+      completeness: 'Complete',
+      records: [
+        {
+          fields: {
+            entry_point: 'src/main.js',
+            entry_kind: 'client',
+            declaration_path: 'package.json',
+            owning_module: 'src',
+            initialization_trace: 'main.js imports the route table and returns the mount and routes to its caller',
+            audience: 'production',
+            evidence_state: 'Observed',
+            confidence: 'High',
+          },
+          evidence: [
+            ['package.json', 'manifest names src/main.js as main'],
+            ['index.html', 'the document loads the same module as a script of type module'],
+          ],
+        },
+      ],
+    },
+    dependencies: {
+      completeness: 'Partial',
+      completenessReason: 'no lockfile is present in scope, so the transitive dependency set could not be examined',
+      evidenceLocation: 'package.json',
+      evidenceNote: 'dependency declared in the package manifest',
+      records: [
+        { from_component: 'storefront-client', to_dependency: '@storefront/router', directness: 'direct', declaration_path: 'package.json', version_constraint: '2.1.0', is_pinned: true },
+      ],
+    },
+    modules: {
+      completeness: 'Complete',
+      records: [
+        { module: 'src', boundary_evidence: 'namespace', responsibility: 'the delivered client: its entry point, routes, components, API access, and configuration', public_interface: 'start', boundary_note: 'one directory holding every authored module of the client' },
+      ],
+    },
+    layers: {
+      completeness: 'Complete',
+      records: [
+        {
+          fields: {
+            layer: 'presentation',
+            member_modules: 'src/components, src/routes',
+            permitted_direction: 'may depend on access; access may not depend on presentation',
+            evidence_state: 'Observed',
+            confidence: 'High',
+          },
+          evidence: [['src/components', 'components render and two of them call the shared read helper']],
+        },
+        {
+          fields: {
+            layer: 'access',
+            member_modules: 'src/api, src/config',
+            permitted_direction: 'depends on nothing within the subject',
+            evidence_state: 'Observed',
+            confidence: 'High',
+          },
+          evidence: [['src/api/client.js', 'one module builds every outbound target and is imported by the presentation layer']],
+        },
+      ],
+    },
+    classification: {
+      completeness: 'Complete',
+      lineage: [['framework.architecture.modules', ['classification-0001']], ['framework.architecture.layers', ['classification-0001']]],
+      records: [
+        {
+          fields: {
+            candidate: 'single-client browser application',
+            supporting_evidence: 'module-0001, layer-0001, layer-0002',
+            is_dominant: true,
+            rationale: 'one module tree, one entry point, one delivery target, and no server-side component declared in scope',
+            evidence_state: 'Inferred',
+            confidence: 'Medium',
+          },
+          evidence: [['package.json', 'one manifest, one entry, one dependency']],
+        },
+      ],
+    },
+    runtime: {
+      completeness: 'Partial',
+      completenessReason: 'the transport is supplied by the host page at run time and is not declared in scope, so the runtime the client executes in was not fully examined',
+      records: [
+        {
+          fields: {
+            component: 'storefront-client',
+            component_kind: 'browser-delivered client',
+            declaration_path: 'index.html',
+            state_ownership: 'none held between loads; the client declares no store and no persistence',
+            evidence_state: 'Observed',
+            confidence: 'Medium',
+          },
+          evidence: [['index.html', 'a module script tag and no declared engine constraint']],
+        },
+      ],
+    },
+    integrations: {
+      completeness: 'Complete',
+      records: [
+        {
+          fields: {
+            integration: 'storefront service read API',
+            direction: 'outbound',
+            protocol: 'http',
+            adapter_path: 'src/api/client.js',
+            activity: 'configured',
+            evidence_state: 'Observed',
+            confidence: 'Medium',
+          },
+          evidence: [['src/api/client.js', 'one helper builds a target from a configured base and a path, and every call site uses it']],
+        },
+      ],
+    },
+    configuration: {
+      completeness: 'Complete',
+      evidenceLocation: 'src/config/public-config.js',
+      records: [
+        { key: 'PUBLIC_API_BASE_URL', source: 'injected environment object read at module load', is_secret_reference: false },
+        { key: 'PUBLIC_ANALYTICS_SITE_ID', source: 'injected environment object read at module load', is_secret_reference: false },
+      ],
+    },
+    deployment: {
+      completeness: 'NotApplicable',
+      completenessReason: 'the subject declares no deployment definition; the only script serves the repository as static files',
+      records: [],
+    },
+    risks: {
+      completeness: 'Complete',
+      lineage: [['framework.architecture.configuration', ['risk-0001']]],
+      records: [
+        {
+          fields: {
+            risk: 'configuration is read at module load in a client with no build step',
+            cause: 'the configuration module is delivered as authored and reads an injected environment object',
+            impact: 'any key added to that module is readable by every recipient of the client',
+            supporting_records: 'configuration-0001, configuration-0002',
+            likelihood_rationale: 'the delivery mechanism guarantees readability rather than making it possible',
+            evidence_state: 'Observed',
+            confidence: 'High',
+          },
+          evidence: [['src/config/public-config.js', 'the module is imported by the access layer and loaded by the document']],
+        },
+      ],
+    },
+    health: {
+      completeness: 'Complete',
+      lineage: [['framework.architecture.modules', ['health-0001']], ['framework.architecture.dependencies', ['health-0002']]],
+      records: [
+        { dimension: 'modularity', score: 3, calculation: 'one module holding the whole client: a boundary exists and does not separate concerns within it', supporting_records: 'module-0001', state: 'Observed', confidence: 'High' },
+        { dimension: 'dependency-hygiene', score: 4, calculation: 'one declared runtime dependency with a pinned version; the transitive set is unexamined for want of a lockfile', supporting_records: 'dependency-0001', state: 'Observed', confidence: 'Medium' },
+        { dimension: 'deployment-clarity', unknown: 'the subject declares no deployment definition, so this run holds no observation that would support a score', supporting_records: 'none' },
+      ],
+    },
+  },
   'orders-db': {
     declaredScope: 'every path in the subject repository at the audited revision, excluding version control internals',
     exclusions: [],

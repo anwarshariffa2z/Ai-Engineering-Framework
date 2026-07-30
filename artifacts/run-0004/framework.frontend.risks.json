@@ -1,0 +1,128 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "risk-0001-e1",
+            "location": "src/routes/routes.js",
+            "observation": "the route is registered and unreferenced",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "risk-0001-e2",
+            "location": "src/components/admin-view.js",
+            "observation": "the guard is a rendering decision",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "cause": "the route is registered and nothing in the client links to it",
+          "evidence_state": "Unknown",
+          "impact": "the surface is discoverable by anyone who guesses the path, and its protection rests on a check the client performs",
+          "likelihood_rationale": "the path is a literal in a delivered module and is readable by any recipient of the client",
+          "next_verification": "establish whether the service enforces staff access independently of the client",
+          "risk": "a registered staff route is reachable by address and by no navigation reference",
+          "supporting_records": "routing-0003, exposure-0002"
+        },
+        "record_id": "risk-0001",
+        "scope_reason": "the conclusion rests on routing-0003, and the routing artifact it derives from carries an Unknown record; artifact-level lineage cannot name the record actually relied upon, so STD-0007 R-28 makes this conclusion Unknown"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "risk-0002-e1",
+            "location": "src/config/public-config.js",
+            "observation": "the module is loaded directly by the document",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "cause": "the client is served as authored and its configuration module is fetched by the browser",
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "impact": "any key placed in that module is readable by every recipient, whether or not it is intended to be public",
+          "likelihood_rationale": "the delivery mechanism guarantees it rather than making it possible",
+          "next_verification": "confirm that no key added to that module is ever a secret",
+          "risk": "configuration is inlined into a client with no build step, so authored source is delivered source",
+          "supporting_records": "exposure-0001"
+        },
+        "record_id": "risk-0002"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 1,
+        "Unknown": 1
+      },
+      "evidence_state": "Unknown"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.frontend.risks",
+      "run_id": "example/storefront-client@rev-0001#run-0004"
+    },
+    "integrity": {
+      "digest": "sha256:56840e42641da1f23e1f6f7c406c659fb61eb3b2e2e4b9a57dc24b927bfb848b"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "risk-0001"
+          ],
+          "digest": "sha256:6dff8b89d13c09cbd986cbeeeaa84d015285fa1be0368a592b14145000cf84b0",
+          "identity": "example/storefront-client@rev-0001#run-0004/framework.frontend.routing@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "risk-0002"
+          ],
+          "digest": "sha256:9637cdbc97ab5d3d29979858bdf2ffafe58f8b1341ac12bf3070f5f19a039dc1",
+          "identity": "example/storefront-client@rev-0001#run-0004/framework.frontend.exposure@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No browser, bundler, or client execution of any kind was authorized, attempted, or performed",
+      "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that declares, renders, routes, or configures the delivered client",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-frontend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

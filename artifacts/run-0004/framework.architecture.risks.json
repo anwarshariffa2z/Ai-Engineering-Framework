@@ -1,0 +1,82 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "risk-0001-e1",
+            "location": "src/config/public-config.js",
+            "observation": "the module is imported by the access layer and loaded by the document",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "cause": "the configuration module is delivered as authored and reads an injected environment object",
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "impact": "any key added to that module is readable by every recipient of the client",
+          "likelihood_rationale": "the delivery mechanism guarantees readability rather than making it possible",
+          "risk": "configuration is read at module load in a client with no build step",
+          "supporting_records": "configuration-0001, configuration-0002"
+        },
+        "record_id": "risk-0001"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 1
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.risks",
+      "run_id": "example/storefront-client@rev-0001#run-0004"
+    },
+    "integrity": {
+      "digest": "sha256:3ad584524357533d99e104c08a1479248ac43efccfa3fb46092a4850404948c0"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "risk-0001"
+          ],
+          "digest": "sha256:a72864837ed26f30b55bf00077808c7090469fd53f5099e5e13b0aee6cc50c76",
+          "identity": "example/storefront-client@rev-0001#run-0004/framework.architecture.configuration@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No browser, bundler, or client execution of any kind was authorized, attempted, or performed",
+      "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-frontend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

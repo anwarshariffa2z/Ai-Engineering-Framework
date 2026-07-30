@@ -1,0 +1,144 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "health-0001-e1",
+            "location": "src/routes/routes.js",
+            "observation": "four route determinations, one unreferenced and one constructed",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "three of four routes carry an established reachability determination; one is unreferenced and one is unknown, so the dimension is adequate with a material gap",
+          "dimension": "routing-integrity",
+          "evidence_state": "Unknown",
+          "supporting_records": "routing-0001, routing-0002, routing-0003, routing-0004"
+        },
+        "record_id": "health-0001",
+        "scope_reason": "one of the four routing determinations is itself Unknown, so no score for this dimension is supported; STD-0007 R-42 forbids an unexamined input contributing to a score at all"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "health-0002-e1",
+            "location": "src/components",
+            "observation": "four components, each imported once",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "every catalogued component has exactly one importer, so no component is reused and the dimension carries significant evidenced weakness",
+          "confidence": "High",
+          "dimension": "component-cohesion",
+          "evidence_state": "Observed",
+          "score": 2,
+          "supporting_records": "components-0001, components-0002, components-0003, components-0004"
+        },
+        "record_id": "health-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "health-0003-e1",
+            "location": "src/components",
+            "observation": "markup inspected in full; no tooling output was supplied",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "calculation": "one landmark observation, one control failing to expose a role or keyboard path, and one determination that could not be made; inspected only, with no automated evidence",
+          "dimension": "accessibility-evidence",
+          "evidence_state": "Unknown",
+          "supporting_records": "accessibility-0001, accessibility-0002, accessibility-0003"
+        },
+        "record_id": "health-0003",
+        "scope_reason": "one of the three accessibility determinations is itself Unknown, so no score for this dimension is supported"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 1,
+        "Unknown": 2
+      },
+      "evidence_state": "Unknown"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.frontend.health",
+      "run_id": "example/storefront-client@rev-0001#run-0004"
+    },
+    "integrity": {
+      "digest": "sha256:91da56a090374838fd924f547b3cba5620325a75708d60227a9aecf28e8b4d47"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "health-0001"
+          ],
+          "digest": "sha256:6dff8b89d13c09cbd986cbeeeaa84d015285fa1be0368a592b14145000cf84b0",
+          "identity": "example/storefront-client@rev-0001#run-0004/framework.frontend.routing@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "health-0002"
+          ],
+          "digest": "sha256:753c0ad8cfa9f4b38ef44699cad25e67816b83e9eda11944742c38f161a03ce0",
+          "identity": "example/storefront-client@rev-0001#run-0004/framework.frontend.components@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "health-0003"
+          ],
+          "digest": "sha256:55936374a77b22f91fcdfa9ee9b9ec4fd50d7f835f86099a2870bd2e37662754",
+          "identity": "example/storefront-client@rev-0001#run-0004/framework.frontend.accessibility@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No browser, bundler, or client execution of any kind was authorized, attempted, or performed",
+      "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that declares, renders, routes, or configures the delivered client",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-frontend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

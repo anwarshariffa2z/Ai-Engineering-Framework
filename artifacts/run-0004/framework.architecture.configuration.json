@@ -1,0 +1,90 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "configuration-0001-e1",
+            "location": "src/config/public-config.js",
+            "observation": "key and default declared in the configuration file",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "is_secret_reference": false,
+          "key": "PUBLIC_API_BASE_URL",
+          "source": "injected environment object read at module load"
+        },
+        "record_id": "configuration-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "configuration-0002-e1",
+            "location": "src/config/public-config.js",
+            "observation": "key and default declared in the configuration file",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "is_secret_reference": false,
+          "key": "PUBLIC_ANALYTICS_SITE_ID",
+          "source": "injected environment object read at module load"
+        },
+        "record_id": "configuration-0002"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 2
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.configuration",
+      "run_id": "example/storefront-client@rev-0001#run-0004"
+    },
+    "integrity": {
+      "digest": "sha256:a72864837ed26f30b55bf00077808c7090469fd53f5099e5e13b0aee6cc50c76"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No browser, bundler, or client execution of any kind was authorized, attempted, or performed",
+      "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-frontend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

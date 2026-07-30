@@ -1,0 +1,182 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "components-0001-e1",
+            "location": "src/components/catalogue-view.js",
+            "observation": "one exported function declaring its inputs",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "components-0001-e2",
+            "location": "src/routes/routes.js",
+            "observation": "imported once, by the router table",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "component": "CatalogueView",
+          "confidence": "High",
+          "declaration_path": "src/components/catalogue-view.js",
+          "evidence_state": "Observed",
+          "import_count": 1,
+          "render_role": "container",
+          "responsibility": "renders the catalogue and fetches the items it renders"
+        },
+        "record_id": "components-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "components-0002-e1",
+            "location": "src/components/product-card.js",
+            "observation": "one exported function that fetches nothing and renders its inputs",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "components-0002-e2",
+            "location": "src/components/catalogue-view.js",
+            "observation": "imported once",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "component": "ProductCard",
+          "confidence": "High",
+          "declaration_path": "src/components/product-card.js",
+          "evidence_state": "Observed",
+          "import_count": 1,
+          "render_role": "presentational",
+          "responsibility": "renders one product and the link to its order"
+        },
+        "record_id": "components-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "components-0003-e1",
+            "location": "src/components/order-view.js",
+            "observation": "one exported function reading the order it was routed to",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "components-0003-e2",
+            "location": "src/routes/routes.js",
+            "observation": "imported once, by the router table",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "component": "OrderView",
+          "confidence": "High",
+          "declaration_path": "src/components/order-view.js",
+          "evidence_state": "Observed",
+          "import_count": 1,
+          "render_role": "container",
+          "responsibility": "renders one order and fetches it"
+        },
+        "record_id": "components-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "components-0004-e1",
+            "location": "src/components/admin-view.js",
+            "observation": "one exported function branching on a supplied profile",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "components-0004-e2",
+            "location": "src/routes/routes.js",
+            "observation": "imported once, by the router table",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "component": "AdminView",
+          "confidence": "High",
+          "declaration_path": "src/components/admin-view.js",
+          "evidence_state": "Observed",
+          "import_count": 1,
+          "render_role": "presentational",
+          "responsibility": "renders the staff settings surface"
+        },
+        "record_id": "components-0004"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 4
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.frontend.components",
+      "run_id": "example/storefront-client@rev-0001#run-0004"
+    },
+    "integrity": {
+      "digest": "sha256:753c0ad8cfa9f4b38ef44699cad25e67816b83e9eda11944742c38f161a03ce0"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No browser, bundler, or client execution of any kind was authorized, attempted, or performed",
+      "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that declares, renders, routes, or configures the delivered client",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-frontend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

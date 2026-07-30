@@ -1,0 +1,81 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "entrypoint-0001-e1",
+            "location": "package.json",
+            "observation": "manifest names src/main.js as main",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "entrypoint-0001-e2",
+            "location": "index.html",
+            "observation": "the document loads the same module as a script of type module",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "audience": "production",
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "entry_kind": "client",
+          "entry_point": "src/main.js",
+          "evidence_state": "Observed",
+          "initialization_trace": "main.js imports the route table and returns the mount and routes to its caller",
+          "owning_module": "src"
+        },
+        "record_id": "entrypoint-0001"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 1
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.entrypoints",
+      "run_id": "example/storefront-client@rev-0001#run-0004"
+    },
+    "integrity": {
+      "digest": "sha256:791cf8a722b182314f310621a2825bbb03c1dae92b0494305cd87dc9d0cd738a"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No browser, bundler, or client execution of any kind was authorized, attempted, or performed",
+      "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-frontend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

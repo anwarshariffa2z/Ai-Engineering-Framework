@@ -1,0 +1,130 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "dataflow-0001-e1",
+            "location": "src/components/catalogue-view.js",
+            "observation": "the component calls the shared read helper during render",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "dataflow-0001-e2",
+            "location": "src/api/client.js",
+            "observation": "one helper builds the target from a configured base and a path",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "caching": "none declared",
+          "call_site": "src/components/catalogue-view.js CatalogueView",
+          "confidence": "Medium",
+          "error_handling": "none declared at the call site; a failure surfaces to the caller",
+          "evidence_state": "Observed",
+          "optimistic_update": "none",
+          "target_interface": "the catalogue read path of the upstream service integration",
+          "trigger": "render"
+        },
+        "record_id": "dataflow-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "dataflow-0002-e1",
+            "location": "src/components/order-view.js",
+            "observation": "the component calls the shared read helper during render",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+            "evidence_id": "dataflow-0002-e2",
+            "location": "src/api/client.js",
+            "observation": "the same helper serves every call site in the client",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "caching": "none declared",
+          "call_site": "src/components/order-view.js OrderView",
+          "confidence": "Medium",
+          "error_handling": "none declared at the call site; a failure surfaces to the caller",
+          "evidence_state": "Observed",
+          "optimistic_update": "none",
+          "target_interface": "the order read path of the upstream service integration",
+          "trigger": "render"
+        },
+        "record_id": "dataflow-0002"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Observed/Medium": 2
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.frontend.dataflow",
+      "run_id": "example/storefront-client@rev-0001#run-0004"
+    },
+    "integrity": {
+      "digest": "sha256:ab5a09d49cc3b325f4e282d01f68192fa39db33fdc0768b3471231901b9988c4"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "consumption_profile": "frontend-discovery",
+          "dependent_records": [
+            "dataflow-0001",
+            "dataflow-0002"
+          ],
+          "digest": "sha256:467149afc05a93392476fddbfdc022349c95b4c897901bd415599ab208c6a4c4",
+          "identity": "example/storefront-client@rev-0001#run-0004/framework.architecture.integrations@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No browser, bundler, or client execution of any kind was authorized, attempted, or performed",
+      "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that declares, renders, routes, or configures the delivered client",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-frontend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

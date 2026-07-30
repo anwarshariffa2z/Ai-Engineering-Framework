@@ -1,0 +1,43 @@
+{
+  "body": {
+    "records": []
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Low",
+      "evidence_state": "Unknown"
+    },
+    "completeness": {
+      "reason": "the client declares no store, no context provider, no persistence, and no subscription; every component receives what it renders as an input",
+      "state": "NotApplicable"
+    },
+    "identity": {
+      "artifact_type": "framework.frontend.state",
+      "run_id": "example/storefront-client@rev-0001#run-0004"
+    },
+    "integrity": {
+      "digest": "sha256:bffb7269166867ef7d2f48c5f4fdffcb90294b88d0aac6b3e2a8ae6a7ef503fc"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No browser, bundler, or client execution of any kind was authorized, attempted, or performed",
+      "environment": "static inspection of subject source; no execution environment was entered and no client was rendered",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that declares, renders, routes, or configures the delivered client",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-frontend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}
