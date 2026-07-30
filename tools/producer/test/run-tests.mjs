@@ -19,8 +19,9 @@ import { readFileSync, readdirSync } from 'node:fs';
 
 import { executeRun, executeComposedRun, executeThreeStageRun, RUN_CONTEXT, COMPOSED_RUN_CONTEXT, THREE_STAGE_RUN_CONTEXT } from '../index.mjs';
 import { consume } from '../consume.mjs';
-import { runDatabaseDiscovery, CONSUMED_TYPES } from '../lib/database-discovery.mjs';
-import { runBackendDiscovery, CONSUMED_TYPES as BACKEND_INPUTS, PROFILE_CONSUMER, profileFor, projectThroughProfile } from '../lib/backend-discovery.mjs';
+import { runDatabaseDiscovery, CONSUMED_TYPES, CONSUMES as DATABASE_CONSUMES, PRODUCED_TYPES as DATABASE_PRODUCES } from '../lib/database-discovery.mjs';
+import { runBackendDiscovery, CONSUMED_TYPES as BACKEND_INPUTS, PROFILE_CONSUMER, profileFor, projectThroughProfile, CONSUMES as BACKEND_CONSUMES, PRODUCED_TYPES as BACKEND_PRODUCES } from '../lib/backend-discovery.mjs';
+import { parseFrontMatter } from '../../validator/lib/yaml.mjs';
 import { evaluateRequiredInputs, consumedTypes } from '../lib/required-inputs.mjs';
 import { crossRunScenario } from '../cross-run.mjs';
 import { buildInstanceChecks } from '../../validator/lib/instance-checks.mjs';
@@ -1145,6 +1146,215 @@ test('STD-0011#R-53', 'the primitive names no methodology and no artifact type',
 test('STD-0010#R-48', 'consumedTypes reads the declaration in order', () => {
   const consumes = [{ type: 'x.b.one', requirement: 'optional' }, { type: 'x.b.two', requirement: 'required', required_for: ['x.a.one'] }];
   assert(consumedTypes(consumes).join() === 'x.b.one,x.b.two', consumedTypes(consumes).join());
+});
+
+
+// ---- methodology contract conformance ---------------------------------------
+//
+// Layer 2 of the three-layer model. Static validation compares documents against
+// documents and cannot see an implementation; artifact validation sees what was
+// emitted and not what was intended. Only this comparison catches a Methodology
+// that declares one contract while its producer implements another.
+//
+// The declaration is loaded from the document by an independent parser and the
+// implementation value is imported from the module. Neither is generated from the
+// other; if it were, the test would pass by construction and prove nothing.
+
+function methodologyContract(file) {
+  const parsed = parseFrontMatter(readFileSync(join(root, 'docs/03-audit-engine', file), 'utf8'));
+  assert(parsed.ok, `${file} front matter did not parse: ${parsed.reason}`);
+  return parsed.data;
+}
+
+const CONTRACTS = [
+  ['AUD-0003', '02-database-discovery.md', DATABASE_CONSUMES, DATABASE_PRODUCES, 'database-discovery', null],
+  ['AUD-0005', '04-backend-discovery.md', BACKEND_CONSUMES, BACKEND_PRODUCES, 'backend-discovery', PROFILE_CONSUMER],
+];
+
+for (const [id, file, implConsumes, implProduces, kind, profileConsumer] of CONTRACTS) {
+  const declared = methodologyContract(file);
+  const entries = Array.isArray(declared.consumes) ? declared.consumes : [];
+
+  test('STD-0010#R-26', `${id}: the implementation consumes exactly what the methodology declares`, () => {
+    const a = entries.map((e) => e.type).slice().sort().join('\n');
+    const b = implConsumes.map((e) => e.type).slice().sort().join('\n');
+    assert(a === b, `declared and implemented consumed sets differ:\ndeclared:\n${a}\nimplemented:\n${b}`);
+  });
+
+  test('STD-0011#R-20', `${id}: required and optional agree between declaration and implementation`, () => {
+    for (const entry of entries) {
+      const impl = implConsumes.find((e) => e.type === entry.type);
+      assert(impl, `${entry.type} is declared and not implemented`);
+      assert(impl.requirement === entry.requirement,
+        `${entry.type}: declared ${entry.requirement}, implemented ${impl.requirement}`);
+    }
+  });
+
+  test('STD-0011#R-53', `${id}: required_for agrees between declaration and implementation`, () => {
+    for (const entry of entries.filter((e) => e.requirement === 'required')) {
+      const impl = implConsumes.find((e) => e.type === entry.type);
+      const declaredFor = (Array.isArray(entry.required_for) ? entry.required_for : []).slice().sort().join(',');
+      const implFor = (impl.required_for ?? []).slice().sort().join(',');
+      assert(declaredFor === implFor, `${entry.type}: declared required_for [${declaredFor}], implemented [${implFor}]`);
+    }
+  });
+
+  test('STD-0010#R-49', `${id}: the produced set derived from producer_kinds matches the implementation`, () => {
+    const kinds = Array.isArray(declared.producer_kinds) ? declared.producer_kinds : [];
+    assert(kinds.includes(kind), `${id} declares producer_kinds [${kinds.join(', ')}], which omits ${kind}`);
+    const derived = [...declarations].filter(([, d]) => kinds.includes(d.producer_kind)).map(([t]) => t).sort();
+    assert(derived.join('\n') === implProduces.slice().sort().join('\n'),
+      `the types declaring kind ${kind} differ from the types the producer emits`);
+    assert(declared.produces === undefined, `${id} restates produces, which R-49 derives`);
+  });
+
+  test('STD-0011#R-09', `${id}: the declared major version is the one the implementation understands`, () => {
+    for (const entry of entries) {
+      assert(String(entry.major) === '1', `${entry.type}: declares major ${entry.major}; the implementation understands 1`);
+    }
+  });
+
+  if (profileConsumer) {
+    test('STD-0010#R-27', `${id}: every claimed profile is one the implementation reads through`, () => {
+      for (const entry of entries.filter((e) => e.profile)) {
+        assert(entry.profile === profileConsumer,
+          `${entry.type}: declares profile ${entry.profile}, and the implementation consumes as ${profileConsumer}`);
+        const declaration = declarations.get(entry.type);
+        assert(profileFor(declaration), `${entry.type}: a profile is claimed and the type declares none for ${profileConsumer}`);
+      }
+      // And the converse: a type offering this consumer a profile is claimed.
+      for (const entry of entries) {
+        const offers = Boolean(profileFor(declarations.get(entry.type)));
+        assert(offers === Boolean(entry.profile),
+          `${entry.type}: the type ${offers ? 'offers' : 'offers no'} profile for ${profileConsumer}, and the methodology ${entry.profile ? 'claims' : 'claims none'}`);
+      }
+    });
+  }
+}
+
+test('STD-0010#R-49', 'every producer kind in the corpus is claimed by exactly one methodology', () => {
+  // The join is only sound if it is total and unambiguous. This is the test that
+  // would have caught the kinds no methodology claims.
+  const kinds = new Map();
+  for (const file of readdirSync(join(root, 'docs/03-audit-engine'))) {
+    if (!file.endsWith('.md') || file === 'README.md') continue;
+    const parsed = parseFrontMatter(readFileSync(join(root, 'docs/03-audit-engine', file), 'utf8'));
+    if (!parsed.ok || parsed.data.object_type !== 'Methodology') continue;
+    for (const k of parsed.data.producer_kinds ?? []) kinds.set(k, [...(kinds.get(k) ?? []), file]);
+  }
+  const declaredKinds = new Set([...declarations.values()].map((d) => d.producer_kind));
+  for (const k of declaredKinds) {
+    assert(kinds.has(k), `producer kind ${k} is declared by artifact types and claimed by no methodology`);
+    assert(kinds.get(k).length === 1, `producer kind ${k} is claimed by ${kinds.get(k).join(', ')}`);
+  }
+});
+
+
+test('STD-0011#R-21', 'an undeclared cross-methodology consumption is reported', () => {
+  // R-21 is the only binding that compares an authored contract against emitted
+  // artifacts, and a check that passes because it reaches nothing is worse than no
+  // check. This drives it from both sides against the real run: with the
+  // methodology's own declaration every artifact passes, and with one entry
+  // withheld the artifact deriving from that type fails and names it.
+  const withheld = 'framework.database.entities';
+  const artifacts = [...threeStage.artifacts].map(([type, artifact]) => ({ path: type, artifact }));
+  const target = threeStage.backend.artifacts.get('framework.backend.dataaccess');
+  assert((target.envelope.lineage.derives_from ?? []).some((e) => e.identity.includes(withheld)),
+    'the fixture artifact no longer derives from the type this test withholds');
+
+  const methodology = methodologyContract('04-backend-discovery.md');
+  const run = (consumes) => {
+    const doc = { path: 'synthetic', meta: { ...methodology, consumes }, parsed: true };
+    const collected = [];
+    buildInstanceChecks({
+      instances: { artifacts, resolutions: [] },
+      declarations,
+      documents: [doc],
+      define: (bound, fn) => { if (bound === 'STD-0011#R-21') collected.push(fn); },
+    });
+    assert(collected.length === 1, 'STD-0011#R-21 is not bound exactly once');
+    return collected[0]().flat();
+  };
+
+  const declared = run(methodology.consumes);
+  assert(declared.every((r) => r.outcome === 'pass'),
+    `the declared contract was reported a violation: ${declared.filter((r) => r.outcome !== 'pass').map((r) => r.detail ?? '').join(' | ')}`);
+
+  const reduced = run(methodology.consumes.filter((e) => e.type !== withheld));
+  const failures = reduced.filter((r) => r.outcome === 'fail');
+  assert(failures.length, 'withholding a consumed type was not reported');
+  assert(failures.some((r) => (r.detail ?? '').includes(withheld)), 'the report does not name the undeclared type');
+});
+
+
+// ---- consumption contract states (STD-0010 R-50) ----------------------------
+
+function contractState(meta) {
+  if (meta.consumes === undefined) return 'absent';
+  if (!Array.isArray(meta.consumes)) return 'malformed';
+  return meta.consumes.length ? 'populated' : 'empty';
+}
+
+const METHODOLOGY_STATES = readdirSync(join(root, 'docs/03-audit-engine'))
+  .filter((f) => f.endsWith('.md') && f !== 'README.md')
+  .map((f) => parseFrontMatter(readFileSync(join(root, 'docs/03-audit-engine', f), 'utf8')))
+  .filter((r) => r.ok && r.data.object_type === 'Methodology')
+  .map((r) => ({ id: r.data.id, state: contractState(r.data) }));
+
+test('STD-0010#R-50', 'an established zero-consumption contract is an empty list, not an absent key', () => {
+  const architecture = METHODOLOGY_STATES.find((m) => m.id === 'AUD-0002');
+  assert(architecture.state === 'empty',
+    `AUD-0002 consumes nothing and its contract is established; it reports ${architecture.state}`);
+});
+
+test('STD-0010#R-50', 'an established non-empty contract is a populated list', () => {
+  for (const id of ['AUD-0003', 'AUD-0005']) {
+    const m = METHODOLOGY_STATES.find((x) => x.id === id);
+    assert(m.state === 'populated', `${id} has a reference producer and reports ${m.state}`);
+  }
+});
+
+test('STD-0010#R-50', 'a methodology with no reference producer omits consumes rather than declaring it empty', () => {
+  // The distinction this requirement exists for. Declaring [] here would assert
+  // that seven methodologies consume nothing, which their own prose contradicts.
+  for (const id of ['AUD-0004', 'AUD-0006', 'AUD-0007', 'AUD-0008', 'AUD-0009', 'AUD-0010', 'AUD-0011']) {
+    const m = METHODOLOGY_STATES.find((x) => x.id === id);
+    assert(m, `${id} is not present as a Methodology`);
+    assert(m.state === 'absent',
+      `${id} has no reference producer and its contract reports ${m.state}; an unestablished contract omits the key`);
+  }
+});
+
+test('STD-0010#R-50', 'the three states are distinguishable and the corpus uses all three', () => {
+  const seen = new Set(METHODOLOGY_STATES.map((m) => m.state));
+  assert(!seen.has('malformed'), 'a consumes declaration is neither absent nor a list');
+  for (const state of ['empty', 'populated', 'absent']) {
+    assert(seen.has(state), `no methodology exercises the ${state} state, so the distinction is untested`);
+  }
+  // And the reading R-50 forbids: absence must not collapse into empty.
+  const absent = METHODOLOGY_STATES.filter((m) => m.state === 'absent').length;
+  const empty = METHODOLOGY_STATES.filter((m) => m.state === 'empty').length;
+  assert(absent === 7 && empty === 1,
+    `expected seven unestablished and one established-empty contract, found ${absent} and ${empty}`);
+});
+
+test('STD-0011#R-21', 'an unestablished contract is not read as declaring nothing', () => {
+  // R-21 compares emitted lineage against a declared consumes. Where no contract
+  // is established there is nothing to compare against, and failing every
+  // cross-methodology derivation would be exactly the collapse R-50 forbids.
+  const artifacts = [...threeStage.artifacts].map(([type, artifact]) => ({ path: type, artifact }));
+  const methodology = methodologyContract('04-backend-discovery.md');
+  const { consumes, ...withoutContract } = methodology;
+  const collected = [];
+  buildInstanceChecks({
+    instances: { artifacts, resolutions: [] },
+    declarations,
+    documents: [{ path: 'synthetic', meta: withoutContract, parsed: true }],
+    define: (bound, fn) => { if (bound === 'STD-0011#R-21') collected.push(fn); },
+  });
+  const results = collected[0]().flat();
+  assert(results.every((r) => r.outcome === 'pass'),
+    `an unestablished contract was reported a violation: ${results.filter((r) => r.outcome !== 'pass').map((r) => r.detail ?? '').join(' | ')}`);
 });
 
 // ---- report -----------------------------------------------------------------
