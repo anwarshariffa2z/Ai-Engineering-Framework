@@ -1,11 +1,11 @@
 ---
 id: AUD-0011
 title: Runtime Verification Methodology
-version: 1.0.0
+version: 1.1.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-26
+last_updated: 2026-07-30
 review_cycle: Annual
 category: Audit Engine
 tags: [audit-engine, runtime, verification, methodology]
@@ -15,6 +15,7 @@ layer: 1
 depends_on: [../02-methodology/evidence-and-confidence.md, ../02-methodology/artifact-specification.md, ../02-methodology/metadata-specification.md, ../02-methodology/contract-specification.md, ../02-methodology/validation-specification.md, ../04-development/security-standard.md]
 references: [07-feature-inventory.md, 08-operations-manual.md, 09-gap-analysis.md, ../09-capabilities/CAP-0001-repository-audit.md, ../02-methodology/glossary.md]
 meta_model_version: 1.0.0
+producer_kinds: [runtime-verification, runtime-discovery]
 normativity:
   "1": informative
   "2": normative

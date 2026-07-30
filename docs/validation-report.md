@@ -1,7 +1,7 @@
 ---
 id: REF-0010
 title: Documentation Validation Report
-version: 1.14.0
+version: 1.15.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -119,11 +119,11 @@ Eight standards declare the enforceable surface of the framework. Every identifi
 | STD-0002 Framework Document ID | 8 | 5 | 3 | 5 | — |
 | STD-0007 Evidence and Confidence | 45 | 21 | 24 | 14 | — |
 | STD-0008 Artifact Specification | 34 | 33 | 1 | 23 | 25 |
-| STD-0010 Metadata Specification | 48 | 48 | 0 | 36 | — |
-| STD-0011 Contract Specification | 53 | 46 | 7 | 10 | — |
+| STD-0010 Metadata Specification | 50 | 50 | 0 | 42 | — |
+| STD-0011 Contract Specification | 53 | 46 | 7 | 14 | — |
 | STD-0012 Validation Specification | 45 | 45 | 0 | 12 | — |
 | STD-0013 Artifact Type Declaration | 37 | 29 | 8 | 26 | — |
-| **Total** | **276** | **231** | **45** | **130** | **25** |
+| **Total** | **278** | **233** | **45** | **140** | **25** |
 
 STD-0007, STD-0008, and STD-0011 carried no bound checks for as long as their subjects — artifact instances, producers, consumers, and conclusions — were absent from the corpus. The AUD-0002 reference producer supplied the first of those subjects: fourteen conforming instances of the fourteen artifact types that methodology declares, with a run-scoped resolution declaration beside them. Fifty-three checks bound as a result, taking the total from sixty-eight to one hundred and twenty-one, and every one of them binds to a requirement that already existed. None was written to raise a count.
 
@@ -160,6 +160,26 @@ Both consuming producers now use it, and both declare `consumes` in the R-48 sha
 Every artifact in all three runs is byte-identical to its released bytes and no digest moved, which is the property that makes the extraction a refactor rather than a change. The primitive is classified **PROVEN**: two independent producers use one implementation, it contains no methodology-specific branch, both preserve their output exactly, its behaviour is driven by declarations rather than by its callers, and no standard changed to accommodate it.
 
 R-48 and R-53 remain **not-evaluated**, and the runtime does not change that. A validator check would need to read a producer's `consumes` declaration, which lives in the producer's source rather than in the corpus, because no producer is registered as a corpus object. What an artifact records is that it is `Unavailable` and which input it lacked; whether *that* output was the right one to withdraw cannot be decided without the declaration. Registering producers as corpus objects would give both requirements a subject, and it is a scope and ownership question rather than an implementation one.
+
+### Methodology producer contracts
+
+Milestone 6.2 gave a set of requirements a subject they had always ranged over and never had. STD-0010 R-25 through R-27 and R-48 state how a producer's and a consumer's compatibility declarations are written and do not say which object carries them; STD-0011 R-03, R-09, R-20, R-21, and R-53 state obligations over that declaration. Nothing declared it, so all nine were dormant, and the producers held the same information in source.
+
+The object was already chosen. [Framework Core Architecture](01-foundation/framework-core-architecture.md) section 4 assigns a Methodology the duty to declare the artifact types it produces and consumes, and lists them among its key metadata. The duty was specified in Framework v1 and never represented. STD-0010 R-49 represents it: a Methodology declares `producer_kinds`, and the types it produces are those whose declarations name one of its kinds under [STD-0013](02-methodology/artifact-type-declaration-standard.md) R-07. `produces` is derived rather than restated, because a Methodology repeating that set would be the second authoritative statement of one fact. `consumes` is carried by the Methodology with the members R-26, R-27, and R-48 already require. No object type was added, no layer, no ADR, and no identifier namespace.
+
+Nine checks bound, taking the total from 130 to 139. Eight read documents. The ninth, [STD-0011](02-methodology/contract-specification.md) R-21, is the one the representation was worth adding for: it compares an authored declaration against artifacts a producer actually emitted, so a lineage entry crossing a methodology boundary must name a type the consuming methodology declares. Removing one `consumes` entry from AUD-0005 and revalidating reports `run-0003/framework.backend.dataaccess.json` deriving from `framework.database.entities`, which AUD-0005 would then not declare. The check is not vacuous, and it is the only one of the nine that could catch a producer that quietly consumed something.
+
+**Three complementary controls, and what each cannot see.** Static corpus validation compares documents against documents: it catches a malformed contract, a `required_for` naming a type the methodology does not produce, a profile no type offers, and a producer kind claimed twice or by nobody. It cannot see an implementation. Producer conformance tests compare the Methodology declaration, loaded from the document by an independent parser, against the values the producer module exports: they catch a declaration that disagrees with the implementation, and neither side is generated from the other, which is what keeps the comparison from passing by construction. Artifact validation compares the declaration against what was emitted. No one of the three proves producer behaviour, and the report does not claim otherwise.
+
+One gap survives all three and is recorded rather than closed. A `required_for` that is *too broad* — declaring an output requires an input it could in fact manage without — is unfalsifiable from artifacts, because the output is simply withdrawn and nothing demonstrates it needn't have been. That is R-05 territory, a producer must not overstate, and it stays judgment-checkable.
+
+**Three methodologies carry a `consumes` declaration, and the seven that do not are saying something.** R-50 makes the difference normative. An empty list is a determination — this methodology was examined and depends on no upstream type — and AUD-0002 declares one. An absent key is the absence of a determination, and it is the honest state for a methodology whose prose identifies upstream artifact types while establishing none of what R-48 requires of an entry. Authoring requiredness for a methodology nobody has implemented would be inventing the contract, and the earlier gate established that a declared set is unverifiable until something exercises it.
+
+The corpus exercises all three states: `consumes: []` at AUD-0002, populated at AUD-0003 and AUD-0005, absent at the other seven. Collapsing the third into the first would let seven unexamined contracts read as seven determinations of independence — the same class of error [STD-0007](02-methodology/evidence-and-confidence.md) R-18 prevents between `NotApplicable` and `Unavailable`, where both yield an empty result and only one is knowledge.
+
+The distinction had already been drawn silently, and wrongly. The first draft of the R-21 artifact cross-check read an absent `consumes` as a declaration of nothing, so it would have reported a violation for every cross-methodology derivation a methodology had not yet operationalized. Stating R-50 is what surfaced that; the check now declines an unestablished contract rather than failing it, and a test drives the path.
+
+**A declaration anomaly the join surfaced.** Every producer kind is now claimed by exactly one methodology, and reaching that state required three methodologies to claim two kinds each. `framework.feature.health` and `framework.feature.risks` declare `producer_kind: feature-discovery` where their five siblings declare `feature-inventory`; `framework.gap.health` declares `gap-discovery` where its five siblings declare `gap-analysis`; `framework.runtime.health` and `framework.runtime.risks` declare `runtime-discovery` where their five siblings declare `runtime-verification`. The pattern is exact and confined to health and risks types. Nothing was changed to make it tidy: the methodologies claim both kinds, which is true of the corpus as it stands, and whether the six declarations should be unified is a correction to raise on its own evidence rather than a side effect of this milestone.
 
 What remains not-evaluated is not evenly distributed and the reasons differ. Forty-three requirements are judgment-classified and routed to human review. Forty-two range over producers, consumers, and orchestrators that are not registered as corpus objects, which no artifact can supply. Twenty-nine are validator self-conformance. The remainder state conditions that do not arise in either reference run — no environment-derived observation, no transformer, no rejection event, no cross-revision reuse — and each reports that rather than repeating a reason that has expired. In particular STD-0011 R-27, R-43, and R-44 remain unbound because a rejection, a stale pair presented as concurrently valid, and a cross-revision consumption are conditions neither run produces.
 

@@ -45,6 +45,9 @@ const run = {
   catalogue,
   unbound,
   hasInstances: loadInstances(root, config).artifacts.length > 0,
+  // A methodology declaring producer_kinds is a producer contract the corpus holds,
+  // which changes why a contract requirement that stays unbound is unbound.
+  hasContracts: documents.some((d) => d.parsed && d.meta?.object_type === 'Methodology' && d.meta?.producer_kinds !== undefined),
   results: [],
 };
 
@@ -89,8 +92,19 @@ run.notEvaluatedReason = (requirement) => {
       ? 'artifact instances exist; no check is bound because the condition this requirement states does not arise in them'
       : 'no artifact instance or type definition exists in the corpus';
   }
+  // Requirements whose subject now exists and which are still unbound for a reason
+  // of their own. STD-0012 R-33 requires the reason to be the current one, and
+  // "nothing declares a contract" expired when Methodologies began declaring one.
+  const STATED = {
+    'STD-0011#R-28': 'the version a producer emits is determined by the artifact type declaration, so a check here would restate the comparison STD-0008 R-02 already makes rather than inspect an independent declaration',
+    'STD-0011#R-10': 'a declared consumption profile is already evaluated against the offering type by STD-0010 R-27; a second advisory check would add coverage and no evidence',
+    'STD-0011#R-20': 'the representation of required and optional is checked by STD-0010 R-48; whether the classification matches producer behaviour is not visible in the corpus and is covered by producer conformance tests',
+  };
+  if (STATED[requirement.address]) return STATED[requirement.address];
   if (['producer', 'consumer', 'orchestrator', 'contract', 'compatibility', 'evolution', 'substitution', 'precondition', 'postcondition', 'input', 'output', 'failure'].includes(scope)) {
-    return 'no producer, consumer, or run is registered in the corpus';
+    return run.hasContracts
+      ? 'a methodology declares its producer and consumer contract; no check is bound because the condition this requirement states is not observable in what the corpus contains'
+      : 'no producer, consumer, or run is registered in the corpus';
   }
   if (['conclusion', 'state', 'confidence', 'completeness', 'promotion', 'degradation', 'propagation', 'scoring', 'conflict'].includes(scope)) {
     return 'no conclusion-bearing artifact exists in the corpus';
