@@ -21,6 +21,7 @@ import { executeRun, executeComposedRun, executeThreeStageRun, RUN_CONTEXT, COMP
 import { consume } from '../consume.mjs';
 import { runDatabaseDiscovery, CONSUMED_TYPES } from '../lib/database-discovery.mjs';
 import { runBackendDiscovery, CONSUMED_TYPES as BACKEND_INPUTS, PROFILE_CONSUMER, profileFor, projectThroughProfile } from '../lib/backend-discovery.mjs';
+import { evaluateRequiredInputs, consumedTypes } from '../lib/required-inputs.mjs';
 import { crossRunScenario } from '../cross-run.mjs';
 import { buildInstanceChecks } from '../../validator/lib/instance-checks.mjs';
 
@@ -975,6 +976,175 @@ test('STD-0011#R-30', 'projection stays within the fields the recorded profile d
       assert(!leaked.length, `${type} exposed ${leaked.join(', ')} outside its profile`);
     }
   }
+});
+
+
+// ---- required-input gating: the shared primitive -----------------------------
+//
+// Synthetic type identities throughout. If a case needed a real artifact type to
+// make sense, the primitive would be carrying knowledge it is not entitled to.
+
+function throws(fn, fragment) {
+  try { fn(); } catch (error) {
+    assert(error.message.includes(fragment), `threw "${error.message}", which does not mention ${fragment}`);
+    return;
+  }
+  throw new Error(`accepted a declaration it must reject (expected mention of ${fragment})`);
+}
+
+const PRODUCES = ['x.a.one', 'x.a.two', 'x.a.three'];
+
+test('STD-0010#R-48', 'an optional input that was obtained degrades nothing', () => {
+  const { eligible, degraded } = evaluateRequiredInputs({
+    consumes: [{ type: 'x.b.opt', requirement: 'optional' }],
+    produces: PRODUCES,
+    available: ['x.b.opt'],
+  });
+  assert(degraded.size === 0, 'an available optional input degraded an output');
+  assert(eligible.length === 3, `${eligible.length} outputs remain eligible`);
+});
+
+test('STD-0011#R-22', 'an optional input that was not obtained degrades nothing', () => {
+  const { eligible, degraded } = evaluateRequiredInputs({
+    consumes: [{ type: 'x.b.opt', requirement: 'optional' }],
+    produces: PRODUCES,
+    available: [],
+    unavailable: [{ type: 'x.b.opt', reason: 'no locator was declared' }],
+  });
+  assert(degraded.size === 0, 'an absent optional input made an output Unavailable');
+  assert(eligible.length === 3, 'an absent optional input reduced the eligible set');
+});
+
+test('STD-0011#R-53', 'a required input that was obtained degrades nothing', () => {
+  const { degraded } = evaluateRequiredInputs({
+    consumes: [{ type: 'x.b.req', requirement: 'required', required_for: ['x.a.one'] }],
+    produces: PRODUCES,
+    available: ['x.b.req'],
+  });
+  assert(degraded.size === 0, 'an available required input degraded an output');
+});
+
+test('STD-0011#R-53', 'a missing required input degrades the one output that named it', () => {
+  const { eligible, degraded } = evaluateRequiredInputs({
+    consumes: [{ type: 'x.b.req', requirement: 'required', required_for: ['x.a.one'] }],
+    produces: PRODUCES,
+    available: [],
+    unavailable: [{ type: 'x.b.req', reason: 'unresolvable' }],
+  });
+  assert(degraded.size === 1, `${degraded.size} outputs were degraded`);
+  const entry = degraded.get('x.a.one');
+  assert(entry.completeness === 'Unavailable', entry.completeness);
+  assert(entry.reason.includes('x.b.req'), 'the disclosure does not name the absent input');
+  assert(entry.reason.includes('unresolvable'), 'the disclosure does not carry the consumer reason');
+  assert(eligible.join() === 'x.a.two,x.a.three', `unaffected outputs did not continue: ${eligible.join()}`);
+});
+
+test('STD-0011#R-53', 'a missing required input degrades every output that named it', () => {
+  const { eligible, degraded } = evaluateRequiredInputs({
+    consumes: [{ type: 'x.b.req', requirement: 'required', required_for: ['x.a.one', 'x.a.three'] }],
+    produces: PRODUCES,
+    available: [],
+    unavailable: [{ type: 'x.b.req', reason: 'unresolvable' }],
+  });
+  assert(degraded.size === 2, `${degraded.size} outputs were degraded`);
+  assert(eligible.join() === 'x.a.two', `unaffected output did not continue: ${eligible.join()}`);
+});
+
+test('STD-0011#R-53', 'two required inputs over disjoint outputs degrade disjointly', () => {
+  const consumes = [
+    { type: 'x.b.first', requirement: 'required', required_for: ['x.a.one'] },
+    { type: 'x.b.second', requirement: 'required', required_for: ['x.a.two'] },
+  ];
+  const { eligible, degraded } = evaluateRequiredInputs({
+    consumes, produces: PRODUCES, available: ['x.b.second'],
+    unavailable: [{ type: 'x.b.first', reason: 'unresolvable' }],
+  });
+  assert(degraded.size === 1 && degraded.has('x.a.one'), 'the wrong output was degraded');
+  assert(eligible.join() === 'x.a.two,x.a.three', eligible.join());
+});
+
+test('STD-0011#R-53', 'two required inputs over one output name both in the disclosure', () => {
+  const consumes = [
+    { type: 'x.b.first', requirement: 'required', required_for: ['x.a.one'] },
+    { type: 'x.b.second', requirement: 'required', required_for: ['x.a.one', 'x.a.two'] },
+  ];
+  const { degraded } = evaluateRequiredInputs({
+    consumes, produces: PRODUCES, available: [],
+    unavailable: [{ type: 'x.b.first', reason: 'first failed' }, { type: 'x.b.second', reason: 'second failed' }],
+  });
+  assert(degraded.size === 2, `${degraded.size} outputs were degraded`);
+  const one = degraded.get('x.a.one');
+  assert(one.missing.join() === 'x.b.first,x.b.second', `overlapping inputs were not both named: ${one.missing.join()}`);
+  assert(one.reason.includes('first failed') && one.reason.includes('second failed'), 'both reasons are not disclosed');
+  assert(degraded.get('x.a.two').missing.join() === 'x.b.second', 'the second output named an input it does not require');
+});
+
+test('STD-0010#R-48', 'a requirement outside the vocabulary is rejected', () => {
+  throws(() => evaluateRequiredInputs({
+    consumes: [{ type: 'x.b.req', requirement: 'mandatory', required_for: ['x.a.one'] }],
+    produces: PRODUCES,
+  }), 'required');
+});
+
+test('STD-0010#R-48', 'a required entry of a multi-output producer must declare required_for', () => {
+  throws(() => evaluateRequiredInputs({
+    consumes: [{ type: 'x.b.req', requirement: 'required' }],
+    produces: PRODUCES,
+  }), 'required_for');
+  throws(() => evaluateRequiredInputs({
+    consumes: [{ type: 'x.b.req', requirement: 'required', required_for: [] }],
+    produces: PRODUCES,
+  }), 'required_for');
+});
+
+test('STD-0010#R-48', 'required_for naming a type outside produces is rejected', () => {
+  throws(() => evaluateRequiredInputs({
+    consumes: [{ type: 'x.b.req', requirement: 'required', required_for: ['x.a.absent'] }],
+    produces: PRODUCES,
+  }), 'x.a.absent');
+});
+
+test('STD-0010#R-48', 'a single-output producer needs no required_for', () => {
+  // R-48 obliges required_for only where more than one type is produced. Demanding
+  // it of a single-output producer would be the implementation strengthening the
+  // requirement, which STD-0012 R-03 forbids of a validator and is no better here.
+  const { degraded } = evaluateRequiredInputs({
+    consumes: [{ type: 'x.b.req', requirement: 'required' }],
+    produces: ['x.a.only'],
+    available: [],
+    unavailable: [{ type: 'x.b.req', reason: 'unresolvable' }],
+  });
+  assert(degraded.size === 1 && degraded.has('x.a.only'), 'the sole output was not degraded');
+});
+
+test('STD-0011#R-53', 'the result does not depend on declaration iteration order', () => {
+  // Object key order is a property of a literal, not of a contract. The primitive
+  // reads lists, and the same declaration read twice must decide the same way.
+  const consumes = [
+    { type: 'x.b.first', requirement: 'required', required_for: ['x.a.two', 'x.a.one'] },
+    { type: 'x.b.second', requirement: 'optional' },
+    { type: 'x.b.third', requirement: 'required', required_for: ['x.a.one'] },
+  ];
+  const unavailable = [{ type: 'x.b.first', reason: 'a' }, { type: 'x.b.third', reason: 'c' }];
+  const a = evaluateRequiredInputs({ consumes, produces: PRODUCES, available: ['x.b.second'], unavailable });
+  const b = evaluateRequiredInputs({ consumes: [...consumes], produces: [...PRODUCES], available: ['x.b.second'], unavailable: [...unavailable] });
+  assert(JSON.stringify([...a.degraded]) === JSON.stringify([...b.degraded]), 'two evaluations of one declaration disagreed');
+  assert(a.eligible.join() === b.eligible.join(), 'the eligible set is not stable');
+  assert(a.degraded.get('x.a.one').missing.join() === 'x.b.first,x.b.third',
+    `missing inputs are not in declaration order: ${a.degraded.get('x.a.one').missing.join()}`);
+});
+
+test('STD-0011#R-53', 'the primitive names no methodology and no artifact type', () => {
+  const text = readFileSync(new URL('../lib/required-inputs.mjs', import.meta.url), 'utf8');
+  const body = text.split('\n').filter((line) => !line.trimStart().startsWith('//') && !line.trimStart().startsWith('*')).join('\n');
+  for (const token of ['framework.', 'database', 'backend', 'architecture', 'AUD-']) {
+    assert(!body.includes(token), `the primitive mentions ${token}`);
+  }
+});
+
+test('STD-0010#R-48', 'consumedTypes reads the declaration in order', () => {
+  const consumes = [{ type: 'x.b.one', requirement: 'optional' }, { type: 'x.b.two', requirement: 'required', required_for: ['x.a.one'] }];
+  assert(consumedTypes(consumes).join() === 'x.b.one,x.b.two', consumedTypes(consumes).join());
 });
 
 // ---- report -----------------------------------------------------------------

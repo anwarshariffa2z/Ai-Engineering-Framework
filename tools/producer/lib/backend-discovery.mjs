@@ -25,20 +25,40 @@
 import { buildArtifact, lineageReference } from './envelope.mjs';
 import { artifactIdentity } from './identity.mjs';
 import { resolve as resolveIdentity, OUTCOME } from './resolver.mjs';
+import { evaluateRequiredInputs, consumedTypes } from './required-inputs.mjs';
 import { SUBJECTS } from './backend-subjects.mjs';
 
-// AUD-0005 section 4. The dependency is on these types, never on the methodology
-// that produced them. Eight types across two methodologies.
-export const CONSUMED_TYPES = [
-  'framework.architecture.scope',
-  'framework.architecture.technology',
-  'framework.architecture.entrypoints',
-  'framework.architecture.modules',
-  'framework.architecture.runtime',
-  'framework.architecture.integrations',
-  'framework.database.entities',
-  'framework.database.connections',
+// The artifact types this producer emits, in the order AUD-0005 section 6 lists
+// them. STD-0010 R-48 requires every required_for entry below to name one of these.
+export const PRODUCED_TYPES = [
+  'framework.backend.services',
+  'framework.backend.interfaces',
+  'framework.backend.contracts',
+  'framework.backend.execution',
+  'framework.backend.dataaccess',
+  'framework.backend.resilience',
+  'framework.backend.errors',
+  'framework.backend.boundaries',
+  'framework.backend.risks',
+  'framework.backend.health',
 ];
+
+// AUD-0005 section 4, written in the shape STD-0010 R-48 fixes. Eight types across
+// two methodologies. The dependency is on these types, never on the methodology
+// that produced them. `required_for` states which outputs cannot be produced
+// without each required input, per STD-0011 R-53.
+export const CONSUMES = [
+  { type: 'framework.architecture.scope', requirement: 'optional' },
+  { type: 'framework.architecture.technology', requirement: 'optional' },
+  { type: 'framework.architecture.entrypoints', requirement: 'required', required_for: ['framework.backend.services'] },
+  { type: 'framework.architecture.modules', requirement: 'optional' },
+  { type: 'framework.architecture.runtime', requirement: 'required', required_for: ['framework.backend.services'] },
+  { type: 'framework.architecture.integrations', requirement: 'optional' },
+  { type: 'framework.database.entities', requirement: 'required', required_for: ['framework.backend.dataaccess'] },
+  { type: 'framework.database.connections', requirement: 'required', required_for: ['framework.backend.dataaccess'] },
+];
+
+export const CONSUMED_TYPES = consumedTypes(CONSUMES);
 
 // The name this consumer answers to in a declared consumption profile. A profile
 // is addressed to a consumer kind, not to a producer.
@@ -48,11 +68,6 @@ const UNDERSTOOD_MAJOR = 1;
 
 // STD-0011 R-27. An output that cannot be produced without an input it did not
 // obtain is Unavailable, naming the input, rather than Complete with fewer records.
-const REQUIRED_INPUTS = {
-  'framework.backend.services': ['framework.architecture.entrypoints', 'framework.architecture.runtime'],
-  'framework.backend.dataaccess': ['framework.database.entities', 'framework.database.connections'],
-};
-
 const CONFIDENCE_ORDER = ['Low', 'Medium', 'High'];
 const EVIDENCE_ORDER = ['Unknown', 'Inferred', 'Observed', 'Verified'];
 
@@ -257,6 +272,15 @@ export function runBackendDiscovery({ run, declarations, root, resolution }) {
   const { inputs, degradation, traceability } = consumeInputs({ root, run, declarations, resolution });
   const consumption = [];
 
+  // STD-0011 R-53 through the shared primitive: the outputs a missing required
+  // input withdraws, and the outputs that carry on without it.
+  const { degraded: gated } = evaluateRequiredInputs({
+    consumes: CONSUMES,
+    produces: PRODUCED_TYPES,
+    available: [...inputs.keys()],
+    unavailable: degradation,
+  });
+
   // Each use below is a fact this run takes from an upstream artifact rather than
   // re-deriving from the subject. The scope artifact declares no profile for this
   // consumer, so it is consumed for its envelope and its records are not read.
@@ -314,14 +338,11 @@ export function runBackendDiscovery({ run, declarations, root, resolution }) {
     const declaration = declarations.get(type);
     if (!declaration) throw new Error(`AUD-0005 declares output ${type}, which is not declared in the corpus`);
 
-    const missing = (REQUIRED_INPUTS[type] ?? []).filter((input) => !inputs.has(input));
-    const effective = missing.length
-      ? {
-        completeness: 'Unavailable',
-        completenessReason: `this artifact requires ${missing.join(', ')}, which this run could not obtain: ${degradation.filter((d) => missing.includes(d.type)).map((d) => d.reason).join('; ')}`,
-        records: [],
-        lineage: undefined,
-      }
+    // Which outputs a missing required input withdraws is decided by the shared
+    // primitive from the declaration above, and not restated here.
+    const gate = gated.get(type);
+    const effective = gate
+      ? { completeness: gate.completeness, completenessReason: gate.reason, records: [], lineage: undefined }
       : spec;
 
     const artifact = buildArtifact({
