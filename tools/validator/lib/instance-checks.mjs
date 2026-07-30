@@ -595,6 +595,25 @@ export function buildInstanceChecks({ instances, declarations, documents, define
     return declared === expected ? [] : [`aggregate evidence state ${declared} is not the minimum ${expected} among load-bearing records`];
   }));
 
+  // STD-0007 R-45 governs precisely the case R-29 and R-30 decline: an aggregate
+  // over an empty set. The two sets are not the same set, so both are checked.
+  // R-38 leaves an Unknown record without a confidence, so an artifact whose every
+  // load-bearing record is Unknown aggregates a non-empty evidence set and an empty
+  // confidence set.
+  declare('STD-0007#R-45', each((artifact) => {
+    const records = loadBearing(artifact);
+    const scored = records.filter((r) => fieldsOf(r).evidence_state !== 'Unknown');
+    const assessment = artifact.envelope?.assessment ?? {};
+    const problems = [];
+    if (!records.length && assessment.evidence_state !== 'Unknown') {
+      problems.push(`aggregates no conclusion and declares evidence state ${assessment.evidence_state} rather than Unknown`);
+    }
+    if (!scored.length && assessment.confidence !== 'Low') {
+      problems.push(`aggregates no confidence and declares ${assessment.confidence} rather than Low`);
+    }
+    return problems;
+  }));
+
   declare('STD-0007#R-32', each((artifact) => {
     const problems = [];
     for (const record of recordsOf(artifact)) {

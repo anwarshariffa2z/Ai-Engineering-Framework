@@ -16,11 +16,11 @@ const CONFIDENCE_ORDER = ['Low', 'Medium', 'High'];
 const COMPLETENESS = ['Complete', 'Partial', 'NotApplicable', 'Unavailable', 'Failed'];
 
 // STD-0007 R-30: an aggregate's evidence state is the minimum among the conclusions
-// aggregated. Over an artifact with no load-bearing record the minimum is the
-// bottom of the lattice, which is the weakest claim available and therefore the
-// only one that cannot overstate. The same rule gives the confidence aggregate its
-// value under R-29. This reading is recorded in README.md as an ambiguity, because
-// neither standard states what the aggregate of an empty record set is.
+// aggregated, and R-29 gives the confidence aggregate its value the same way. Over
+// an empty set neither has a result, and STD-0007 R-45 states what it is: the
+// weakest value of the vocabulary, which is the only one that cannot overstate. The
+// `bottom` argument is that value. This was implemented before R-45 existed, from
+// three independent readings that agreed; R-45 records the rule they agreed on.
 function minimum(values, order, bottom) {
   let lowest = null;
   for (const value of values) {

@@ -642,10 +642,10 @@ test('STD-0007#R-08', 'four absence states arise in one run from four distinct c
   assert(new Set(states).size >= 3, 'the run does not distinguish completeness states');
 });
 
-test('STD-0007#R-30', 'an artifact with no record aggregates to the bottom of each lattice', () => {
-  // The third independent reading of the same rule. AUD-0002 and AUD-0003 reached
-  // it for their own empty artifacts; this is AUD-0005's, reached by the same
-  // generic aggregation and recorded as evidence, not as a settled rule.
+test('STD-0007#R-45', 'an artifact with no record aggregates to the bottom of each lattice', () => {
+  // Three producers reached this independently through the same generic
+  // aggregation, and R-45 now states it. Retargeted from R-30, which governs the
+  // minimum over a non-empty set and declines this case.
   const execution = threeStage.backend.artifacts.get('framework.backend.execution');
   assert(execution.envelope.assessment.evidence_state === 'Unknown', execution.envelope.assessment.evidence_state);
   assert(execution.envelope.assessment.confidence === 'Low', execution.envelope.assessment.confidence);
@@ -763,6 +763,39 @@ function probe({ scope, assessment, records, lineage }) {
     body: { records: records ?? [] },
   };
 }
+
+test('STD-0007#R-45', 'an aggregate over no conclusion at the lattice top is rejected', () => {
+  // The failure R-45 exists to prevent: the mathematical infimum over an empty
+  // subset of a bounded lattice is its top, and adopting it reports the strongest
+  // available claim for an examination that determined nothing.
+  const results = runCheck('STD-0007#R-45', probe({
+    assessment: { evidence_state: 'Verified', confidence: 'High' },
+    records: [],
+  }));
+  assert(outcomes(results).every((o) => o === 'fail'), `R-45 accepted a top-of-lattice empty aggregate: ${details(results)}`);
+});
+
+test('STD-0007#R-45', 'an artifact whose every record is Unknown must still carry Low confidence', () => {
+  // The second empty set, and not the same one. R-38 leaves an Unknown record
+  // without a confidence, so the evidence set here is non-empty and the confidence
+  // set is empty. A check testing only the record count would miss it.
+  const records = [{ record_id: 'PRB-0001', fields: { finding: 'a', evidence_state: 'Unknown' }, scope_reason: 'out of scope' }];
+  const accepted = runCheck('STD-0007#R-45', probe({ assessment: { evidence_state: 'Unknown', confidence: 'Low' }, records }));
+  assert(outcomes(accepted).every((o) => o === 'pass'), `R-45 rejected a conforming all-Unknown aggregate: ${details(accepted)}`);
+  const rejected = runCheck('STD-0007#R-45', probe({ assessment: { evidence_state: 'Unknown', confidence: 'High' }, records }));
+  assert(outcomes(rejected).every((o) => o === 'fail'), `R-45 accepted High confidence over no confidence: ${details(rejected)}`);
+});
+
+test('STD-0007#R-45', 'a non-empty aggregate is left to R-29 and R-30', () => {
+  // R-45 governs the empty case only. A wrong minimum over a populated set is a
+  // R-29/R-30 failure, and R-45 reporting it too would be the validator binding one
+  // requirement to another's subject.
+  const results = runCheck('STD-0007#R-45', probe({
+    assessment: { evidence_state: 'Verified', confidence: 'High' },
+    records: [{ record_id: 'PRB-0001', fields: { finding: 'a', evidence_state: 'Inferred', confidence: 'Low' } }],
+  }));
+  assert(outcomes(results).every((o) => o === 'pass'), `R-45 reached a non-empty aggregate: ${details(results)}`);
+});
 
 test('STD-0008#R-43', 'a required member holding an empty collection is accepted', () => {
   // scope.exclusions is required by R-10. A run that excluded nothing declares an
