@@ -653,6 +653,51 @@ export function buildInstanceChecks({ instances, declarations, documents, define
 
   // ---- STD-0011: participant obligations ----------------------------------
 
+  // R-21. A producer MUST NOT consume an input it did not declare. This is the
+  // check the contract representation was worth adding for: it compares an
+  // authored declaration against what a producer actually emitted, so it reaches
+  // a disagreement no amount of document-to-document validation would find.
+  //
+  // A lineage entry is a consumption that happened. Where the upstream type is
+  // produced by a different kind than the artifact carrying the entry, the
+  // consumption crossed a methodology boundary and the consuming methodology's
+  // `consumes` must name it. A within-methodology derivation is not a
+  // consumption and is not reached.
+  const methodologyByKind = new Map();
+  for (const doc of documents ?? []) {
+    if (doc?.meta?.object_type !== 'Methodology') continue;
+    const kinds = Array.isArray(doc.meta.producer_kinds) ? doc.meta.producer_kinds : [];
+    for (const kind of kinds) methodologyByKind.set(kind, doc);
+  }
+
+  if (methodologyByKind.size) {
+    declare('STD-0011#R-21', each((artifact) => {
+      const type = artifact.envelope?.identity?.artifact_type;
+      const kind = declarations.get(type)?.producer_kind;
+      const methodology = methodologyByKind.get(kind);
+      if (!methodology) return [];
+      // STD-0010 R-50: an absent consumes key is an unestablished contract, not an
+      // empty one. There is nothing here to compare an emitted derivation against,
+      // and treating absence as "declares nothing" would fail every consumption a
+      // methodology has not yet operationalized — which is the reading R-50 forbids.
+      if (methodology.meta.consumes === undefined) return [];
+      const declared = new Set((Array.isArray(methodology.meta.consumes) ? methodology.meta.consumes : []).map((e) => e?.type));
+      const problems = [];
+      for (const entry of artifact.envelope?.lineage?.derives_from ?? []) {
+        const upstream = byIdentity.get(entry.identity);
+        const upstreamType = upstream?.envelope?.identity?.artifact_type;
+        if (!upstreamType) continue;
+        const upstreamKind = declarations.get(upstreamType)?.producer_kind;
+        if (!upstreamKind || upstreamKind === kind) continue;
+        if (!declared.has(upstreamType)) {
+          problems.push(`derives from ${upstreamType}, which ${methodology.meta.id} does not declare that it consumes`);
+        }
+      }
+      return problems;
+    }));
+  }
+
+
   declare('STD-0011#R-45', each((artifact) => {
     const identity = identityOf(artifact);
     return IDENTITY.test(identity) ? [] : [`the producer assigned an identity outside the composition STD-0008 R-52 requires: ${identity}`];

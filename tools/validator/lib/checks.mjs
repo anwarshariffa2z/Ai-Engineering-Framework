@@ -666,6 +666,168 @@ export function buildChecks(ctx) {
       : [pass('corpus', `${seen.size} type identities, each declared exactly once`)];
   });
 
+  // ---- Methodology producer contracts -------------------------------------
+  // The subject these requirements always ranged over is a producer's and a
+  // consumer's compatibility declaration. STD-0010 R-49 places it on the
+  // Methodology, which is where the core architecture already assigned it, so the
+  // checks below read documents and know no methodology and no artifact type.
+
+  const instancesForContracts = loadInstances(root, config);
+  const methodologies = parsed.filter((d) => d.meta.object_type === 'Methodology');
+  const kindsOf = (doc) => asList(doc.meta.producer_kinds);
+  const consumesOf = (doc) => (Array.isArray(doc.meta.consumes) ? doc.meta.consumes : []);
+  const declaredKinds = new Set(declarations.map(({ d }) => d.producer_kind).filter(Boolean));
+  const producedBy = (doc) => declarations
+    .filter(({ d }) => kindsOf(doc).includes(d.producer_kind))
+    .map(({ d }) => d.type);
+
+  const eachMethodology = (fn) => () => methodologies.map((doc) => {
+    const problem = fn(doc);
+    return problem ? fail(doc.path, problem) : pass(doc.path);
+  });
+
+  define('STD-0010#R-49', eachMethodology((doc) => {
+    if (doc.meta.producer_kinds === undefined) return 'declares no producer_kinds';
+    const kinds = kindsOf(doc);
+    const unknown = kinds.filter((k) => !declaredKinds.has(k));
+    if (unknown.length) return `producer_kinds names ${unknown.join(', ')}, which no artifact type declaration produces`;
+    // The produces list is derived, never restated. A methodology carrying one
+    // would be the second authoritative copy R-49 exists to prevent.
+    if (doc.meta.produces !== undefined) return 'restates produces, which R-49 derives from producer_kinds';
+    return null;
+  }));
+
+  // R-25 is satisfied by the derivation R-49 defines: the produced set is the
+  // types naming this methodology's kinds. What is checked is that the derivation
+  // yields something and that no kind is claimed by two methodologies, because a
+  // type claimed twice has no single producer.
+  define('STD-0010#R-25', () => {
+    const claimants = new Map();
+    for (const doc of methodologies) for (const k of kindsOf(doc)) claimants.set(k, [...(claimants.get(k) ?? []), doc.path]);
+    const results = [];
+    for (const [kind, where] of claimants) {
+      if (where.length > 1) results.push(fail(kind, `claimed by ${where.length} methodologies: ${where.join(', ')}`));
+    }
+    for (const kind of declaredKinds) {
+      if (!claimants.has(kind)) results.push(fail(kind, 'no methodology declares this producer kind, so its types have no declared producer'));
+    }
+    return results.length ? results : [pass('corpus', `${claimants.size} producer kinds, each claimed by exactly one methodology`)];
+  });
+
+  // R-50. Three declaration states, and the error it exists to prevent is the
+  // third being read as the first. The check is over the validator's own reading
+  // as much as over the corpus: an established contract must be a list, and a
+  // methodology whose artifacts prove it consumes must not be claiming that its
+  // contract is unestablished. That second half is what makes this more than a
+  // type check — absence is admissible only while nothing contradicts it.
+  const consumedInCorpus = new Map();
+  for (const { artifact } of instancesForContracts.artifacts) {
+    const type = artifact.envelope?.identity?.artifact_type;
+    const kind = declarations.find(({ d }) => d.type === type)?.d?.producer_kind;
+    if (!kind) continue;
+    for (const entry of artifact.envelope?.lineage?.derives_from ?? []) {
+      const upstream = instancesForContracts.artifacts
+        .find(({ artifact: a }) => a.envelope?.identity?.artifact_type
+          && entry.identity.includes(a.envelope.identity.artifact_type))?.artifact;
+      const upstreamType = upstream?.envelope?.identity?.artifact_type;
+      const upstreamKind = declarations.find(({ d }) => d.type === upstreamType)?.d?.producer_kind;
+      if (!upstreamKind || upstreamKind === kind) continue;
+      if (!consumedInCorpus.has(kind)) consumedInCorpus.set(kind, new Set());
+      consumedInCorpus.get(kind).add(upstreamType);
+    }
+  }
+
+  define('STD-0010#R-50', eachMethodology((doc) => {
+    const value = doc.meta.consumes;
+    if (value !== undefined && !Array.isArray(value)) {
+      return `consumes is ${typeof value}; an established contract is a list, empty or populated`;
+    }
+    if (value !== undefined) return null;
+    // Absent: the contract is not established. Admissible only while the corpus
+    // does not already show this methodology consuming something.
+    const observed = kindsOf(doc).flatMap((k) => [...(consumedInCorpus.get(k) ?? [])]);
+    return observed.length
+      ? `declares no consumption contract, and its artifacts derive from ${[...new Set(observed)].join(', ')}`
+      : null;
+  }));
+
+  define('STD-0010#R-26', eachMethodology((doc) => {
+    const problems = [];
+    for (const entry of consumesOf(doc)) {
+      if (!entry || typeof entry !== 'object') { problems.push('a consumes entry is not a mapping'); continue; }
+      if (!declaredTypes.has(entry.type)) problems.push(`consumes ${entry.type ?? '(untyped)'}, which no declaration defines`);
+      if (!/^\d+$/.test(String(entry.major ?? ''))) problems.push(`${entry.type}: no major version`);
+      if (!/^\d+$/.test(String(entry.minimum_minor ?? ''))) problems.push(`${entry.type}: no minimum minor version`);
+    }
+    return problems.length ? problems.join('; ') : null;
+  }));
+
+  define('STD-0010#R-27', eachMethodology((doc) => {
+    const problems = [];
+    for (const entry of consumesOf(doc)) {
+      if (!entry?.profile) continue;
+      const declaration = declarations.find(({ d }) => d.type === entry.type);
+      const offered = asList(declaration?.d?.consumption_profiles).filter((p) => p && typeof p === 'object');
+      if (!offered.some((p) => p.consumer === entry.profile)) {
+        problems.push(`${entry.type}: claims profile "${entry.profile}", which that type declares for no consumer`);
+      }
+    }
+    return problems.length ? problems.join('; ') : null;
+  }));
+
+  define('STD-0010#R-48', eachMethodology((doc) => {
+    const produced = producedBy(doc);
+    const problems = [];
+    for (const entry of consumesOf(doc)) {
+      if (!['required', 'optional'].includes(entry?.requirement)) {
+        problems.push(`${entry?.type}: requirement is ${JSON.stringify(entry?.requirement)}, not required or optional`);
+        continue;
+      }
+      if (entry.requirement !== 'required' || produced.length <= 1) continue;
+      const targets = asList(entry.required_for);
+      if (!targets.length) { problems.push(`${entry.type}: required, and names no required_for`); continue; }
+      const outside = targets.filter((t) => !produced.includes(t));
+      if (outside.length) problems.push(`${entry.type}: required_for names ${outside.join(', ')}, which this methodology does not produce`);
+    }
+    return problems.length ? problems.join('; ') : null;
+  }));
+
+  define('STD-0011#R-03', eachMethodology((doc) => (
+    doc.meta.producer_kinds === undefined
+      ? 'declares no producer kind, so the types it produces are not declared'
+      : (producedBy(doc).length || kindsOf(doc).length === 0
+        ? null
+        : 'declares producer kinds that yield no artifact type')
+  )));
+
+  define('STD-0011#R-09', eachMethodology((doc) => {
+    const problems = [];
+    for (const entry of consumesOf(doc)) {
+      if (entry?.major === undefined || entry?.minimum_minor === undefined) {
+        problems.push(`${entry?.type}: does not declare the major and minimum minor version it can read`);
+        continue;
+      }
+      const declaration = declarations.find(({ d }) => d.type === entry.type);
+      const actual = String(declaration?.d?.type_version ?? '').split('.');
+      if (actual.length === 3 && actual[0] !== String(entry.major)) {
+        problems.push(`${entry.type}: declares major ${entry.major}, and the type is at ${declaration.d.type_version}`);
+      }
+    }
+    return problems.length ? problems.join('; ') : null;
+  }));
+
+  define('STD-0011#R-53', eachMethodology((doc) => {
+    const produced = producedBy(doc);
+    if (produced.length <= 1) return null;
+    const problems = [];
+    for (const entry of consumesOf(doc)) {
+      if (entry?.requirement !== 'required') continue;
+      const targets = asList(entry.required_for);
+      if (!targets.length) problems.push(`${entry.type}: a required input of a producer emitting ${produced.length} types names no dependent output`);
+    }
+    return problems.length ? problems.join('; ') : null;
+  }));
+
   // ---- Artifact instances -------------------------------------------------
   // Requirements whose subjects are instances rather than documents. They were
   // dormant while the corpus held none; each check below binds to a requirement
