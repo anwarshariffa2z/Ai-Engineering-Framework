@@ -17,12 +17,13 @@ import { readResolutionDeclaration } from '../lib/store.mjs';
 import { resolve as resolveIdentity, OUTCOME, isStale } from '../lib/resolver.mjs';
 import { readFileSync, readdirSync } from 'node:fs';
 
-import { executeRun, executeComposedRun, executeThreeStageRun, RUN_CONTEXT, COMPOSED_RUN_CONTEXT, THREE_STAGE_RUN_CONTEXT } from '../index.mjs';
+import { executeRun, executeComposedRun, executeThreeStageRun, executeFrontendRun, RUN_CONTEXT, COMPOSED_RUN_CONTEXT, THREE_STAGE_RUN_CONTEXT } from '../index.mjs';
 import { consume } from '../consume.mjs';
 import { runDatabaseDiscovery, CONSUMED_TYPES, CONSUMES as DATABASE_CONSUMES, PRODUCED_TYPES as DATABASE_PRODUCES } from '../lib/database-discovery.mjs';
 import { runBackendDiscovery, CONSUMED_TYPES as BACKEND_INPUTS, PROFILE_CONSUMER, profileFor, projectThroughProfile, CONSUMES as BACKEND_CONSUMES, PRODUCED_TYPES as BACKEND_PRODUCES } from '../lib/backend-discovery.mjs';
 import { parseFrontMatter } from '../../validator/lib/yaml.mjs';
 import { evaluateRequiredInputs, consumedTypes } from '../lib/required-inputs.mjs';
+import { runFrontendDiscovery, CONSUMED_TYPES as FRONTEND_CONSUMED, PRODUCED_TYPES as FRONTEND_PRODUCES } from '../lib/frontend-discovery.mjs';
 import { crossRunScenario } from '../cross-run.mjs';
 import { buildInstanceChecks } from '../../validator/lib/instance-checks.mjs';
 
@@ -1308,7 +1309,7 @@ test('STD-0010#R-50', 'an established zero-consumption contract is an empty list
 });
 
 test('STD-0010#R-50', 'an established non-empty contract is a populated list', () => {
-  for (const id of ['AUD-0003', 'AUD-0005']) {
+  for (const id of ['AUD-0003', 'AUD-0004', 'AUD-0005']) {
     const m = METHODOLOGY_STATES.find((x) => x.id === id);
     assert(m.state === 'populated', `${id} has a reference producer and reports ${m.state}`);
   }
@@ -1317,7 +1318,7 @@ test('STD-0010#R-50', 'an established non-empty contract is a populated list', (
 test('STD-0010#R-50', 'a methodology with no reference producer omits consumes rather than declaring it empty', () => {
   // The distinction this requirement exists for. Declaring [] here would assert
   // that seven methodologies consume nothing, which their own prose contradicts.
-  for (const id of ['AUD-0004', 'AUD-0006', 'AUD-0007', 'AUD-0008', 'AUD-0009', 'AUD-0010', 'AUD-0011']) {
+  for (const id of ['AUD-0006', 'AUD-0007', 'AUD-0008', 'AUD-0009', 'AUD-0010', 'AUD-0011']) {
     const m = METHODOLOGY_STATES.find((x) => x.id === id);
     assert(m, `${id} is not present as a Methodology`);
     assert(m.state === 'absent',
@@ -1334,8 +1335,10 @@ test('STD-0010#R-50', 'the three states are distinguishable and the corpus uses 
   // And the reading R-50 forbids: absence must not collapse into empty.
   const absent = METHODOLOGY_STATES.filter((m) => m.state === 'absent').length;
   const empty = METHODOLOGY_STATES.filter((m) => m.state === 'empty').length;
-  assert(absent === 7 && empty === 1,
-    `expected seven unestablished and one established-empty contract, found ${absent} and ${empty}`);
+  // AUD-0004 crossed from absent to populated when its producer was built, which
+  // is the transition R-50 exists to make visible.
+  assert(absent === 6 && empty === 1,
+    `expected six unestablished and one established-empty contract, found ${absent} and ${empty}`);
 });
 
 test('STD-0011#R-21', 'an unestablished contract is not read as declaring nothing', () => {
@@ -1355,6 +1358,177 @@ test('STD-0011#R-21', 'an unestablished contract is not read as declaring nothin
   const results = collected[0]().flat();
   assert(results.every((r) => r.outcome === 'pass'),
     `an unestablished contract was reported a violation: ${results.filter((r) => r.outcome !== 'pass').map((r) => r.detail ?? '').join(' | ')}`);
+});
+
+
+// ---- AUD-0004 Frontend Discovery --------------------------------------------
+
+const frontendRun = executeFrontendRun({ root });
+const frontendAgain = executeFrontendRun({ root });
+
+test('STD-0011#R-18', 'the frontend producer emits one artifact of every type it declares', () => {
+  assert(FRONTEND_PRODUCES.length === 10, `${FRONTEND_PRODUCES.length} declared output types`);
+  for (const type of FRONTEND_PRODUCES) {
+    assert(frontendRun.frontend.artifacts.has(type), `${type} was not emitted`);
+  }
+  assert(frontendRun.artifacts.size === 24, `run-0004 emitted ${frontendRun.artifacts.size} artifacts`);
+});
+
+test('STD-0013#R-33', 'every frontend record conforms to its type declaration', () => {
+  for (const [type, artifact] of frontendRun.frontend.artifacts) {
+    const declaration = declarations.get(type);
+    for (const record of artifact.body.records) {
+      const problems = checkRecordAgainstDeclaration(declaration, record);
+      assert(!problems.length, `${type} ${record.record_id}: ${problems.join('; ')}`);
+    }
+  }
+});
+
+test('STD-0010#R-46', 'the frontend run regenerates byte-identically', () => {
+  for (const [type, artifact] of frontendRun.frontend.artifacts) {
+    const again = frontendAgain.frontend.artifacts.get(type);
+    assert(artifact.envelope.integrity.digest === again.envelope.integrity.digest, `${type} digest moved between runs`);
+    assert(canonicalize(artifact) === canonicalize(again), `${type} serialization moved between runs`);
+  }
+});
+
+test('STD-0008#R-55', 'every frontend artifact verifies against its own digest', () => {
+  for (const [type, artifact] of frontendRun.frontend.artifacts) {
+    assert(verifyDigest(artifact), `${type} does not verify against its declared digest`);
+  }
+});
+
+test('STD-0011#R-45', 'every frontend identity is well formed and stable across runs', () => {
+  for (const [type, artifact] of frontendRun.frontend.artifacts) {
+    const identity = identityOf(artifact);
+    assert(isWellFormedIdentity(identity), `${type} identity ${identity} is malformed`);
+    assert(identity === identityOf(frontendAgain.frontend.artifacts.get(type)), `${type} identity moved between runs`);
+  }
+});
+
+test('STD-0008#R-56', 'every frontend lineage entry is an immutable reference that resolves and verifies', () => {
+  let edges = 0;
+  let crossMethodology = 0;
+  for (const [, artifact] of frontendRun.frontend.artifacts) {
+    for (const entry of artifact.envelope.lineage.derives_from ?? []) {
+      edges += 1;
+      assert(isImmutableReference(entry), `a lineage entry is not immutable: ${entry.identity}`);
+      assert(!/artifacts\//.test(JSON.stringify(entry)), 'a lineage entry carries a storage path');
+      const outcome = resolveIdentity({ root, declaration: frontendRun.declaration, reference: entry, consumingRunId: frontendRun.run.runId });
+      assert(outcome.outcome === OUTCOME.RESOLVED, `${entry.identity} did not resolve: ${outcome.reason}`);
+      if (entry.identity.includes('framework.architecture.')) crossMethodology += 1;
+    }
+  }
+  assert(crossMethodology === 2, `${crossMethodology} cross-methodology edges, expected two`);
+  assert(edges === 7, `${edges} frontend lineage edges`);
+});
+
+test('STD-0011#R-21', 'the frontend producer consumes only what AUD-0004 declares', () => {
+  const declared = new Set(methodologyContract('03-frontend-discovery.md').consumes.map((e) => e.type));
+  for (const type of FRONTEND_CONSUMED) assert(declared.has(type), `${type} is consumed and not declared`);
+  assert(declared.size === FRONTEND_CONSUMED.length, 'the declaration and the implementation name different consumed sets');
+});
+
+test('STD-0011#R-53', 'a withheld required input degrades only the output that declared it', () => {
+  for (const [withheld, degradedType] of [
+    ['framework.architecture.entrypoints', 'framework.frontend.surface'],
+    ['framework.architecture.integrations', 'framework.frontend.dataflow'],
+  ]) {
+    const resolution = {
+      runId: frontendRun.run.runId,
+      resolution: frontendRun.declaration.resolution.filter((e) => !e.identity.includes(withheld)),
+      unresolvable: [],
+    };
+    const degraded = runFrontendDiscovery({ run: frontendRun.run, declarations, root, resolution });
+    const target = degraded.artifacts.get(degradedType);
+    assert(target.envelope.completeness.state === 'Unavailable', `${degradedType} reported ${target.envelope.completeness.state}`);
+    assert(target.envelope.completeness.reason.includes(withheld), 'the degradation does not name the absent input');
+    assert(target.body.records.length === 0, 'an Unavailable artifact carries records');
+    for (const [type, artifact] of degraded.artifacts) {
+      if (type === degradedType) continue;
+      assert(artifact.envelope.completeness.state !== 'Unavailable', `${type} was withdrawn and declared no dependency on ${withheld}`);
+    }
+  }
+});
+
+test('STD-0011#R-22', 'a withheld optional input withdraws nothing', () => {
+  const resolution = {
+    runId: frontendRun.run.runId,
+    resolution: frontendRun.declaration.resolution.filter((e) => !e.identity.includes('framework.architecture.modules')),
+    unresolvable: [],
+  };
+  const degraded = runFrontendDiscovery({ run: frontendRun.run, declarations, root, resolution });
+  for (const [type, artifact] of degraded.artifacts) {
+    assert(artifact.envelope.completeness.state !== 'Unavailable', `${type} was withdrawn for a missing optional input`);
+  }
+});
+
+test('STD-0011#R-30', 'each profiled input is read only through the fields its profile grants', () => {
+  let profiled = 0;
+  for (const [type, input] of frontendRun.frontend.inputs ?? []) {
+    if (!input.profile) continue;
+    profiled += 1;
+    const allowed = new Set(input.profile.reads);
+    for (const record of input.records) {
+      const leaked = Object.keys(record.fields).filter((f) => !allowed.has(f));
+      assert(!leaked.length, `${type} exposed ${leaked.join(', ')} outside its profile`);
+    }
+  }
+  assert(profiled === 4, `${profiled} profiled inputs, expected four`);
+});
+
+test('STD-0007#R-45', 'the frontend run keeps four absence states distinct', () => {
+  const artifacts = frontendRun.frontend.artifacts;
+  // Observed empty: examined in full, nothing found.
+  const assets = artifacts.get('framework.frontend.assets');
+  assert(assets.envelope.completeness.state === 'Complete' && assets.body.records.length === 0, 'assets is not an observed empty set');
+  assert(assets.envelope.assessment.evidence_state === 'Unknown' && assets.envelope.assessment.confidence === 'Low',
+    'an empty aggregate did not take the bottom of each lattice');
+  // NotApplicable: a determination about the subject.
+  const state = artifacts.get('framework.frontend.state');
+  assert(state.envelope.completeness.state === 'NotApplicable' && state.envelope.completeness.reason, 'state is not NotApplicable with a reason');
+  // Partial: less than the declared scope was examined.
+  const routing = artifacts.get('framework.frontend.routing');
+  assert(routing.envelope.completeness.state === 'Partial' && routing.body.records.length > 0, 'routing is not Partial with records');
+  // Unknown: a record that declines a conclusion, carrying no confidence.
+  const unknowns = [...artifacts.values()].flatMap((a) => a.body.records).filter((r) => r.fields.evidence_state === 'Unknown');
+  assert(unknowns.length > 0, 'no Unknown record arose');
+  for (const record of unknowns) {
+    assert(record.scope_reason, `${record.record_id} is Unknown and carries no scope reason`);
+    assert(record.fields.confidence === undefined, `${record.record_id} is Unknown and carries a confidence`);
+  }
+});
+
+test('STD-0007#R-21', 'the frontend producer manufactures no Verified evidence', () => {
+  for (const [type, artifact] of frontendRun.frontend.artifacts) {
+    for (const record of artifact.body.records) {
+      assert(record.fields.evidence_state !== 'Verified', `${type} ${record.record_id} claims Verified from static inspection`);
+    }
+    assert(artifact.envelope.assessment.evidence_state !== 'Verified', `${type} aggregates to Verified`);
+  }
+});
+
+test('AUD-0004#2', 'the frontend producer runs nothing and contacts nothing', () => {
+  const forbidden = ['node:net', 'node:http', 'node:https', 'node:child_process', 'node:worker_threads',
+    'puppeteer', 'playwright', 'jsdom', 'vite', 'webpack', 'esbuild', 'rollup'];
+  for (const module of ['lib/frontend-discovery.mjs', 'lib/frontend-subjects.mjs']) {
+    const text = readFileSync(join(root, 'tools/producer', module), 'utf8');
+    for (const specifier of forbidden) assert(!text.includes(`from '${specifier}'`), `${module} imports ${specifier}`);
+    assert(!/\bfetch\(|\bexec\(|\bspawn\(|XMLHttpRequest/.test(text), `${module} calls out of process`);
+  }
+});
+
+test('STD-0008#R-11', 'no secret, credential, endpoint, or record value reaches a frontend artifact', () => {
+  const serialized = JSON.stringify([...frontendRun.frontend.artifacts.values()]);
+  for (const pattern of [/https?:\/\/[a-z0-9.-]+\//i, /BEGIN [A-Z ]*PRIVATE KEY/, /"password"\s*:/i, /Bearer [A-Za-z0-9]/, /__ENV\.[A-Z_]+\s*=/]) {
+    assert(!pattern.test(serialized), `the run emitted material matching ${pattern}`);
+  }
+  // Exposure records classification and location, never the value behind them.
+  const exposure = frontendRun.frontend.artifacts.get('framework.frontend.exposure');
+  for (const record of exposure.body.records) {
+    assert(record.fields.redaction_marker, `${record.record_id} carries no redaction marker`);
+    assert(!/=\s*['"]/.test(JSON.stringify(record.fields)), `${record.record_id} appears to carry a value`);
+  }
 });
 
 // ---- report -----------------------------------------------------------------
