@@ -78,7 +78,7 @@ This is the canonical registry for every framework document. A document is not c
 | STD-0004 | Evaluation Standard | Development | Approved | Framework Maintainers | [document](04-development/evaluation-standard.md) | 1.0.0 | 2026-07-25 |
 | STD-0005 | Reliability Standard | Development | Approved | Framework Maintainers | [document](04-development/reliability-standard.md) | 1.0.0 | 2026-07-25 |
 | STD-0006 | Security Standard | Development | Approved | Framework Maintainers | [document](04-development/security-standard.md) | 1.0.0 | 2026-07-25 |
-| STD-0007 | Evidence and Confidence Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/evidence-and-confidence.md) | 1.1.0 | 2026-07-25 |
+| STD-0007 | Evidence and Confidence Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/evidence-and-confidence.md) | 1.2.0 | 2026-07-30 |
 | STD-0008 | Artifact Specification Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/artifact-specification.md) | 1.8.0 | 2026-07-29 |
 | STD-0010 | Metadata Specification Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/metadata-specification.md) | 1.5.0 | 2026-07-29 |
 | STD-0011 | Contract Specification Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/contract-specification.md) | 1.3.0 | 2026-07-29 |
