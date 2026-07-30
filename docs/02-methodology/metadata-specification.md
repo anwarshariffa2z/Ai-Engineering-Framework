@@ -1,11 +1,11 @@
 ---
 id: STD-0010
 title: Metadata Specification Standard
-version: 1.5.0
+version: 1.6.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-29
+last_updated: 2026-07-30
 review_cycle: Annual
 category: Methodology
 tags: [metadata, schema, representation, front-matter, standard]
@@ -266,6 +266,11 @@ requirements:
     check: mechanical
     severity: blocking
     scope: artifact
+  - id: R-48
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: compatibility
 ---
 
 # Metadata Specification Standard
@@ -497,6 +502,10 @@ This section specifies how the compatibility declarations required by STD-0008 s
 **R-26.** A consumer MUST declare `consumes`, a list in which each entry carries an artifact type identity, a major version, and a minimum minor version.
 
 **R-27.** Where a consumer declares a consumption profile, it MUST appear as a `profile` member of the corresponding `consumes` entry, listing the field and record-group names read.
+
+**R-48.** Each entry in `consumes` MUST carry a `requirement` member whose value is `required` or `optional`. Where the value is `required` and the declaring party also declares more than one entry in `produces`, the entry MUST additionally carry `required_for`, a non-empty list of the artifact type identities that require it, each of which MUST appear in `produces`.
+
+R-48 represents the obligations [STD-0011](contract-specification.md) R-20 and R-53 state; it does not define them. The `required_for` member is what makes R-53 evaluable without reading a producer's prose: which outputs a missing input withdraws is otherwise recoverable only from the producer's source. Its absence on a single-output producer is not an omission — there is one answer and `produces` already carries it.
 
 Vocabulary policy for an enumerated field, required by STD-0008, is declared in an artifact type definition as `vocabulary: closed` or `vocabulary: open`, and a consumer of an open vocabulary declares `on_unknown` naming its fallback.
 
