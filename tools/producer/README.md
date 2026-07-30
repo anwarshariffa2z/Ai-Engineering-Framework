@@ -143,7 +143,7 @@ Two further observations, both concrete:
 
 Recorded, not resolved. Closing it means a record-to-record reference, which is a new identity form and a change to ADR-0006, and one milestone's evidence is not a mandate to reopen an accepted decision.
 
-### Generic producer runtime: still not yet, and now for a stated reason
+### Generic producer runtime: PARTIAL, decided at the post-AUD-0005 consolidation gate
 
 Three producers now occupy the three positions the question needs — non-consuming, single-upstream consuming, multi-upstream consuming. Against the five conditions set for extraction:
 
@@ -153,9 +153,11 @@ Three producers now occupy the three positions the question needs — non-consum
 | The same input-resolution semantics where inputs exist | **Yes.** Both consumers resolve by identity against the run declaration and verify the digest through the same `resolver.mjs` |
 | The same failure-propagation semantics | **No.** AUD-0002 has no input and cannot fail closed at all; AUD-0003 maps a missing input to `Unavailable` on two output types; AUD-0005 maps it on two of ten and must also handle a profile that no longer matches its type, a condition the second producer has no analogue for |
 | Ordering derivable from declared dependencies | **Yes**, and now demonstrated over three stages rather than argued over two |
-| No methodology-specific condition hidden inside the abstraction | **No.** `REQUIRED_INPUTS` differs per methodology and is not derivable from any declaration: nothing in a type declaration states which of a producer's outputs cannot be produced without which input |
+| No methodology-specific condition hidden inside the abstraction | **Now yes, in principle.** `REQUIRED_INPUTS` differs per methodology and was derivable from no declaration. STD-0011 R-53 and STD-0010 R-48 now state and represent the per-output required-input contract, so the table is expressible as data. No producer yet declares it — all three still hold it as a constant |
 
-Three of five hold. **Do not extract.** The two that fail are the same one seen from two sides: the framework can say what a producer consumes but not what each of its outputs *requires*, so any shared runtime would carry a per-methodology table and the abstraction would hide exactly the thing that differs. The extraction proposal that follows from this is to make required-input mapping declarable first, and to revisit extraction after that — not to extract around it.
+Four of five now hold, and the fifth changed for a reason outside this directory: the design gate the previous revision named has been passed. STD-0011 R-53 states what a required input is required *for*, and STD-0010 R-48 gives it a member. That collapses the two failing conditions into one, because failure propagation differs between AUD-0003 and AUD-0005 only in the table — the rule applied to the table is character-for-character the same in both.
+
+**Decision: PARTIAL.** Extract the named primitive — required-input gating and the degradation that follows from it, driven by an R-48 declaration rather than a constant — and leave the rest where it is. A whole-runtime extraction is still wrong: stage ordering, subject knowledge, and record construction remain methodology-specific, and AUD-0002 exercises none of the consuming path, so a shared runtime would be an abstraction over two cases with a third bolted to the side. Full extraction is not reconsidered until a producer exists that the primitive does not fit.
 
 ## Standards ambiguities found
 
@@ -166,8 +168,16 @@ Three of five hold. **Do not extract.** The two that fail are the same one seen 
    and R-47 requires every member to participate. This implementation's output
    already satisfied both: no artifact changed and no digest moved.
 
-2. **The aggregate of an empty record set is undefined. Three independent readings
-   now agree; still deferred.** AUD-0003 produces one `NotApplicable` artifact with no
+2. **The aggregate of an empty record set was undefined. Closed.** STD-0007 R-45
+   now states that an aggregate over an empty set takes the weakest value of its
+   vocabulary, and that an empty aggregate carries no completeness meaning. Three
+   producers had reached it independently through one shared `aggregate`, and the
+   corpus holds eight subjects: six artifacts with no load-bearing record and two
+   whose records are all `Unknown`, which aggregate a populated evidence set and an
+   empty confidence set. The output was already conforming; no artifact changed and
+   no digest moved. The original finding follows.
+
+   **Three independent readings agreed before the rule existed.** AUD-0003 produces one `NotApplicable` artifact with no
    records and AUD-0005 produces another, for a different reason: the subject declares
    no asynchronous, scheduled, or event-driven work at all, so `framework.backend.execution`
    counts nothing. All three producers reach the bottom of each lattice, `Unknown` and

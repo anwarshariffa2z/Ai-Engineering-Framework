@@ -1,11 +1,11 @@
 ---
 id: REF-0010
 title: Documentation Validation Report
-version: 1.12.0
+version: 1.13.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-29
+last_updated: 2026-07-30
 review_cycle: Event-driven
 category: Reference
 tags: [validation, documentation, quality]
@@ -115,15 +115,15 @@ Eight standards declare the enforceable surface of the framework. Every identifi
 
 | Standard | Requirements | Mechanical | Judgment | Bound | Retired |
 | --- | --- | --- | --- | --- | --- |
-| STD-0001 Document Metadata | 5 | 4 | 1 | 4 | — |
+| STD-0001 Document Metadata | 6 | 4 | 2 | 4 | — |
 | STD-0002 Framework Document ID | 8 | 5 | 3 | 5 | — |
-| STD-0007 Evidence and Confidence | 44 | 20 | 24 | 13 | — |
+| STD-0007 Evidence and Confidence | 45 | 21 | 24 | 14 | — |
 | STD-0008 Artifact Specification | 34 | 33 | 1 | 23 | 25 |
-| STD-0010 Metadata Specification | 47 | 47 | 0 | 36 | — |
-| STD-0011 Contract Specification | 52 | 45 | 7 | 10 | — |
+| STD-0010 Metadata Specification | 48 | 48 | 0 | 36 | — |
+| STD-0011 Contract Specification | 53 | 46 | 7 | 10 | — |
 | STD-0012 Validation Specification | 45 | 45 | 0 | 12 | — |
 | STD-0013 Artifact Type Declaration | 37 | 29 | 8 | 26 | — |
-| **Total** | **272** | **228** | **44** | **129** | **25** |
+| **Total** | **276** | **231** | **45** | **130** | **25** |
 
 STD-0007, STD-0008, and STD-0011 carried no bound checks for as long as their subjects — artifact instances, producers, consumers, and conclusions — were absent from the corpus. The AUD-0002 reference producer supplied the first of those subjects: fourteen conforming instances of the fourteen artifact types that methodology declares, with a run-scoped resolution declaration beside them. Fifty-three checks bound as a result, taking the total from sixty-eight to one hundred and twenty-one, and every one of them binds to a requirement that already existed. None was written to raise a count.
 
@@ -140,6 +140,16 @@ A third declaration correction followed the same pattern as the second milestone
 Reconciling the second producer's findings against the standards added two requirements and one bound check. [STD-0008](02-methodology/artifact-specification.md) R-58 fixes the boundary between the framework's own record members and the field values a type declaration supplies; it is mechanical, it binds, and it is what allows the STD-0013 R-35 check to read a record's declared fields without a standing exception list for the framework's members. [STD-0013](02-methodology/artifact-type-declaration-standard.md) R-37 states the one qualification R-33 receives, for a record whose evidence state is `Unknown`. It is judgment-checkable and deliberately unbound: whether a field was omitted honestly or a value fabricated to satisfy a list cannot be seen in an artifact, and a check that treated every omission as licensed would assume R-37 rather than evaluate it. Both requirements were already being relied on before they were stated — the validator was applying one and exempting under the other on its own authority, which [STD-0012](02-methodology/validation-specification.md) R-03 forbids. Stating them removed that, and neither changed an artifact or moved a digest.
 
 Three artifact type declarations were corrected in the same pass. `framework.database.risks` and `framework.architecture.classification` each recorded lineage in the runs to upstream types their declarations did not list, and `framework.architecture.risks` listed five of the seven it drew on. The instance lineage was right in every case and the declarations were incomplete, so the declarations were corrected to match the derivation that actually occurred: `derives_from` entries were added, none was removed, the graph over all ninety-three types remains acyclic under STD-0013 R-21, and every entry names a declared type under its R-22. No `type_version` moved. A `derives_from` entry supplies an operand to R-21 and R-22, which range over the corpus graph, and to no requirement that ranges over an instance — not R-33, R-34, or R-35 — so no artifact's conformance and no consumer's compatibility determination changed, and every AUD-0002 digest is byte-for-byte what it was. That no requirement in STD-0013 classifies a change to `derives_from`, where its R-15 classifies a vocabulary change and its R-24 a consumption-profile change, is recorded here as a gap rather than closed by inference.
+
+### The post-AUD-0005 standards consolidation gate
+
+With three reference producers in the corpus, four behaviours the implementations had converged on were reviewed against the rule that a repeated behaviour is evidence and a single one is not. Four requirements were added and one check bound; two candidates were rejected or deferred, and the reasons are recorded here rather than dropped.
+
+[STD-0007](02-methodology/evidence-and-confidence.md) R-45 states the aggregate of an empty set. R-29 and R-30 define an aggregate as a minimum over a set and say nothing about a set with no members, which is not a hypothetical: eight instances across all three runs present it. Six carry no load-bearing record — `framework.architecture.deployment` in each of the three runs, `framework.architecture.integrations`, `framework.database.migration`, and `framework.backend.execution` — and two, both `framework.database.lifecycle`, carry records whose every evidence state is `Unknown` and which therefore carry no confidence under R-38, so their evidence set is populated and their confidence set is empty. All three producers reached `Unknown` and `Low` through the same generic aggregation. The rule is worth stating because the alternative is not merely undefined but attractive: the infimum over an empty subset of a bounded lattice is its top, so a literal reading of R-29 and R-30 would have an examination that determined nothing report `Verified` at `High`. R-45 fixes the bottom, and states separately that an empty aggregate carries no completeness meaning — `NotApplicable`, `Unavailable`, and `Partial` all produce it, and section 8 is what tells them apart. The check binds to the eight instances and covers both empty sets independently; the validator's existing R-29 and R-30 checks continue to decline the empty case, which is now correct rather than merely cautious.
+
+[STD-0011](02-methodology/contract-specification.md) R-53 states what a required input is required *for*. R-20 already obliged a producer to declare each input required or optional, so the originally proposed obligation would have duplicated it and was rejected in that form. What no requirement stated is the relation both consuming producers actually implement: requiredness binds an input type to particular *output* types, not to the producer as a whole. AUD-0003 declares `framework.architecture.technology` required for `framework.database.technology` alone; AUD-0005 declares two inputs required for `framework.backend.services` and two others for `framework.backend.dataaccess`. Both degrade only the artifacts that rest on a withheld input and emit the rest. Read without R-53, the "required input missing" row of R-25's failure table reaches every type the producer emits, and a producer that lost one upstream artifact would withdraw thirteen sound ones. [STD-0010](02-methodology/metadata-specification.md) R-48 carries the representation — a `requirement` member on each `consumes` entry, and `required_for` where the producer emits more than one type — because the contract semantics belong to STD-0011 and the metadata shape does not. Both are dormant, alongside R-25 through R-27, for the reason those are: no producer or consumer is registered as a corpus object, so nothing declares `consumes` for a check to read. The producers hold the same information in a `REQUIRED_INPUTS` constant, which is exactly the condition R-48 exists to end.
+
+[STD-0001](02-methodology/document-metadata-standard.md) R-06 classifies a document version change. R-05 obliged the version to move on a substantive change and left what it should move to unstated, and the corpus shows the cost: STD-0008 1.5.0 retired eleven requirement identifiers under a MINOR bump, which is the one change most likely to break a document binding to them. R-06 is judgment-checkable and is classified so deliberately. A version string is machine-readable; whether rewritten prose narrowed an obligation or restated it is a reading of two texts, and marking it mechanical because the operand is a string would be the pretence STD-0012 R-03 exists to prevent. It classifies changes approved after its own approval and does not reclassify released history, on the principle STD-0010 R-38 already uses. The second proposed requirement, obliging the classification to be recorded, was deferred: no metadata member carries it, and inventing one to hold a value nothing yet reads is representation ahead of need.
 
 What remains not-evaluated is not evenly distributed and the reasons differ. Forty-three requirements are judgment-classified and routed to human review. Forty-two range over producers, consumers, and orchestrators that are not registered as corpus objects, which no artifact can supply. Twenty-nine are validator self-conformance. The remainder state conditions that do not arise in either reference run — no environment-derived observation, no transformer, no rejection event, no cross-revision reuse — and each reports that rather than repeating a reason that has expired. In particular STD-0011 R-27, R-43, and R-44 remain unbound because a rejection, a stale pair presented as concurrently valid, and a cross-revision consumption are conditions neither run produces.
 
