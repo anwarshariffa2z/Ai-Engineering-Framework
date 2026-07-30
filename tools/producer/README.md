@@ -143,7 +143,7 @@ Two further observations, both concrete:
 
 Recorded, not resolved. Closing it means a record-to-record reference, which is a new identity form and a change to ADR-0006, and one milestone's evidence is not a mandate to reopen an accepted decision.
 
-### Generic producer runtime: PARTIAL, decided at the post-AUD-0005 consolidation gate
+### Generic producer runtime: PARTIAL, with the named primitive extracted in Milestone 6.1
 
 Three producers now occupy the three positions the question needs — non-consuming, single-upstream consuming, multi-upstream consuming. Against the five conditions set for extraction:
 
@@ -153,11 +153,25 @@ Three producers now occupy the three positions the question needs — non-consum
 | The same input-resolution semantics where inputs exist | **Yes.** Both consumers resolve by identity against the run declaration and verify the digest through the same `resolver.mjs` |
 | The same failure-propagation semantics | **No.** AUD-0002 has no input and cannot fail closed at all; AUD-0003 maps a missing input to `Unavailable` on two output types; AUD-0005 maps it on two of ten and must also handle a profile that no longer matches its type, a condition the second producer has no analogue for |
 | Ordering derivable from declared dependencies | **Yes**, and now demonstrated over three stages rather than argued over two |
-| No methodology-specific condition hidden inside the abstraction | **Now yes, in principle.** `REQUIRED_INPUTS` differs per methodology and was derivable from no declaration. STD-0011 R-53 and STD-0010 R-48 now state and represent the per-output required-input contract, so the table is expressible as data. No producer yet declares it — all three still hold it as a constant |
+| No methodology-specific condition hidden inside the abstraction | **Yes, for this primitive.** `REQUIRED_INPUTS` differed per methodology and was derivable from no declaration. STD-0011 R-53 and STD-0010 R-48 state and represent the per-output contract, and both consuming producers now declare `consumes` in that shape. The constant is gone from both |
 
 Four of five now hold, and the fifth changed for a reason outside this directory: the design gate the previous revision named has been passed. STD-0011 R-53 states what a required input is required *for*, and STD-0010 R-48 gives it a member. That collapses the two failing conditions into one, because failure propagation differs between AUD-0003 and AUD-0005 only in the table — the rule applied to the table is character-for-character the same in both.
 
 **Decision: PARTIAL.** Extract the named primitive — required-input gating and the degradation that follows from it, driven by an R-48 declaration rather than a constant — and leave the rest where it is. A whole-runtime extraction is still wrong: stage ordering, subject knowledge, and record construction remain methodology-specific, and AUD-0002 exercises none of the consuming path, so a shared runtime would be an abstraction over two cases with a third bolted to the side. Full extraction is not reconsidered until a producer exists that the primitive does not fit.
+
+#### The extracted primitive
+
+`lib/required-inputs.mjs`. Given a `consumes` declaration in the R-48 shape, the types a producer declares it produces, and which inputs this run obtained, `evaluateRequiredInputs` returns the outputs that may still execute and, for each of the rest, the `Unavailable` state and the disclosure STD-0011 R-25 requires. It throws on a declaration R-48 does not permit — a requirement outside the vocabulary, a required entry of a multi-output producer with no `required_for`, a `required_for` naming a type outside `produces` — because guessing would invent the dependency the requirement exists to make explicit.
+
+It holds no artifact type identity, no methodology name, and no knowledge of stage ordering, evidence, records, or the subject. One test asserts that by reading the module's own source, which is the only way that property stays true.
+
+The declaration direction inverted with the shape. `REQUIRED_INPUTS` mapped an output to the inputs it needed; R-48 maps an input to the outputs that require it, which is the direction a consumer reads and the direction a validator would have to read if producers were ever registered as corpus objects.
+
+**AUD-0002 is not applicable.** It consumes nothing, so it has no required input to gate. Giving it the primitive for symmetry would be an abstraction over a case that does not exist.
+
+**Verdict: PROVEN.** Two independent producers use one implementation; the primitive contains no methodology-specific branch; both producers' artifacts are byte-identical to their released bytes across all three runs and no digest moved; the behaviour is driven by declarations rather than by callers; and no standard changed to accommodate it.
+
+Line counts went *up* in both producers, and that is the honest result. An R-48 declaration is more verbose than an inverted constant, and `PRODUCED_TYPES` is now written out where it was previously implicit in a sequence of `emit` calls. The milestone bought one implementation of one contract, not fewer lines.
 
 ## Standards ambiguities found
 
