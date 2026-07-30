@@ -1,7 +1,7 @@
 ---
 id: STD-0010
 title: Metadata Specification Standard
-version: 1.6.0
+version: 1.7.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -271,6 +271,16 @@ requirements:
     check: mechanical
     severity: blocking
     scope: compatibility
+  - id: R-49
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: compatibility
+  - id: R-50
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: methodology
 ---
 
 # Metadata Specification Standard
@@ -506,6 +516,20 @@ This section specifies how the compatibility declarations required by STD-0008 s
 **R-48.** Each entry in `consumes` MUST carry a `requirement` member whose value is `required` or `optional`. Where the value is `required` and the declaring party also declares more than one entry in `produces`, the entry MUST additionally carry `required_for`, a non-empty list of the artifact type identities that require it, each of which MUST appear in `produces`.
 
 R-48 represents the obligations [STD-0011](contract-specification.md) R-20 and R-53 state; it does not define them. The `required_for` member is what makes R-53 evaluable without reading a producer's prose: which outputs a missing input withdraws is otherwise recoverable only from the producer's source. Its absence on a single-output producer is not an omission — there is one answer and `produces` already carries it.
+
+**Where the declaration lives.** R-25 through R-27 and R-48 state how a producer's and a consumer's compatibility declarations are written; they do not say which object carries them, and until an object did, none of them had a subject. [Framework Core Architecture](../01-foundation/framework-core-architecture.md) section 4 already answers it: a Methodology declares the artifact types it produces and consumes. A Methodology is therefore the object that carries these declarations, and a producer implementation is not — an implementation is not a framework object, carries no version, owner, or lifecycle, and stating a contract there would place the framework's authority in a file no Standard governs.
+
+**R-49.** A Methodology MUST declare `producer_kinds`, a list of the producer kind names under which its artifact types are declared per [STD-0013](artifact-type-declaration-standard.md) R-07. The artifact types a Methodology produces are exactly those whose declarations name one of its kinds; this constitutes the `produces` declaration R-25 requires, and a Methodology MUST NOT restate that list. A Methodology producing no artifact type declares an empty list.
+
+R-49 is the join and deliberately not a copy. Every artifact type already declares the kind that produces it, and a Methodology repeating the resulting set would create a second authoritative statement of one fact — the drift these standards exist to prevent. What the Methodology adds is the one thing the type declarations cannot: which kinds are its own. `producer_kind` names a kind rather than a document, which STD-0013 R-07 requires, so the link is only expressible from this side.
+
+`consumes` is carried by a Methodology in the same way, and its entries take the members R-26, R-27, and R-48 require.
+
+**R-50.** A Methodology whose consumption contract is established and names no consumed artifact type MUST declare `consumes` as an empty list. An absent `consumes` key means that the Methodology's consumption contract is not established. A reader of the metadata MUST NOT interpret an absent `consumes` key as an empty consumption declaration.
+
+The two states are different statements and the difference is load-bearing. An empty list is a determination: this methodology was examined and depends on no upstream type. An absent key is the absence of a determination, and it is the honest representation for a methodology whose prose identifies upstream artifact types while establishing none of what R-48 requires of an entry — which of its outputs cannot be produced without which input. Collapsing the two would let a methodology with an unexamined consumption contract read as one that consumes nothing, which is the same class of error [STD-0007](evidence-and-confidence.md) R-18 prevents between `NotApplicable` and `Unavailable`: both yield an empty result, and only one of them is knowledge.
+
+R-50 governs the meaning of the two declaration states and nothing else. The shape of `consumes` and of its entries is R-26's, and R-48 governs their requiredness members; neither is restated here.
 
 Vocabulary policy for an enumerated field, required by STD-0008, is declared in an artifact type definition as `vocabulary: closed` or `vocabulary: open`, and a consumer of an open vocabulary declares `on_unknown` naming its fallback.
 

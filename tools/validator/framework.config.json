@@ -86,6 +86,8 @@
     "layer",
     "context_cost",
     "meta_model_version",
+    "producer_kinds",
+    "consumes",
     "artifact_types",
     "authored",
     "generated_by",

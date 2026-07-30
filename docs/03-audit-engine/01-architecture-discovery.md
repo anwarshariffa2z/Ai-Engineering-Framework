@@ -1,11 +1,11 @@
 ---
 id: AUD-0002
 title: Architecture Discovery Methodology
-version: 2.0.0
+version: 2.1.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-25
+last_updated: 2026-07-30
 review_cycle: Annual
 category: Audit Engine
 tags: [audit-engine, architecture, discovery, methodology]
@@ -15,6 +15,8 @@ layer: 1
 depends_on: [../02-methodology/evidence-and-confidence.md, ../02-methodology/artifact-specification.md, ../02-methodology/metadata-specification.md, ../02-methodology/contract-specification.md, ../02-methodology/validation-specification.md]
 references: [00-bootstrap.md, 02-database-discovery.md, ../09-capabilities/CAP-0001-repository-audit.md, ../02-methodology/glossary.md]
 meta_model_version: 1.0.0
+producer_kinds: [architecture-discovery]
+consumes: []
 normativity:
   "1": informative
   "2": normative

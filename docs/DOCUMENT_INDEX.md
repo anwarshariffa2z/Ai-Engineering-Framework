@@ -27,16 +27,16 @@ This is the canonical registry for every framework document. A document is not c
 | DOC-0007 | Framework Artifact Model | Foundation | Draft | Framework Maintainers | [document](01-foundation/framework-artifact-model.md) | 1.1.1 | 2026-07-29 |
 | AUD-0000 | Audit Engine Documentation | Audit Engine | Draft | Framework Maintainers | [document](03-audit-engine/README.md) | 0.1.3 | 2026-07-26 |
 | AUD-0001 | Audit Engine Bootstrap | Audit Engine | Draft | Framework Maintainers | [document](03-audit-engine/00-bootstrap.md) | 0.1.0 | 2026-07-25 |
-| AUD-0002 | Architecture Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/01-architecture-discovery.md) | 2.0.0 | 2026-07-25 |
-| AUD-0003 | Database Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/02-database-discovery.md) | 3.0.0 | 2026-07-25 |
-| AUD-0004 | Frontend Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/03-frontend-discovery.md) | 1.0.0 | 2026-07-26 |
-| AUD-0005 | Backend Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/04-backend-discovery.md) | 1.0.0 | 2026-07-26 |
-| AUD-0006 | Business Workflow Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/05-business-workflow-discovery.md) | 1.0.0 | 2026-07-26 |
-| AUD-0007 | Security and Permissions Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/06-security-permissions.md) | 1.0.0 | 2026-07-26 |
-| AUD-0008 | Feature Inventory Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/07-feature-inventory.md) | 1.0.0 | 2026-07-26 |
-| AUD-0009 | Operations Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/08-operations-manual.md) | 1.0.0 | 2026-07-26 |
-| AUD-0010 | Gap Analysis Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/09-gap-analysis.md) | 1.0.0 | 2026-07-26 |
-| AUD-0011 | Runtime Verification Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/10-runtime-verification.md) | 1.0.0 | 2026-07-26 |
+| AUD-0002 | Architecture Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/01-architecture-discovery.md) | 2.1.0 | 2026-07-30 |
+| AUD-0003 | Database Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/02-database-discovery.md) | 3.1.0 | 2026-07-30 |
+| AUD-0004 | Frontend Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/03-frontend-discovery.md) | 1.1.0 | 2026-07-30 |
+| AUD-0005 | Backend Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/04-backend-discovery.md) | 1.1.0 | 2026-07-30 |
+| AUD-0006 | Business Workflow Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/05-business-workflow-discovery.md) | 1.1.0 | 2026-07-30 |
+| AUD-0007 | Security and Permissions Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/06-security-permissions.md) | 1.1.0 | 2026-07-30 |
+| AUD-0008 | Feature Inventory Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/07-feature-inventory.md) | 1.1.0 | 2026-07-30 |
+| AUD-0009 | Operations Discovery Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/08-operations-manual.md) | 1.1.0 | 2026-07-30 |
+| AUD-0010 | Gap Analysis Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/09-gap-analysis.md) | 1.1.0 | 2026-07-30 |
+| AUD-0011 | Runtime Verification Methodology | Audit Engine | Approved | Framework Maintainers | [document](03-audit-engine/10-runtime-verification.md) | 1.1.0 | 2026-07-30 |
 | AUD-0012 | Audit Engine Product Specification | Roadmap | Draft | Framework Maintainers | [document](07-roadmap/audit-engine-roadmap.md) | 1.0.1 | 2026-07-26 |
 | ADR-0001 | Establish a Documentation-First Framework | Architecture Decision Record | Accepted | Framework Maintainers | [document](ADR/ADR-0001-framework-foundation.md) | 1.0.0 | 2026-07-25 |
 | ADR-0002 | Express Requirements as Standard Metadata Rather Than as Rule Objects | Architecture Decision Record | Accepted | Framework Maintainers | [document](ADR/ADR-0002-requirements-as-metadata.md) | 1.0.0 | 2026-07-25 |
@@ -80,7 +80,7 @@ This is the canonical registry for every framework document. A document is not c
 | STD-0006 | Security Standard | Development | Approved | Framework Maintainers | [document](04-development/security-standard.md) | 1.0.0 | 2026-07-25 |
 | STD-0007 | Evidence and Confidence Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/evidence-and-confidence.md) | 1.2.0 | 2026-07-30 |
 | STD-0008 | Artifact Specification Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/artifact-specification.md) | 1.8.0 | 2026-07-29 |
-| STD-0010 | Metadata Specification Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/metadata-specification.md) | 1.6.0 | 2026-07-30 |
+| STD-0010 | Metadata Specification Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/metadata-specification.md) | 1.7.0 | 2026-07-30 |
 | STD-0011 | Contract Specification Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/contract-specification.md) | 1.4.0 | 2026-07-30 |
 | STD-0012 | Validation Specification Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/validation-specification.md) | 1.1.0 | 2026-07-29 |
 | STD-0013 | Artifact Type Declaration Standard | Methodology | Approved | Framework Maintainers | [document](02-methodology/artifact-type-declaration-standard.md) | 1.2.0 | 2026-07-29 |
