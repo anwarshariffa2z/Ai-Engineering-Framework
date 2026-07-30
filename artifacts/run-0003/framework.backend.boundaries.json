@@ -1,0 +1,157 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "boundary-0001-e1",
+            "location": "src/index.js",
+            "observation": "the middleware is registered before every route registration, so it precedes each of them",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "check_kind": "authentication",
+          "condition_evaluated": "presence of an authorization header, from which a principal is decoded",
+          "confidence": "Medium",
+          "enforcement_location": "src/middleware/authenticate.js",
+          "evidence_state": "Observed",
+          "is_environmental": false,
+          "operation": "every registered operation"
+        },
+        "record_id": "boundary-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "boundary-0002-e1",
+            "location": "src/middleware/authorize.js",
+            "observation": "the middleware returns without evaluating its condition unless a configuration value matches",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "check_kind": "authorization",
+          "condition_evaluated": "presence of a tenant on the decoded principal, evaluated only where a configuration flag holds a particular value",
+          "enforcement_location": "src/middleware/authorize.js",
+          "evidence_state": "Unknown",
+          "is_environmental": true,
+          "operation": "every registered operation"
+        },
+        "record_id": "boundary-0002",
+        "scope_reason": "whether this check enforces anything depends on a configuration value read at process start, which is supplied by the environment and is not present in the repository. The check is registered and its condition is visible; what it does in any deployment is not determinable from the source"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "boundary-0003-e1",
+            "location": "src/routes/orders.js",
+            "observation": "the validator is named in the registration for this operation and for no other",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "check_kind": "input-validation",
+          "condition_evaluated": "the request body against the declared schema",
+          "confidence": "Medium",
+          "enforcement_location": "src/middleware/validate.js",
+          "evidence_state": "Observed",
+          "is_environmental": false,
+          "operation": "place order"
+        },
+        "record_id": "boundary-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "boundary-0004-e1",
+            "location": "src/routes/orders.js",
+            "observation": "a sibling operation names a validator and this one does not",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "check_kind": "input-validation",
+          "confidence": "Medium",
+          "enforcement_location": "absent: no validator is named in the registration and no check is performed in the handler",
+          "evidence_state": "Observed",
+          "is_environmental": false,
+          "operation": "cancel order"
+        },
+        "record_id": "boundary-0004"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Observed/Medium": 3,
+        "Unknown": 1
+      },
+      "evidence_state": "Unknown"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.backend.boundaries",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:756008aa01f1f567cd089cf57dd2a6c65fe7a54b9a5679448386e72fff064b98"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "boundary-0001",
+            "boundary-0002",
+            "boundary-0003",
+            "boundary-0004"
+          ],
+          "digest": "sha256:28e282c33707adb41ce09e82ac2b1f0b9497615db63ab99bacac598f5c82ed31",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.backend.interfaces@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that registers, serves, guards, or bounds a server-side operation",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

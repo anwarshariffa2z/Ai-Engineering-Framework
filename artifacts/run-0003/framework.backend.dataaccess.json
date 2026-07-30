@@ -1,0 +1,203 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "dataaccess-0001-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "the listing method issues one filtered read including the related items",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "access_location": "src/data/order-repository.js",
+          "confidence": "Medium",
+          "entity": "Order",
+          "evidence_state": "Observed",
+          "is_shared_write": false,
+          "operation_kind": "read",
+          "service": "orders-api",
+          "transaction_boundary": "none: a single read"
+        },
+        "record_id": "dataaccess-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "dataaccess-0002-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "an order write and an item write are awaited in sequence with no surrounding transaction",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "access_location": "src/data/order-repository.js",
+          "confidence": "Medium",
+          "entity": "Order, OrderItem",
+          "evidence_state": "Observed",
+          "is_shared_write": false,
+          "operation_kind": "write",
+          "service": "orders-api",
+          "transaction_boundary": "absent: two dependent writes are issued as independent calls"
+        },
+        "record_id": "dataaccess-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "dataaccess-0003-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "the status change is wrapped in an explicit transaction call",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "access_location": "src/data/order-repository.js",
+          "confidence": "Medium",
+          "entity": "Order",
+          "evidence_state": "Observed",
+          "is_shared_write": false,
+          "isolation_declaration": "none declared; the store default applies",
+          "operation_kind": "write",
+          "service": "orders-api",
+          "transaction_boundary": "declared: the status change is issued inside an explicit transaction"
+        },
+        "record_id": "dataaccess-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "dataaccess-0004-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "a maintenance path issues an update with no filter",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "access_location": "src/data/order-repository.js",
+          "confidence": "Medium",
+          "entity": "Order",
+          "evidence_state": "Observed",
+          "is_shared_write": false,
+          "operation_kind": "write",
+          "service": "orders-api",
+          "transaction_boundary": "none: a single unfiltered update"
+        },
+        "record_id": "dataaccess-0004"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "dataaccess-0005-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "a maintenance path deletes on a status and an instant supplied by the caller",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "access_location": "src/data/order-repository.js",
+          "confidence": "Medium",
+          "entity": "Order",
+          "evidence_state": "Observed",
+          "is_shared_write": false,
+          "operation_kind": "write",
+          "service": "orders-api",
+          "transaction_boundary": "none: a single filtered delete"
+        },
+        "record_id": "dataaccess-0005"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Observed/Medium": 5
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.backend.dataaccess",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:082be15417aacd97e3e249a7d8283dea0dd6b192b5d9fa02ac5db187279b7937"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "consumption_profile": "backend-discovery",
+          "dependent_records": [
+            "dataaccess-0001",
+            "dataaccess-0002",
+            "dataaccess-0003",
+            "dataaccess-0004",
+            "dataaccess-0005"
+          ],
+          "digest": "sha256:55fb3466d80a68715a8294beea6ec4cc926a8b660bcd02ab985aa4347b8bc367",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.database.entities@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "consumption_profile": "backend-discovery",
+          "dependent_records": [
+            "dataaccess-0001",
+            "dataaccess-0002",
+            "dataaccess-0003",
+            "dataaccess-0004",
+            "dataaccess-0005"
+          ],
+          "digest": "sha256:9fdf0cb6ede835c3e323a0d0daecea1f9a7a41724f3f7cf7418a4e15cba80ced",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.database.connections@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that registers, serves, guards, or bounds a server-side operation",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "contract-0001-e1",
+            "location": "src/handlers/schemas.js",
+            "observation": "the schema declares two properties and no currency",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          },
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "contract-0001-e2",
+            "location": "spec/openapi.yaml",
+            "observation": "the published operation lists currency among its required properties",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "divergence": "the published specification requires a currency field that the validating schema does not declare. Both are recorded; neither is preferred",
+          "evidence_state": "Observed",
+          "operation": "place order",
+          "request_shape": "an object carrying a customer identifier and a list of items",
+          "response_shape": "an object carrying the created identifier",
+          "schema_authority": "code",
+          "validation_location": "src/middleware/validate.js applying src/handlers/schemas.js"
+        },
+        "record_id": "contract-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "contract-0002-e1",
+            "location": "src/routes/orders.js",
+            "observation": "the registration names a handler and no validator",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "evidence_state": "Observed",
+          "operation": "list orders",
+          "response_shape": "a list of orders with their items",
+          "schema_authority": "none",
+          "validation_location": "absent: no validator is registered for this operation"
+        },
+        "record_id": "contract-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "contract-0003-e1",
+            "location": "src/routes/orders.js",
+            "observation": "the registration names a handler and no validator",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "evidence_state": "Observed",
+          "operation": "cancel order",
+          "response_shape": "an empty body",
+          "schema_authority": "none",
+          "validation_location": "absent: no validator is registered for this operation"
+        },
+        "record_id": "contract-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "contract-0004-e1",
+            "location": "spec/openapi.yaml",
+            "observation": "an operation is published with no corresponding registration anywhere in scope",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "divergence": "the operation is published in the specification and registered nowhere in the source. It is a documented intention, not a removed operation",
+          "evidence_state": "Observed",
+          "operation": "daily report",
+          "schema_authority": "specification",
+          "validation_location": "absent: no registration for this operation exists in scope"
+        },
+        "record_id": "contract-0004"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Observed/Medium": 4
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.backend.contracts",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:aaa4aa4a794bb7495d87e91e69915d4cbdb34e7dfb31e81116a49411e14d75a2"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "contract-0001",
+            "contract-0002",
+            "contract-0003",
+            "contract-0004"
+          ],
+          "digest": "sha256:28e282c33707adb41ce09e82ac2b1f0b9497615db63ab99bacac598f5c82ed31",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.backend.interfaces@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that registers, serves, guards, or bounds a server-side operation",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "classification-0001-e1",
+            "location": "src/",
+            "observation": "directory arrangement and the import graph the modules declare",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "candidate": "layered",
+          "confidence": "Medium",
+          "evidence_state": "Inferred",
+          "is_dominant": true,
+          "rationale": "assumes the directory arrangement reflects the intended layering and that no dependency exists outside the declared imports",
+          "supporting_evidence": "six modules in a directory-per-responsibility arrangement, with every store access confined to the data module and every registration confined to the routes module"
+        },
+        "record_id": "classification-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "classification-0002-e1",
+            "location": "package.json",
+            "observation": "one start script and one main entry",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "candidate": "microservices",
+          "confidence": "Medium",
+          "evidence_state": "Inferred",
+          "excluded_by": "one entry point and no inter-service transport in scope",
+          "is_dominant": false,
+          "supporting_evidence": "a single deployable entry point and no service boundary within the subject"
+        },
+        "record_id": "classification-0002"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Inferred/Medium": 2
+      },
+      "evidence_state": "Inferred"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.classification",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:c29bb826838e80bd9775b5171dc938de28daf30b4aa9b4279ef9f93753cd3321"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "classification-0001",
+            "classification-0002"
+          ],
+          "digest": "sha256:f3c5045b4ca1e055f530c02168f7c4b87b2f7e114eed038e447859d471c532ce",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.architecture.modules@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "classification-0001"
+          ],
+          "digest": "sha256:a8481999fa36144fac5395e13484c13faa1e3bdee67acc48c9f25157d7746a44",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.architecture.layers@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

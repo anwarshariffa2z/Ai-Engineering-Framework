@@ -1,0 +1,10 @@
+{
+  "payments": {
+    "baseUrl": "${env:PAYMENTS_BASE_URL}",
+    "timeoutMs": 2000,
+    "retries": 3
+  },
+  "notifications": {
+    "baseUrl": "${env:NOTIFICATIONS_BASE_URL}"
+  }
+}

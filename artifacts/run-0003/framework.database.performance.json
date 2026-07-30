@@ -1,0 +1,128 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "performance-0001-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "the read filters on the customer and includes the related items in one call",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "access_pattern": "list a customer’s orders with their items",
+          "confidence": "Medium",
+          "entity": "Order",
+          "evidence_state": "Observed",
+          "supporting_index": "Order.customerId, Order.placedAt"
+        },
+        "record_id": "performance-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "performance-0002-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "two writes are issued in sequence with no transaction around them",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "access_pattern": "create an order and then its items",
+          "confidence": "Medium",
+          "entity": "OrderItem",
+          "evidence_state": "Observed",
+          "is_unbounded": false,
+          "supporting_index": "absent: the write is a bulk insert and needs none"
+        },
+        "record_id": "performance-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "performance-0003-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "a maintenance path issues an update with no filter",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "access_pattern": "update every order",
+          "confidence": "Medium",
+          "entity": "Order",
+          "evidence_state": "Observed",
+          "is_unbounded": true,
+          "supporting_index": "absent: the write is unfiltered"
+        },
+        "record_id": "performance-0003"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Observed/Medium": 3
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.database.performance",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:c516facae4964e044d4613f61b94beba35a9a9d54de4bebd4f0d97dc4583a451"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "performance-0001",
+            "performance-0002",
+            "performance-0003"
+          ],
+          "digest": "sha256:55fb3466d80a68715a8294beea6ec4cc926a8b660bcd02ab985aa4347b8bc367",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.database.entities@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that declares, configures, or reaches persistent state",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

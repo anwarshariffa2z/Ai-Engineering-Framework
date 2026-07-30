@@ -1,11 +1,11 @@
 ---
 id: STD-0010
 title: Metadata Specification Standard
-version: 1.4.0
+version: 1.6.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-29
+last_updated: 2026-07-30
 review_cycle: Annual
 category: Methodology
 tags: [metadata, schema, representation, front-matter, standard]
@@ -266,6 +266,11 @@ requirements:
     check: mechanical
     severity: blocking
     scope: artifact
+  - id: R-48
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: compatibility
 ---
 
 # Metadata Specification Standard
@@ -498,6 +503,10 @@ This section specifies how the compatibility declarations required by STD-0008 s
 
 **R-27.** Where a consumer declares a consumption profile, it MUST appear as a `profile` member of the corresponding `consumes` entry, listing the field and record-group names read.
 
+**R-48.** Each entry in `consumes` MUST carry a `requirement` member whose value is `required` or `optional`. Where the value is `required` and the declaring party also declares more than one entry in `produces`, the entry MUST additionally carry `required_for`, a non-empty list of the artifact type identities that require it, each of which MUST appear in `produces`.
+
+R-48 represents the obligations [STD-0011](contract-specification.md) R-20 and R-53 state; it does not define them. The `required_for` member is what makes R-53 evaluable without reading a producer's prose: which outputs a missing input withdraws is otherwise recoverable only from the producer's source. Its absence on a single-output producer is not an omission — there is one answer and `produces` already carries it.
+
 Vocabulary policy for an enumerated field, required by STD-0008, is declared in an artifact type definition as `vocabulary: closed` or `vocabulary: open`, and a consumer of an open vocabulary declares `on_unknown` naming its fallback.
 
 `meta_model_version` declares the metadata model version an object targets, and is a version per R-05.
@@ -526,7 +535,9 @@ This section specifies how the artifact envelope required by STD-0008 section 6 
 
 The `run_id` member is an artifact instance identity's run component and the `digest` member is a content digest, written per R-41 and R-42 respectively.
 
-**R-30.** Each entry in `derives_from` MUST carry the upstream artifact instance identity, its type version, its subject revision, its content digest, and the identities of the records that depend on it.
+**R-30.** Each entry in `derives_from` MUST carry the upstream artifact instance identity, its type version, its subject revision, its content digest, and the identities of the records that depend on it, and where [STD-0008](artifact-specification.md) R-59 requires the consumption profile to be recorded it MUST appear as a `consumption_profile` member whose value is the profile's `consumer` name.
+
+The member carries the profile's identity and not its content. A consumer of the artifact resolves the name against the consumed type's declaration, where [STD-0013](artifact-type-declaration-standard.md) R-23 makes it unique; copying the profile's `reads` into the reference would duplicate a declaration that is already addressable and would let the two disagree.
 
 **R-44.** An envelope summary carried by a reference MUST be represented as a mapping with the members `identity`, `type_version`, `subject_revision`, `completeness_state`, `redaction_state`, `evidence_state`, and `confidence`, corresponding one-to-one with the members [STD-0008](artifact-specification.md) R-57 requires.
 

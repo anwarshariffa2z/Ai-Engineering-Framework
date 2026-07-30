@@ -30,6 +30,7 @@ import { identityOf } from './lib/envelope.mjs';
 import { buildResolutionDeclaration, writeArtifact, writeResolutionDeclaration, locatorFor } from './lib/store.mjs';
 import { runArchitectureDiscovery } from './lib/architecture-discovery.mjs';
 import { runDatabaseDiscovery } from './lib/database-discovery.mjs';
+import { runBackendDiscovery } from './lib/backend-discovery.mjs';
 import { verifyDigest } from './lib/canonical.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -152,6 +153,69 @@ export function executeComposedRun({ root: runRoot, context = COMPOSED_RUN_CONTE
   return { run, artifacts, architecture, database, declaration, outputDirectory };
 }
 
+export const THREE_STAGE_RUN_CONTEXT = {
+  subjectAuthority: 'example',
+  subjectName: 'orders-api',
+  subjectRevision: 'rev-0001',
+  runDiscriminator: 'run-0003',
+  subjectRef: 'fixtures/subject-repo-backend',
+  producerId: 'reference-repository-audit',
+  producerVersion: '1.0.0',
+  executorClass: 'tool',
+  generatedAt: '2026-07-29T00:00:00Z',
+  authorization: 'read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed',
+  redactionState: 'none',
+  environment: 'static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called',
+};
+
+/**
+ * One run executing three methodologies over one subject.
+ *
+ * The ordering is not a property of this function: it is derived below from what
+ * each methodology declares it consumes. Architecture consumes nothing, so it goes
+ * first; database consumes architecture types; backend consumes both. Each stage
+ * is written and declared before the next resolves anything, because a stage
+ * reaches its inputs through the run's resolution declaration and not through a
+ * variable this function happens to hold.
+ *
+ * The duplication between this and executeComposedRun is deliberate and is left in
+ * place. Whether the two mean the same thing is the question a third producer
+ * exists to answer, and hiding the difference behind an abstraction before the
+ * answer is in would be assuming it.
+ */
+export function executeThreeStageRun({ root: runRoot, context = THREE_STAGE_RUN_CONTEXT, outputDirectory = 'artifacts/run-0003' }) {
+  const declarations = loadDeclarations(join(runRoot, 'docs'));
+  const run = { ...context, runId: runIdentity(context) };
+  const subjectRoot = join(runRoot, context.subjectRef);
+  const entries = [];
+
+  // Declare what has been written so far. A stage resolves against this and
+  // against nothing else.
+  const declareSoFar = () => {
+    const declaration = buildResolutionDeclaration({ runId: run.runId, entries });
+    writeResolutionDeclaration(runRoot, `${outputDirectory}/resolution.json`, declaration);
+    return declaration;
+  };
+
+  const architecture = runArchitectureDiscovery({ run, subjectRoot, declarations });
+  gate(architecture, declarations);
+  entries.push(...writeAll(runRoot, architecture, outputDirectory));
+  const afterArchitecture = declareSoFar();
+
+  const database = runDatabaseDiscovery({ run, subjectRoot, declarations, root: runRoot, resolution: afterArchitecture });
+  gate(database.artifacts, declarations);
+  entries.push(...writeAll(runRoot, database.artifacts, outputDirectory));
+  const afterDatabase = declareSoFar();
+
+  const backend = runBackendDiscovery({ run, declarations, root: runRoot, resolution: afterDatabase });
+  gate(backend.artifacts, declarations);
+  entries.push(...writeAll(runRoot, backend.artifacts, outputDirectory));
+  const declaration = declareSoFar();
+
+  const artifacts = new Map([...architecture, ...database.artifacts, ...backend.artifacts]);
+  return { run, artifacts, architecture, database, backend, declaration, outputDirectory };
+}
+
 function summarize(result) {
   const lines = [];
   lines.push(`run ${result.run.runId}`);
@@ -167,8 +231,9 @@ function summarize(result) {
 if (process.argv[1]?.endsWith('index.mjs')) {
   const architectureOnly = executeRun({ root });
   const composed = executeComposedRun({ root });
+  const threeStage = executeThreeStageRun({ root });
 
-  for (const result of [architectureOnly, composed]) {
+  for (const result of [architectureOnly, composed, threeStage]) {
     const text = summarize(result);
     console.log(text);
     writeFileSync(join(root, result.outputDirectory, 'run-summary.txt'), `${text}\n`, 'utf8');
@@ -178,4 +243,23 @@ if (process.argv[1]?.endsWith('index.mjs')) {
   for (const item of composed.database.consumption) {
     console.log(`  ${item.obtained ? 'obtained  ' : 'degraded  '}${item.type}  ${item.used}`);
   }
+
+  console.log('\nconsumed by the backend stage of the three-stage run:');
+  for (const item of threeStage.backend.traceability) {
+    console.log(`  ${item.upstream_type}  ${item.compatibility_basis}`);
+  }
+
+  console.log('\nlineage granularity, measured over the three-hop conclusions:');
+  for (const m of threeStage.backend.granularity) {
+    console.log(`  ${m.downstream} <- ${m.upstream_type}: ${m.records_used} of ${m.records_in_artifact} records used`);
+    console.log(`    cap from the upstream aggregate    ${m.cap_from_aggregate.evidence_state}/${m.cap_from_aggregate.confidence}`);
+    console.log(`    cap from the records actually used ${m.cap_from_used_records.evidence_state}/${m.cap_from_used_records.confidence}${m.differs ? '   DIFFERS' : ''}`);
+  }
+
+  const lost = threeStage.backend.headroom.filter((h) => h.headroom_lost);
+  console.log(`\nheadroom lost to artifact-level aggregation, over ${threeStage.backend.headroom.length} lineage edges of the backend half:`);
+  for (const h of lost) {
+    console.log(`  ${h.edge}: ${h.dependents} dependent records capped at ${h.aggregate_cap}, strongest upstream record ${h.strongest_upstream_record}`);
+  }
+  console.log(`  ${lost.length} of ${threeStage.backend.headroom.length} edges lose headroom`);
 }

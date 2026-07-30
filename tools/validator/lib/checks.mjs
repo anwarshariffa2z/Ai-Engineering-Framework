@@ -607,8 +607,12 @@ export function buildChecks(ctx) {
   });
 
   define('STD-0013#R-23', each((d) => {
-    const bad = asList(d.consumption_profiles).filter((p) => !p || !p.consumer || !Array.isArray(p.reads));
-    return bad.length ? `${bad.length} consumption profiles omit consumer or reads` : null;
+    const profiles = asList(d.consumption_profiles);
+    const bad = profiles.filter((p) => !p || !p.consumer || !Array.isArray(p.reads));
+    if (bad.length) return `${bad.length} consumption profiles omit consumer or reads`;
+    const seen = new Set();
+    const duplicated = profiles.map((p) => p.consumer).filter((c) => seen.has(c) || !seen.add(c));
+    return duplicated.length ? `two consumption profiles name the same consumer: ${[...new Set(duplicated)].join(', ')}` : null;
   }));
 
   define('STD-0013#R-25', each((d) => {

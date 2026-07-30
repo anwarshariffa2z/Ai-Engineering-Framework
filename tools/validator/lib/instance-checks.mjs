@@ -377,6 +377,24 @@ export function buildInstanceChecks({ instances, declarations, documents, define
     return problems;
   })));
 
+  // The profile a lineage entry names must be one the consumed type declares.
+  // The consumed type is read off the entry's own identity, so the check knows
+  // no methodology and no type name. R-59's other half — that a profile is
+  // recorded wherever one was used — is not evaluated: an artifact that records
+  // none is reporting a whole-type read, and nothing in it distinguishes that
+  // from a profile ignored. STD-0008 section 20 states the bound.
+  declare('STD-0008#R-59', each((artifact) => (artifact.envelope?.lineage?.derives_from ?? []).flatMap((entry) => {
+    const named = entry.consumption_profile;
+    if (named === undefined) return [];
+    const upstreamType = (entry.identity ?? '').split('/').pop().split('@')[0];
+    const declaration = declarations.get(upstreamType);
+    if (!declaration) return [`lineage entry names consumption profile ${named} of ${upstreamType}, which no declaration defines`];
+    const profiles = Array.isArray(declaration.consumption_profiles) ? declaration.consumption_profiles : [];
+    return profiles.some((p) => p?.consumer === named)
+      ? []
+      : [`lineage entry names consumption profile ${named}, which ${upstreamType} does not declare`];
+  })));
+
   // ---- STD-0010: representation -------------------------------------------
 
   declare('STD-0010#R-28', each((artifact) => {
@@ -402,7 +420,11 @@ export function buildInstanceChecks({ instances, declarations, documents, define
 
   declare('STD-0010#R-30', each((artifact) => (artifact.envelope?.lineage?.derives_from ?? []).flatMap((entry) => {
     const missing = LINEAGE_MEMBERS.filter((m) => entry[m] === undefined);
-    return missing.length ? [`a derives_from entry omits ${missing.join(', ')}`] : [];
+    const problems = missing.length ? [`a derives_from entry omits ${missing.join(', ')}`] : [];
+    if (entry.consumption_profile !== undefined && (typeof entry.consumption_profile !== 'string' || !entry.consumption_profile)) {
+      problems.push('a derives_from entry carries a consumption_profile that is not a profile name');
+    }
+    return problems;
   })));
 
   declare('STD-0010#R-41', each((artifact) => {
@@ -571,6 +593,25 @@ export function buildInstanceChecks({ instances, declarations, documents, define
     if (!records.length) return [];
     const expected = minimumBy(records.map((r) => fieldsOf(r).evidence_state).filter(Boolean), EVIDENCE_ORDER);
     return declared === expected ? [] : [`aggregate evidence state ${declared} is not the minimum ${expected} among load-bearing records`];
+  }));
+
+  // STD-0007 R-45 governs precisely the case R-29 and R-30 decline: an aggregate
+  // over an empty set. The two sets are not the same set, so both are checked.
+  // R-38 leaves an Unknown record without a confidence, so an artifact whose every
+  // load-bearing record is Unknown aggregates a non-empty evidence set and an empty
+  // confidence set.
+  declare('STD-0007#R-45', each((artifact) => {
+    const records = loadBearing(artifact);
+    const scored = records.filter((r) => fieldsOf(r).evidence_state !== 'Unknown');
+    const assessment = artifact.envelope?.assessment ?? {};
+    const problems = [];
+    if (!records.length && assessment.evidence_state !== 'Unknown') {
+      problems.push(`aggregates no conclusion and declares evidence state ${assessment.evidence_state} rather than Unknown`);
+    }
+    if (!scored.length && assessment.confidence !== 'Low') {
+      problems.push(`aggregates no confidence and declares ${assessment.confidence} rather than Low`);
+    }
+    return problems;
   }));
 
   declare('STD-0007#R-32', each((artifact) => {
@@ -768,6 +809,85 @@ export function buildInstanceChecks({ instances, declarations, documents, define
       }
     }
     return problems.length ? [fail('corpus', problems.join('; '))] : [pass('corpus', 'every artifact reference in the corpus is an identity')];
+  });
+
+  // R-23. A producer guarantees, for each type it declares, that an artifact of
+  // that type is emitted, that it conforms at the declared version, that its
+  // completeness is declared, and that its provenance is recorded.
+  //
+  // Dormant until a run executed more than one methodology: with one producer per
+  // run there was nothing to distinguish "the types this producer declares" from
+  // "the types this run emitted". A run composing three methodologies separates
+  // them, and `producer_kind` on each declaration is the operand that makes the
+  // guarantee evaluable without naming a methodology here.
+  declare('STD-0011#R-23', () => {
+    const runs = new Map();
+    for (const { artifact } of artifacts) {
+      const runId = artifact.envelope.identity.run_id;
+      if (!runs.has(runId)) runs.set(runId, new Set());
+      runs.get(runId).add(artifact.envelope.identity.artifact_type);
+    }
+    const kindOf = new Map();
+    for (const [type, declaration] of declarations) {
+      if (!declaration.producer_kind) continue;
+      if (!kindOf.has(declaration.producer_kind)) kindOf.set(declaration.producer_kind, new Set());
+      kindOf.get(declaration.producer_kind).add(type);
+    }
+
+    const results = [];
+    for (const [runId, emitted] of runs) {
+      // A producer kind participated in this run where the run emitted any type
+      // that kind declares. Its guarantee then covers every type it declares.
+      for (const [kind, declared] of kindOf) {
+        const present = [...declared].filter((type) => emitted.has(type));
+        if (!present.length) continue;
+        const absent = [...declared].filter((type) => !emitted.has(type));
+        if (absent.length) {
+          results.push(fail(runId, `${kind} emitted ${present.length} of the ${declared.size} types it declares; ${absent.join(', ')} is guaranteed and absent`));
+          continue;
+        }
+        const undeclaredState = [...declared].filter((type) => {
+          const artifact = artifacts.find(({ artifact: a }) => a.envelope.identity.run_id === runId && a.envelope.identity.artifact_type === type)?.artifact;
+          return !artifact?.envelope?.completeness?.state || !artifact?.envelope?.provenance?.producer_id;
+        });
+        results.push(undeclaredState.length
+          ? fail(runId, `${kind}: ${undeclaredState.join(', ')} declares no completeness state or records no provenance`)
+          : pass(runId, `${kind} emitted all ${declared.size} types it declares, each with a completeness state and recorded provenance`));
+      }
+    }
+    return results.length ? results : [pass('corpus', 'no run emits a type any declaration attributes to a producer kind')];
+  });
+
+  // R-30. Compatibility is evaluated against the declared profile rather than
+  // against the whole type. What an artifact witnesses is a consumption that
+  // happened, so the check evaluates the consumption it can see: every field the
+  // named profile reads must be a field the consumed type still declares. It
+  // deliberately does not require the type's other fields to be satisfied —
+  // demanding those would be evaluating the whole type, which is the behaviour
+  // R-30 forbids. Its coverage is bounded to consumption a profile was recorded
+  // for; STD-0008 section 20 states what remains unwitnessed.
+  declare('STD-0011#R-30', () => {
+    const results = [];
+    for (const { path, artifact } of artifacts) {
+      for (const entry of artifact.envelope?.lineage?.derives_from ?? []) {
+        const named = entry.consumption_profile;
+        if (named === undefined) continue;
+        const upstreamType = (entry.identity ?? '').split('/').pop().split('@')[0];
+        const declaration = declarations.get(upstreamType);
+        const profile = (Array.isArray(declaration?.consumption_profiles) ? declaration.consumption_profiles : [])
+          .find((p) => p?.consumer === named);
+        if (!profile) continue; // R-59 owns an unresolvable profile reference.
+        const declared = new Set([
+          ...(Array.isArray(declaration.required_fields) ? declaration.required_fields : []),
+          ...(Array.isArray(declaration.optional_fields) ? declaration.optional_fields : []),
+        ]);
+        const missing = (Array.isArray(profile.reads) ? profile.reads : []).filter((f) => !declared.has(f));
+        results.push(missing.length
+          ? fail(path, `consumed ${upstreamType} through the ${named} profile, which reads ${missing.join(', ')} that the type no longer declares`)
+          : pass(path, `consumption of ${upstreamType} was compatible with the ${named} profile over ${profile.reads.length} fields`));
+      }
+    }
+    return results.length ? results : [pass('corpus', 'no artifact records a consumption drawn through a declared profile')];
   });
 
   return bound;

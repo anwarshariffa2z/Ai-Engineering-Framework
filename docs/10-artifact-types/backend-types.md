@@ -1,11 +1,11 @@
 ---
 id: REF-0016
 title: Backend Artifact Type Declarations
-version: 1.0.0
+version: 1.1.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-26
-last_updated: 2026-07-26
+last_updated: 2026-07-29
 review_cycle: Annual
 category: Reference
 tags: [artifacts, declarations, backend]
@@ -63,6 +63,7 @@ artifact_types:
       - field: auth_requirement
         kind: closed
         values: [required, absent, unknown]
+    derives_from: [framework.backend.services]
     consumption_profiles:
       - consumer: workflow-discovery
         reads: [operation, service, handler_path]
@@ -168,6 +169,7 @@ artifact_types:
       - field: policy_kind
         kind: open
         values: [timeout, retry, circuit-breaker, rate-limit, bulkhead, fallback]
+    derives_from: [framework.architecture.integrations]
     consumption_profiles:
       - consumer: operations-discovery
         reads: [dependency, policy_kind, timeout]
@@ -250,7 +252,7 @@ artifact_types:
       - field: dimension
         kind: closed
         values: [service-boundary-clarity, interface-discipline, contract-integrity, execution-model-clarity, data-access-ownership, transaction-discipline, resilience-posture, error-handling-quality, boundary-enforcement-coverage, documentation-traceability]
-    derives_from: [framework.backend.interfaces, framework.backend.contracts, framework.backend.execution, framework.backend.dataaccess, framework.backend.resilience, framework.backend.errors, framework.backend.boundaries, framework.backend.risks]
+    derives_from: [framework.backend.services, framework.backend.interfaces, framework.backend.contracts, framework.backend.execution, framework.backend.dataaccess, framework.backend.resilience, framework.backend.errors, framework.backend.boundaries, framework.backend.risks]
     fixtures:
       normal: One record per health dimension found within the declared scope, each carrying supporting_records and a confidence level.
       empty: The declared scope was examined in full and contained no health dimension; completeness is Complete and the record set is empty.

@@ -1,0 +1,111 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "relationship-0001-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "a relation with a declared referential action",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "cardinality": "one-to-many",
+          "confidence": "Medium",
+          "declaration_level": "mapper-authored schema with a declared cascade",
+          "enforcement_location": "store",
+          "evidence_state": "Inferred",
+          "from_entity": "Customer",
+          "optionality": "required",
+          "synchronization": "deletion of a customer is declared to cascade to their orders",
+          "to_entity": "Order"
+        },
+        "record_id": "relationship-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "relationship-0002-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "a relation with a declared referential action",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "cardinality": "one-to-many",
+          "confidence": "Medium",
+          "declaration_level": "mapper-authored schema with a declared cascade",
+          "enforcement_location": "store",
+          "evidence_state": "Inferred",
+          "from_entity": "Order",
+          "optionality": "required",
+          "synchronization": "deletion of an order is declared to cascade to its items",
+          "to_entity": "OrderItem"
+        },
+        "record_id": "relationship-0002"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Inferred/Medium": 2
+      },
+      "evidence_state": "Inferred"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.database.relationships",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:3c3d24351ff1b4bedada59a133bf36b7bd37fda10c79a66fa73cfa45f3840f64"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "relationship-0001",
+            "relationship-0002"
+          ],
+          "digest": "sha256:55fb3466d80a68715a8294beea6ec4cc926a8b660bcd02ab985aa4347b8bc367",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.database.entities@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that declares, configures, or reaches persistent state",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

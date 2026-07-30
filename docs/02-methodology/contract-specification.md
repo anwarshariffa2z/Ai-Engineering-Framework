@@ -1,11 +1,11 @@
 ---
 id: STD-0011
 title: Contract Specification Standard
-version: 1.3.0
+version: 1.4.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-29
+last_updated: 2026-07-30
 review_cycle: Annual
 category: Methodology
 tags: [contracts, producers, consumers, compatibility, obligations, standard]
@@ -289,6 +289,11 @@ requirements:
     check: mechanical
     severity: blocking
     scope: orchestrator
+  - id: R-53
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: input
 ---
 
 # Contract Specification Standard
@@ -476,6 +481,12 @@ R-22 protects subjects from being penalized for evidence a requester chose not t
 
 Where a required input is an artifact of another type, the dependency is on the **type**, never on a producer, per R-01.
 
+**R-53.** A producer emitting more than one artifact type MUST declare, for each required input, the types it emits that require that input. Where a required input is unavailable, the producer MUST record `Unavailable` for exactly those types, per section 10, and MUST emit the types that do not require it.
+
+R-20 states whether an input is required. It does not state what it is required *for*, and for a producer emitting one type the question does not arise. For a producer emitting fourteen it decides how much of an examination a single missing input discards. Read without R-53, the "required input missing" row of R-25's table reaches every type the producer emits, so a producer that could not obtain one upstream artifact would withdraw thirteen sound ones. Read with it, the producer withdraws what actually rests on the input and stands behind the rest.
+
+R-53 is a declaration obligation, not a licence. A type omitted from a required input's dependents is a claim that the type can be produced without it, and R-05 governs that claim as it governs every other. The representation is defined by [STD-0010](metadata-specification.md) R-48.
+
 ## 9. Guaranteed Outputs
 
 *This section is normative.*
@@ -567,7 +578,7 @@ Substitution is what ADR-0004 exists to enable, and R-34 states its price precis
 
 The procedure by which conformance is demonstrated against a type's fixtures is validator behaviour and is stated by [STD-0012](validation-specification.md) section 10.
 
-A producer conforms when it satisfies R-03 through R-08, R-45 and R-46, its preconditions satisfy R-15, its postconditions satisfy R-18 and R-19, its inputs satisfy R-20 and R-21, its guarantees satisfy R-23 and R-24, its failure behaviour satisfies R-25 and R-26, and its compatibility satisfies R-28 and R-29.
+A producer conforms when it satisfies R-03 through R-08, R-45 and R-46, its preconditions satisfy R-15, its postconditions satisfy R-18 and R-19, its inputs satisfy R-20, R-21, and R-53, its guarantees satisfy R-23 and R-24, its failure behaviour satisfies R-25 and R-26, and its compatibility satisfies R-28 and R-29.
 
 A consumer conforms when it satisfies R-09 through R-14, R-27, R-30, and R-47 through R-50.
 

@@ -1,0 +1,147 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "dependency-0001-e1",
+            "location": "package.json",
+            "observation": "dependency declared in the package manifest",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "directness": "direct",
+          "evidence_state": "Observed",
+          "from_component": "orders-api",
+          "is_pinned": true,
+          "to_dependency": "express",
+          "version_constraint": "4.19.2"
+        },
+        "record_id": "dependency-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "dependency-0002-e1",
+            "location": "package.json",
+            "observation": "dependency declared in the package manifest",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "directness": "direct",
+          "evidence_state": "Observed",
+          "from_component": "orders-api",
+          "is_pinned": true,
+          "to_dependency": "@prisma/client",
+          "version_constraint": "5.14.0"
+        },
+        "record_id": "dependency-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "dependency-0003-e1",
+            "location": "package.json",
+            "observation": "dependency declared in the package manifest",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "directness": "direct",
+          "evidence_state": "Observed",
+          "from_component": "orders-api",
+          "is_pinned": true,
+          "to_dependency": "zod",
+          "version_constraint": "3.23.8"
+        },
+        "record_id": "dependency-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "dependency-0004-e1",
+            "location": "package.json",
+            "observation": "dependency declared in the package manifest",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "directness": "direct",
+          "evidence_state": "Observed",
+          "from_component": "orders-api",
+          "is_pinned": true,
+          "to_dependency": "prisma",
+          "version_constraint": "5.14.0"
+        },
+        "record_id": "dependency-0004"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 4
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "reason": "no lockfile is present in scope, so the transitive dependency set could not be examined",
+      "state": "Partial"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.dependencies",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:d03d054b0f4f809417f25e204b5f3ab2b91b5c963729228fede5b56ca1e92bfb"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

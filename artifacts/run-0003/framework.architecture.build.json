@@ -1,0 +1,140 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "build-0001-e1",
+            "location": "package.json",
+            "observation": "command declared, not executed by this audit",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "command": "npm run build",
+          "confidence": "Medium",
+          "controller": "local-script",
+          "definition_path": "package.json",
+          "evidence_state": "Observed",
+          "outputs": "unknown",
+          "reproducibility_note": "the script the command invokes is not present in scope at this revision"
+        },
+        "record_id": "build-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "build-0002-e1",
+            "location": ".ci/pipeline.yml",
+            "observation": "command declared, not executed by this audit",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "ci_reference": ".ci/pipeline.yml#install",
+          "command": "npm ci",
+          "confidence": "High",
+          "controller": "ci-pipeline",
+          "definition_path": ".ci/pipeline.yml",
+          "evidence_state": "Observed"
+        },
+        "record_id": "build-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "build-0003-e1",
+            "location": ".ci/pipeline.yml",
+            "observation": "command declared, not executed by this audit",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "ci_reference": ".ci/pipeline.yml#test",
+          "command": "npm test",
+          "confidence": "High",
+          "controller": "ci-pipeline",
+          "definition_path": ".ci/pipeline.yml",
+          "evidence_state": "Observed"
+        },
+        "record_id": "build-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "build-0004-e1",
+            "location": ".ci/pipeline.yml",
+            "observation": "command declared, not executed by this audit",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "ci_reference": ".ci/pipeline.yml#release",
+          "command": "npm start",
+          "confidence": "High",
+          "controller": "ci-pipeline",
+          "definition_path": ".ci/pipeline.yml",
+          "evidence_state": "Observed"
+        },
+        "record_id": "build-0004"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Observed/High": 3,
+        "Observed/Medium": 1
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.build",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:90e07a5b5042f4526153817546465d122bb0c4ae50850792b1a4df489d2d897b"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

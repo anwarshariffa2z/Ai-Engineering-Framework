@@ -1,7 +1,7 @@
 ---
 id: STD-0013
 title: Artifact Type Declaration Standard
-version: 1.1.0
+version: 1.2.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-26
@@ -392,7 +392,9 @@ The per-instance lineage obligations, and the requirement that derivation be rec
 
 *This section is normative.*
 
-**R-23.** Every entry in `consumption_profiles` MUST carry `consumer` and `reads`.
+**R-23.** Every entry in `consumption_profiles` MUST carry `consumer` and `reads`, and two entries in one declaration MUST NOT name the same `consumer`.
+
+`consumer` is therefore the profile's identity within its type, which is what makes a profile addressable by a consumer recording the basis on which it consumed, per [STD-0008](artifact-specification.md) R-59.
 
 **R-25.** Every entry in a profile's `reads` MUST be a declared field of the type.
 

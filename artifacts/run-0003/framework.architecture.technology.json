@@ -1,0 +1,213 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "technology-0001-e1",
+            "location": "package.json",
+            "observation": "package manifest declares an ES module entry point",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "ecosystem": "npm",
+          "evidence_state": "Observed",
+          "role": "runtime",
+          "technology": "node"
+        },
+        "record_id": "technology-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "technology-0002-e1",
+            "location": "package.json",
+            "observation": "declared as a runtime dependency and imported by the entry point",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "ecosystem": "npm",
+          "evidence_state": "Observed",
+          "is_transitive": false,
+          "role": "runtime",
+          "technology": "express",
+          "version_constraint": "4.19.2"
+        },
+        "record_id": "technology-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "technology-0003-e1",
+            "location": "package.json",
+            "observation": "declared as a runtime dependency and imported by the data module",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "ecosystem": "npm",
+          "evidence_state": "Observed",
+          "is_transitive": false,
+          "role": "data",
+          "technology": "@prisma/client",
+          "version_constraint": "5.14.0"
+        },
+        "record_id": "technology-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "technology-0004-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the mapper datasource names postgresql as its provider",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "prisma/schema.prisma",
+          "evidence_state": "Observed",
+          "role": "data",
+          "technology": "postgresql"
+        },
+        "record_id": "technology-0004"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "technology-0005-e1",
+            "location": "package.json",
+            "observation": "declared as a runtime dependency and imported by the request schemas",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "ecosystem": "npm",
+          "evidence_state": "Observed",
+          "is_transitive": false,
+          "role": "runtime",
+          "technology": "zod",
+          "version_constraint": "3.23.8"
+        },
+        "record_id": "technology-0005"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "technology-0006-e1",
+            "location": "package.json",
+            "observation": "declared as a development dependency",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "ecosystem": "npm",
+          "evidence_state": "Observed",
+          "is_transitive": false,
+          "role": "development-support",
+          "technology": "prisma",
+          "version_constraint": "5.14.0"
+        },
+        "record_id": "technology-0006"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "technology-0007-e1",
+            "location": "package.json",
+            "observation": "test script invokes the platform test runner",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "evidence_state": "Observed",
+          "role": "test",
+          "technology": "node-test-runner"
+        },
+        "record_id": "technology-0007"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 7
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.architecture.technology",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:1d2cffe13de7f52d4f9e0f5331e41795f5cbced6a7bb8b9ddd84a26b4a2715d7"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision, excluding version control internals",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

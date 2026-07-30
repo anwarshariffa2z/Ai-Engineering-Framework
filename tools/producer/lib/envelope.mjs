@@ -16,11 +16,11 @@ const CONFIDENCE_ORDER = ['Low', 'Medium', 'High'];
 const COMPLETENESS = ['Complete', 'Partial', 'NotApplicable', 'Unavailable', 'Failed'];
 
 // STD-0007 R-30: an aggregate's evidence state is the minimum among the conclusions
-// aggregated. Over an artifact with no load-bearing record the minimum is the
-// bottom of the lattice, which is the weakest claim available and therefore the
-// only one that cannot overstate. The same rule gives the confidence aggregate its
-// value under R-29. This reading is recorded in README.md as an ambiguity, because
-// neither standard states what the aggregate of an empty record set is.
+// aggregated, and R-29 gives the confidence aggregate its value the same way. Over
+// an empty set neither has a result, and STD-0007 R-45 states what it is: the
+// weakest value of the vocabulary, which is the only one that cannot overstate. The
+// `bottom` argument is that value. This was implemented before R-45 existed, from
+// three independent readings that agreed; R-45 records the rule they agreed on.
 function minimum(values, order, bottom) {
   let lowest = null;
   for (const value of values) {
@@ -161,7 +161,13 @@ export function envelopeSummary(artifact) {
 // envelope summary is attached only where the reference leaves its producing run,
 // which is the condition R-57 states; a within-run entry carries exactly the
 // members R-30 names and nothing further.
-export function lineageReference(artifact, dependentRecords, { crossRun = false } = {}) {
+//
+// consumptionProfile is the condition STD-0008 R-59 states, and only that
+// condition: the profile the consumer evaluated compatibility against. A
+// derivation drawn from an artifact this run produced, or from one consumed
+// whole because its type declares no profile for this consumer, records
+// nothing — an absent member is the honest report of a whole-type read.
+export function lineageReference(artifact, dependentRecords, { crossRun = false, consumptionProfile = null } = {}) {
   const reference = {
     identity: identityOf(artifact),
     type_version: artifact.envelope.type.type_version,
@@ -169,6 +175,7 @@ export function lineageReference(artifact, dependentRecords, { crossRun = false 
     digest: artifact.envelope.integrity.digest,
     dependent_records: dependentRecords,
   };
+  if (consumptionProfile) reference.consumption_profile = consumptionProfile;
   if (crossRun) reference.summary = envelopeSummary(artifact);
   return reference;
 }

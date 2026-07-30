@@ -1,0 +1,147 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "entity-0001-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "the entity is reached only through the repository in the data module",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "access_paths": "src/data/order-repository.js",
+          "classification": "candidate personal data: an email and a full name. The signal is the field naming and is therefore weak; a steward must confirm it",
+          "confidence": "Medium",
+          "entity": "Customer",
+          "evidence_state": "Observed",
+          "growth_class": "transactional",
+          "identity_strategy": "surrogate-key",
+          "owning_module": "src/data",
+          "storage_objects": "Customer"
+        },
+        "record_id": "entity-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "entity-0002-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "five methods on one repository reach the entity, and no other module in scope does",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "access_paths": "src/data/order-repository.js",
+          "confidence": "Medium",
+          "entity": "Order",
+          "evidence_state": "Observed",
+          "growth_class": "transactional",
+          "identity_strategy": "surrogate-key",
+          "owning_module": "src/data",
+          "storage_objects": "Order"
+        },
+        "record_id": "entity-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "entity-0003-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "the entity is written in a bulk create beside the order it belongs to",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "access_paths": "src/data/order-repository.js",
+          "confidence": "Medium",
+          "entity": "OrderItem",
+          "evidence_state": "Observed",
+          "growth_class": "transactional",
+          "identity_strategy": "composite-key",
+          "owning_module": "src/data",
+          "storage_objects": "OrderItem"
+        },
+        "record_id": "entity-0003"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Observed/Medium": 3
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.database.entities",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:55fb3466d80a68715a8294beea6ec4cc926a8b660bcd02ab985aa4347b8bc367"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "entity-0001",
+            "entity-0002",
+            "entity-0003"
+          ],
+          "digest": "sha256:4e5cf34633d43f0bf18ddb7823390aecb62855bb68ea078183b5c9ba856797f4",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.database.schema@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "entity-0001",
+            "entity-0002",
+            "entity-0003"
+          ],
+          "digest": "sha256:f3c5045b4ca1e055f530c02168f7c4b87b2f7e114eed038e447859d471c532ce",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.architecture.modules@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that declares, configures, or reaches persistent state",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

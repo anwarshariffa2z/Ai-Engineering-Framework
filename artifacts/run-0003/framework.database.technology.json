@@ -1,0 +1,106 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "technology-0001-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the datasource block names the provider and the schema declares every model in scope",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "prisma/schema.prisma",
+          "engine": "postgresql",
+          "engine_role": "system-of-record",
+          "evidence_state": "Observed",
+          "family": "relational",
+          "schema_authority": "prisma/schema.prisma"
+        },
+        "record_id": "technology-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "technology-0002-e1",
+            "location": "package.json",
+            "observation": "a mapper is declared as a runtime dependency; it is not itself a store and no role in the closed vocabulary describes it",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "High",
+          "declaration_path": "package.json",
+          "engine": "@prisma/client",
+          "engine_role": "unknown",
+          "evidence_state": "Observed",
+          "version_constraint": "5.14.0"
+        },
+        "record_id": "technology-0002"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 2
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.database.technology",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:571e02152a3069920f5a6db7a78a987ce0f2cd17bd7cd62b76d2830e7f0bd987"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "technology-0001",
+            "technology-0002"
+          ],
+          "digest": "sha256:1d2cffe13de7f52d4f9e0f5331e41795f5cbced6a7bb8b9ddd84a26b4a2715d7",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.architecture.technology@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that declares, configures, or reaches persistent state",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

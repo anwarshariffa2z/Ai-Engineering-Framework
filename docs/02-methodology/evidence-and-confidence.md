@@ -1,11 +1,11 @@
 ---
 id: STD-0007
 title: Evidence and Confidence Standard
-version: 1.1.0
+version: 1.2.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
-last_updated: 2026-07-25
+last_updated: 2026-07-30
 review_cycle: Annual
 category: Methodology
 tags: [evidence, confidence, uncertainty, scoring, semantics, standard]
@@ -250,6 +250,11 @@ requirements:
     check: mechanical
     severity: blocking
     scope: scoring
+  - id: R-45
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: composition
 ---
 
 # Evidence and Confidence Standard
@@ -516,6 +521,14 @@ A set of `Medium` conclusions does not compose to a `High` one. Aggregation adds
 
 **R-43.** Where an aggregate is reported, the distribution MUST be available and not only the minimum: an aggregate of forty `High` conclusions and one `Low` is reported as `Low` under R-29, and a reader is entitled to see that this is what happened.
 
+**The empty aggregate.** R-29 and R-30 define an aggregate as a minimum over a set. Where that set is empty, no member supplies a value, and the rule as stated has no result. This is not a hypothetical case: an examination that reached no conclusion, and an aggregation whose every conclusion is `Unknown` and therefore carries no confidence under R-38, both present it.
+
+**R-45.** Where the set of conclusions over which an aggregate is computed is empty, the aggregate MUST take the weakest value of its vocabulary: `Unknown` for evidence state, `Low` for confidence.
+
+The mathematical infimum over an empty subset of a bounded lattice is the lattice's top — `Verified`, `High`. Adopting it would mean that an examination which determined nothing reports the strongest claim the vocabulary admits, and it would do so through structurally valid output. R-45 fixes the bottom instead, because the bottom is the only value that cannot overstate.
+
+**An empty aggregate is not a statement about the examination.** It says that nothing was aggregated; it does not say why. `NotApplicable`, `Unavailable`, and `Partial` all yield it, and section 8 is what distinguishes them. A reader who infers a reason from an aggregate of `Unknown` and `Low` has read a completeness determination out of a value that carries none.
+
 ## 13. Scoring Principles
 
 *This section is normative.*
@@ -564,7 +577,7 @@ An evidence item conforms when it satisfies R-03, R-08, R-09, R-11, and R-12.
 
 A derived conclusion additionally conforms when it satisfies R-25 through R-28.
 
-An aggregate conforms when it satisfies R-29 and R-30.
+An aggregate conforms when it satisfies R-29, R-30, and R-45.
 
 A score conforms when it satisfies R-31 through R-35.
 

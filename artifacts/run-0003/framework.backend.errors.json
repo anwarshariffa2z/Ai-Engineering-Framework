@@ -1,0 +1,96 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "error-0001-e1",
+            "location": "src/errors/handler.js",
+            "observation": "one branch maps a mapper error code onto a conflict response",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "client_visible_shape": "a conflict status with a single error word",
+          "confidence": "High",
+          "discloses_internal_detail": false,
+          "evidence_state": "Observed",
+          "failure": "a uniqueness violation raised by the store",
+          "handler_location": "src/errors/handler.js",
+          "internal_source": "the mapper error code for a unique constraint violation",
+          "is_swallowed": false
+        },
+        "record_id": "error-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "error-0002-e1",
+            "location": "src/errors/handler.js",
+            "observation": "the fallback branch logs the error and responds with a success status",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "client_visible_shape": "a success status carrying an affirmative body",
+          "confidence": "High",
+          "discloses_internal_detail": false,
+          "evidence_state": "Observed",
+          "failure": "every failure other than a uniqueness violation",
+          "handler_location": "src/errors/handler.js",
+          "internal_source": "any error reaching the handler",
+          "is_swallowed": true
+        },
+        "record_id": "error-0002"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "High",
+      "distribution": {
+        "Observed/High": 2
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.backend.errors",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:643c89c67e210a55bfc43568732219d44c6907c899bea625247b506453471a9a"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that registers, serves, guards, or bounds a server-side operation",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

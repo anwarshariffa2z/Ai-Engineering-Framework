@@ -1,0 +1,143 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "schema-0001-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "a model is declared; whether the store carries it was not observed",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "authority_path": "prisma/schema.prisma",
+          "confidence": "Medium",
+          "enforcement_location": "store",
+          "evidence_state": "Inferred",
+          "object": "Customer",
+          "object_type": "table",
+          "store": "postgresql"
+        },
+        "record_id": "schema-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "schema-0002-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "a model is declared; whether the store carries it was not observed",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "authority_path": "prisma/schema.prisma",
+          "confidence": "Medium",
+          "enforcement_location": "store",
+          "evidence_state": "Inferred",
+          "object": "Order",
+          "object_type": "table",
+          "store": "postgresql"
+        },
+        "record_id": "schema-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "schema-0003-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "a model is declared with a composite identifier",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "authority_path": "prisma/schema.prisma",
+          "confidence": "Medium",
+          "enforcement_location": "store",
+          "evidence_state": "Inferred",
+          "object": "OrderItem",
+          "object_type": "table",
+          "store": "postgresql"
+        },
+        "record_id": "schema-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "schema-0004-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the field is declared as free text; no enumeration constrains it in the schema and no check is declared",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "authority_path": "prisma/schema.prisma",
+          "confidence": "High",
+          "enforcement_location": "none",
+          "evidence_state": "Observed",
+          "object": "Order status",
+          "object_type": "type",
+          "store": "postgresql"
+        },
+        "record_id": "schema-0004"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Inferred/Medium": 3,
+        "Observed/High": 1
+      },
+      "evidence_state": "Inferred"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.database.schema",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:4e5cf34633d43f0bf18ddb7823390aecb62855bb68ea078183b5c9ba856797f4"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that declares, configures, or reaches persistent state",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

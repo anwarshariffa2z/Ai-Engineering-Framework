@@ -1,7 +1,7 @@
 ---
 id: STD-0008
 title: Artifact Specification Standard
-version: 1.7.0
+version: 1.8.0
 status: Approved
 owner: Framework Maintainers
 created: 2026-07-25
@@ -198,6 +198,11 @@ requirements:
     check: mechanical
     severity: blocking
     scope: record
+  - id: R-59
+    level: MUST
+    check: mechanical
+    severity: blocking
+    scope: lineage
 ---
 
 # Artifact Specification Standard
@@ -449,6 +454,12 @@ A reference that leaves the run discriminator or the subject revision unbound �
 
 R-57 gives a reference the property R-08 gives an envelope. A consumer can decide whether it is entitled to use an artifact without fetching it, and can therefore reject one it cannot fetch rather than guessing. A lineage edge is identity to identity, and an identity already carries a subject authority, so an edge leaving the repository is indistinguishable in form from one that does not; no further mechanism is required for cross-repository lineage.
 
+**R-59.** Where a record's derivation was drawn from an upstream artifact through a consumption profile that the upstream type declares, the lineage reference MUST record the identity of that profile, and MUST NOT name a profile the upstream type does not declare.
+
+A lineage reference records what a run did, not what a consumer was entitled to do. R-59 therefore attaches to the act of consumption and not to the existence of a declaration: a reference to an artifact the same run produced records no profile, and neither does one to an artifact read whole because its type declares no profile for that consumer. An absent member states that the derivation was not drawn through a profile, and states nothing about whether one was available.
+
+Without R-59 the duty [STD-0011](contract-specification.md) R-30 places on a consumer — to evaluate compatibility against its profile rather than against the whole type — is discharged where it is discharged and witnessed nowhere. The profile a consumer used is not derivable from what an artifact otherwise carries: provenance identifies the producer, and a producer may consume under a consumer identity that its producer identity does not name. What R-59 makes evaluable is bounded and section 20 records the bound.
+
 **R-20.** The derivation graph across a composition MUST be acyclic.
 
 The detection of a cycle, its timing, and the resulting failure are validator behaviour and are stated by [STD-0012](validation-specification.md) R-10 and R-11.
@@ -527,7 +538,7 @@ Conformance fixtures are a property of a type declaration and are required by [S
 
 *This section is normative.*
 
-An artifact conforms when it satisfies R-01, R-02, R-06, R-08 through R-15, R-17 through R-19, R-33, R-40, R-42 through R-46, and R-52 through R-58.
+An artifact conforms when it satisfies R-01, R-02, R-06, R-08 through R-15, R-17 through R-19, R-33, R-40, R-42 through R-46, and R-52 through R-59.
 
 Producer and consumer conformance is not defined by this standard. Both are defined by [STD-0011](contract-specification.md) section 14, which owns participant obligations.
 
@@ -582,6 +593,8 @@ The distinction between `NotApplicable` and `Unavailable` (R-35) is the interpre
 Honest completeness declaration is the conformance requirement most likely to be violated undetectably. A producer that examined half its declared scope and declared `Complete` is structurally valid and semantically corrupt, and no mechanical check can catch it. Conformance fixtures reduce the risk; they do not remove it.
 
 Where artifacts are stored, and how a consumer reaches an artifact produced in another repository, was recorded as open in [Framework Artifact Model](../01-foundation/framework-artifact-model.md) section 19 and is decided by [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md): identity is logical, location is resolvable, and integrity is verifiable. This standard states the first and the third as properties of an instance, in R-52 through R-57. It states nothing about the second, because a resolution is deployment-specific data rather than a property of an artifact, and an identity that encoded one would be renamed every time the artifact moved.
+
+**What recording a consumption profile does and does not establish.** R-59 makes one thing visible that was not: that a named profile was the basis on which a particular derivation was drawn, and that the profile is one the consumed type declares. Three further things remain outside what any artifact can show. A reference carrying no profile does not distinguish a whole-type read from a profile that was declared and ignored, because a consumer that ignores a profile records no consumer identity either. A consumer that wrongly rejected a profile-compatible artifact produces no lineage entry at all, and an absence is not auditable. And whether a consumer read only the fields its profile names is a property of the consumer's execution, not of its output. The first is closable by recording the consumer identity on every reference; the second is closable only by recording rejections; the third is not closable by any representation. None is undertaken here.
 
 **The run discriminator is a deferred implementation question, not an open architectural one.** [ADR-0006](../ADR/ADR-0006-artifact-instance-identity.md) considered making the discriminator a function of a run's declared scope and authorization, and deferred it because it would bind identity to fields whose canonical serialization is unspecified. R-53 states what a discriminator does, and [STD-0011](contract-specification.md) R-51 obliges an orchestrator to assign distinct ones; neither states how one is derived. A producer invoked with a discriminator supplied by its orchestrator needs no derivation rule, so nothing in the framework is blocked on it. What remains uncovered is a careless orchestrator issuing one discriminator for two runs, which R-51 forbids and no inspection of a single artifact detects.
 

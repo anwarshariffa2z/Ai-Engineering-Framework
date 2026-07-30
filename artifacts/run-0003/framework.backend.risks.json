@@ -1,0 +1,221 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "backendrisk-0001-e1",
+            "location": "src/errors/handler.js",
+            "observation": "the fallback branch responds with a success status",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "cause": "the terminal error handler logs the error and responds with a success status on every branch except a uniqueness violation",
+          "confidence": "High",
+          "evidence_state": "Observed",
+          "impact": "a caller cannot distinguish a completed request from a failed one, and no retry or compensation is possible on the caller side",
+          "likelihood_rationale": "the handler is registered last and therefore terminal for every registered operation",
+          "next_verification": "a request forced to fail returns a non-success status",
+          "reversibility": "reversible",
+          "risk": "every failure but one is reported to the caller as success",
+          "supporting_records": "error-0002"
+        },
+        "record_id": "backendrisk-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "backendrisk-0002-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "two awaited writes with no surrounding transaction",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "cause": "the creation path issues two dependent writes as independent calls",
+          "confidence": "Medium",
+          "evidence_state": "Observed",
+          "impact": "a failure between them leaves an order with no items, and the error handler above reports that failure as success",
+          "likelihood_rationale": "the sequence runs on every order placement",
+          "reversibility": "reversible",
+          "risk": "an order and its items are written without a transaction",
+          "supporting_records": "dataaccess-0002"
+        },
+        "record_id": "backendrisk-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "backendrisk-0003-e1",
+            "location": "src/clients/notifications.js",
+            "observation": "the request carries no timeout signal",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "cause": "one outbound dependency is called on the order placement path with no timeout, no retry, and no fallback declared anywhere in scope",
+          "confidence": "Medium",
+          "evidence_state": "Observed",
+          "impact": "a slow dependency holds the request open for as long as it is slow, and the request path has no bound of its own",
+          "likelihood_rationale": "the call is on the placement path and runs on every order",
+          "reversibility": "reversible",
+          "risk": "a request can be held open by a dependency with no timeout",
+          "supporting_records": "resilience-0003"
+        },
+        "record_id": "backendrisk-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "backendrisk-0004-e1",
+            "location": "src/middleware/authorize.js",
+            "observation": "the condition is guarded by a configuration comparison",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "cause": "the tenant scoping check returns without evaluating its condition unless a configuration flag holds a particular value at process start",
+          "evidence_state": "Unknown",
+          "impact": "unknown: a deployment with the flag set enforces tenant scoping and one without it does not, and which holds is not determinable here",
+          "next_verification": "the deployed configuration of each environment is read and recorded",
+          "risk": "whether authorization is enforced cannot be established from the repository",
+          "supporting_records": "boundary-0002"
+        },
+        "record_id": "backendrisk-0004",
+        "scope_reason": "the only load-bearing input for this risk is the tenant scoping boundary record, which itself reached no determination because the check is conditioned on a value supplied by the environment. STD-0007 R-28 makes a conclusion drawn from an Unknown input Unknown: this run establishes that the check is conditional and establishes nothing about whether it enforces"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "backendrisk-0005-e1",
+            "location": "spec/openapi.yaml",
+            "observation": "one operation requires an undeclared field and one operation has no registration",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "cause": "the specification requires a field the validating schema does not declare, and publishes an operation that is registered nowhere",
+          "confidence": "Medium",
+          "evidence_state": "Observed",
+          "impact": "a caller written against the specification can send a request the service rejects, or call an address that does not exist",
+          "likelihood_rationale": "the specification is the artifact a caller is given",
+          "reversibility": "reversible",
+          "risk": "the published contract and the enforced contract disagree",
+          "supporting_records": "contract-0001,contract-0004"
+        },
+        "record_id": "backendrisk-0005"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Observed/High": 1,
+        "Observed/Medium": 3,
+        "Unknown": 1
+      },
+      "evidence_state": "Unknown"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.backend.risks",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:3f2cfd0b72aa2ea73a2f2ebda4b1a07f30fc51ec32d0fc41ea6cdc65118de367"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "backendrisk-0001"
+          ],
+          "digest": "sha256:643c89c67e210a55bfc43568732219d44c6907c899bea625247b506453471a9a",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.backend.errors@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "backendrisk-0002"
+          ],
+          "digest": "sha256:082be15417aacd97e3e249a7d8283dea0dd6b192b5d9fa02ac5db187279b7937",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.backend.dataaccess@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "backendrisk-0003"
+          ],
+          "digest": "sha256:ca813c385c80a7f538c96c75a17e639e50c10b6c566c1ec80c3d3cde1bde6a10",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.backend.resilience@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "backendrisk-0004"
+          ],
+          "digest": "sha256:756008aa01f1f567cd089cf57dd2a6c65fe7a54b9a5679448386e72fff064b98",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.backend.boundaries@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        },
+        {
+          "dependent_records": [
+            "backendrisk-0005"
+          ],
+          "digest": "sha256:aaa4aa4a794bb7495d87e91e69915d4cbdb34e7dfb31e81116a49411e14d75a2",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.backend.contracts@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that registers, serves, guards, or bounds a server-side operation",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

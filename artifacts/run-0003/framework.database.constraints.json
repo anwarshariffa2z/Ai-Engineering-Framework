@@ -1,0 +1,178 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "constraint-0001-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "an identifier attribute is declared on the model",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "constraint": "Customer identifier",
+          "constraint_kind": "primary-key",
+          "enforcement_location": "store",
+          "evidence_state": "Inferred",
+          "target": "Customer.id"
+        },
+        "record_id": "constraint-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "constraint-0002-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "a uniqueness attribute is declared on the field",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "constraint": "Customer email uniqueness",
+          "constraint_kind": "unique",
+          "enforcement_location": "store",
+          "evidence_state": "Inferred",
+          "target": "Customer.email"
+        },
+        "record_id": "constraint-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "constraint-0003-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "an identifier attribute is declared on the model",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "constraint": "Order identifier",
+          "constraint_kind": "primary-key",
+          "enforcement_location": "store",
+          "evidence_state": "Inferred",
+          "target": "Order.id"
+        },
+        "record_id": "constraint-0003"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "constraint-0004-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "a composite identifier attribute is declared on the model",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "constraint": "OrderItem composite identifier",
+          "constraint_kind": "primary-key",
+          "enforcement_location": "store",
+          "evidence_state": "Inferred",
+          "target": "OrderItem.orderId, OrderItem.sku"
+        },
+        "record_id": "constraint-0004"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "constraint-0005-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the field is free text and no declaration constrains its values anywhere in scope",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "constraint": "Order status vocabulary",
+          "constraint_kind": "check",
+          "enforcement_location": "none",
+          "evidence_state": "Observed",
+          "target": "Order.status"
+        },
+        "record_id": "constraint-0005"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Inferred/Medium": 4,
+        "Observed/Medium": 1
+      },
+      "evidence_state": "Inferred"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.database.constraints",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:5df71e6aa119bbd7222926dfbf654ed3274618f05a3f29aeb84cf5eb300a2e28"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "constraint-0001",
+            "constraint-0002",
+            "constraint-0003",
+            "constraint-0004",
+            "constraint-0005"
+          ],
+          "digest": "sha256:4e5cf34633d43f0bf18ddb7823390aecb62855bb68ea078183b5c9ba856797f4",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.database.schema@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that declares, configures, or reaches persistent state",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

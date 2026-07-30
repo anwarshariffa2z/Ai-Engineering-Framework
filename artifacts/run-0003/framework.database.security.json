@@ -1,0 +1,71 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "security-0001-e1",
+            "location": "config/database.json",
+            "observation": "one credential reference serves every path in scope, and transport verification is declared required",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "confidence": "Medium",
+          "encryption_at_rest": "unknown",
+          "evidence_state": "Inferred",
+          "principal": "the application credential referenced by DATABASE_URL",
+          "privileges": "unknown: no grant is declared in scope",
+          "store": "postgresql",
+          "workload_separation": false
+        },
+        "record_id": "security-0001"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Inferred/Medium": 1
+      },
+      "evidence_state": "Inferred"
+    },
+    "completeness": {
+      "reason": "privilege grants, role definitions, and at-rest configuration live in the store rather than the repository, and this run contacted no store",
+      "state": "Partial"
+    },
+    "identity": {
+      "artifact_type": "framework.database.security",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:cb8c8d4a969406a1d2b56b8dabeb01641bebf981dca34208dcefbc356749a695"
+    },
+    "lineage": {},
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that declares, configures, or reaches persistent state",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}

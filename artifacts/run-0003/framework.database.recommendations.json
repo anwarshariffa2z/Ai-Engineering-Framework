@@ -1,0 +1,132 @@
+{
+  "body": {
+    "records": [
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "recommendation-0001-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "the two writes are already adjacent in one method",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "action": "wrap the order creation writes in one transaction",
+          "confidence": "Medium",
+          "evidence_state": "Observed",
+          "priority": "high",
+          "problem": "a failure between two dependent writes leaves an order with no items",
+          "source_records": "risk-0001",
+          "verification": "a test that fails the item write and observes no order remaining"
+        },
+        "record_id": "recommendation-0001"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "recommendation-0002-e1",
+            "location": "prisma/schema.prisma",
+            "observation": "the field is declared as free text",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "action": "constrain the order status vocabulary in the schema",
+          "confidence": "Medium",
+          "evidence_state": "Observed",
+          "priority": "medium",
+          "problem": "a value outside the intended set can be written and read back as valid",
+          "source_records": "risk-0002",
+          "verification": "a write of an unintended value is rejected by the store"
+        },
+        "record_id": "recommendation-0002"
+      },
+      {
+        "evidence": [
+          {
+            "collector": "reference-repository-audit@1.0.0",
+            "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+            "evidence_id": "recommendation-0003-e1",
+            "location": "src/data/order-repository.js",
+            "observation": "the update carries no filter",
+            "redaction_state": "none",
+            "revision": "rev-0001",
+            "source": "subject repository source"
+          }
+        ],
+        "fields": {
+          "action": "bound the maintenance update",
+          "confidence": "Medium",
+          "evidence_state": "Observed",
+          "priority": "medium",
+          "problem": "an unfiltered update rewrites every row",
+          "source_records": "risk-0003",
+          "verification": "the path rejects an invocation with no bound"
+        },
+        "record_id": "recommendation-0003"
+      }
+    ]
+  },
+  "envelope": {
+    "assessment": {
+      "confidence": "Medium",
+      "distribution": {
+        "Observed/Medium": 3
+      },
+      "evidence_state": "Observed"
+    },
+    "completeness": {
+      "state": "Complete"
+    },
+    "identity": {
+      "artifact_type": "framework.database.recommendations",
+      "run_id": "example/orders-api@rev-0001#run-0003"
+    },
+    "integrity": {
+      "digest": "sha256:219554ea24dbb04afbe1035a493be41db60a3987cf7b136d1aba935c2a2c9025"
+    },
+    "lineage": {
+      "derives_from": [
+        {
+          "dependent_records": [
+            "recommendation-0001",
+            "recommendation-0002",
+            "recommendation-0003"
+          ],
+          "digest": "sha256:41d20c2c41b88bdb240fa5e53ec135272e9a7c7883e92e1525f36eafb99f0d1e",
+          "identity": "example/orders-api@rev-0001#run-0003/framework.database.risks@1.0.0",
+          "subject_revision": "rev-0001",
+          "type_version": "1.0.0"
+        }
+      ]
+    },
+    "provenance": {
+      "authorization": "read-only inspection of the subject at the audited revision. No endpoint was called, no message was enqueued, no database connection was authorized, attempted, or made, and no subject code was executed",
+      "environment": "static inspection of subject source; no execution environment was entered, no data store was contacted, and no service endpoint was called",
+      "executor_class": "tool",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "producer_id": "reference-repository-audit",
+      "producer_version": "1.0.0",
+      "redaction_state": "none"
+    },
+    "scope": {
+      "declared_scope": "every path in the subject repository at the audited revision that declares, configures, or reaches persistent state",
+      "exclusions": []
+    },
+    "subject": {
+      "subject_ref": "fixtures/subject-repo-backend",
+      "subject_revision": "rev-0001"
+    },
+    "type": {
+      "type_version": "1.0.0"
+    }
+  }
+}
